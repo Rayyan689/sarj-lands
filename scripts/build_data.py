@@ -107,15 +107,20 @@ for p in parcels:
         "segment_demand": demand[(p["area_of_city"], p["land_type"], p["listing_type"])],
     })
 
-out = {
+# Public file: safe to ship to browsers (no personal data). Demand is aggregate counts only.
+public = {
     "snapshot_date": SNAPSHOT,
     "anchors": ANCHORS,
     "parcels": out_parcels,
-    "inquiries": inquiries,
     "corrections": corrections,
+    "demand": [{"area_of_city": k[0], "land_type": k[1], "listing_type": k[2], "count": v} for k, v in demand.items()],
     "benchmarks": [{"scope": k[0], "listing_type": k[1], "land_type": k[2], "key": k[3] if len(k) > 3 else "Riyadh",
                     "median_sqm": med[k], "count": cnt[k]} for k in med if k[0] in ("area", "city")],
 }
+# Private file: investor names and phones. Imported only by server code (admin + API routes).
+private = {"snapshot_date": SNAPSHOT, "inquiries": inquiries}
+
 OUT.parent.mkdir(parents=True, exist_ok=True)
-OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1))
-print(f"wrote {OUT}: {len(out_parcels)} parcels, {len(inquiries)} inquiries, {len(corrections)} corrections")
+OUT.write_text(json.dumps(public, ensure_ascii=False, indent=1))
+(OUT.parent / "private-inquiries.json").write_text(json.dumps(private, ensure_ascii=False, indent=1))
+print(f"wrote {OUT}: {len(out_parcels)} parcels, {len(corrections)} corrections; private file: {len(inquiries)} inquiries")

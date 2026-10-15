@@ -4,13 +4,11 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 export type Lang = "ar" | "en";
 const Ctx = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({ lang: "ar", setLang: () => {} });
 
+/** Arabic first: every visitor starts in Arabic. English only if they chose it before. */
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("ar");
   useEffect(() => {
-    let saved: string | null = null;
-    try { saved = localStorage.getItem("lang"); } catch {}
-    const initial = (saved as Lang) || (navigator.language.startsWith("ar") ? "ar" : "en");
-    setLangState(initial);
+    try { if (localStorage.getItem("lang") === "en") setLangState("en"); } catch {}
   }, []);
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -21,7 +19,6 @@ export function LangProvider({ children }: { children: ReactNode }) {
 }
 
 export const useLang = () => useContext(Ctx);
-/** t({ar, en}) picks the current language. */
 export function useT() {
   const { lang } = useLang();
   return (s: { ar: string; en: string }) => s[lang];

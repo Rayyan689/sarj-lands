@@ -1,18 +1,43 @@
 @import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
 
+/* Sarj palette: Riyadh stone, palm night, palm green, Najdi sun. */
 :root {
-  --background: #faf8f4;
-  --foreground: #1c1a17;
+  --stone: #eef1ec;      /* page */
+  --stone-2: #e3e8e1;    /* sunken panels */
+  --sheet: #fbfcfa;      /* raised surfaces */
+  --ink: #13261e;        /* text */
+  --muted: #56665e;      /* secondary text */
+  --line: #cdd6cc;       /* rules and borders */
+  --palm: #1f5c45;       /* actions */
+  --palm-deep: #164634;
+  --sun: #e0a526;        /* available land, highlights */
+  --sun-soft: #f6e6bd;
+  --closed: #9aa59f;     /* sold / leased */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --color-stone: var(--stone);
+  --color-stone-2: var(--stone-2);
+  --color-sheet: var(--sheet);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-palm: var(--palm);
+  --color-palm-deep: var(--palm-deep);
+  --color-sun: var(--sun);
+  --color-sun-soft: var(--sun-soft);
+  --color-closed: var(--closed);
+  --font-sans: "Readex Pro", system-ui, sans-serif;
+  --font-display: "Reem Kufi", "Readex Pro", sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-}
+html { background: var(--stone); }
+body { background: var(--stone); color: var(--ink); font-family: var(--font-sans); }
+
+:focus-visible { outline: 2px solid var(--palm); outline-offset: 2px; }
+
+.maplibregl-ctrl-attrib { font-size: 10px; }
+.pin-pulse { animation: pin 2.4s ease-out infinite; }
+@keyframes pin { 0% { transform: scale(1); opacity: .55 } 100% { transform: scale(2.6); opacity: 0 } }
+@media (prefers-reduced-motion: reduce) { .pin-pulse { animation: none } * { scroll-behavior: auto !important } }
