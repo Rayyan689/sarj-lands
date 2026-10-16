@@ -159,20 +159,20 @@ export function buildAnalytics(origin: string) {
 
   // ---------- briefing headlines ----------
   const brief: { ar: string; en: string; tone: "act" | "risk" | "info"; href: string }[] = [];
-  if (readyUncontacted.length) brief.push({ tone: "act", href: "#calls",
+  if (readyUncontacted.length) brief.push({ tone: "act", href: "/admin/investors?tab=calls",
     ar: `${readyUncontacted.length} مستثمرين جاهزين يشترون أو يستأجرون، وما أحد كلمهم للحين. أقدمهم ينتظر من ${Math.max(...readyUncontacted.map((c) => c.waiting))} يوم.`,
     en: `${readyUncontacted.length} ready-to-move investors haven't been contacted yet. The oldest has waited ${Math.max(...readyUncontacted.map((c) => c.waiting))} days.` });
-  if (hot[0]) brief.push({ tone: "act", href: "#hot",
+  if (hot[0]) brief.push({ tone: "act", href: "/admin/properties?tab=hot",
     ar: `أرض ${hot[0].district_ar} (${hot[0].id}) عليها ${hot[0].buyers.length} مشترين قادرين عليها، ومعروضة من ${hot[0].age} يوم. فرصة لطلب أفضل عرض.`,
     en: `${hot[0].district_en} (${hot[0].id}) has ${hot[0].buyers.length} buyers who can afford it, yet it's been listed ${hot[0].age} days. Time for best-and-final offers.` });
-  if (buyNext[0]) brief.push({ tone: "info", href: "#buy",
+  if (buyNext[0]) brief.push({ tone: "info", href: "/admin/market?tab=buy",
     ar: `${buyNext[0].count} مستثمرين يبون ${buyNext[0].type === "commercial" ? "تجاري" : "سكني"} ${buyNext[0].deal === "sale" ? "للبيع" : "للإيجار"} في ${AREA_LABEL[buyNext[0].area].ar}، وما عندنا ولا أرض هناك.`,
     en: `${buyNext[0].count} investors want ${buyNext[0].type} land ${buyNext[0].deal === "sale" ? "to buy" : "to lease"} in ${AREA_LABEL[buyNext[0].area].en}, and we have none there.` });
-  brief.push({ tone: "risk", href: "#vacancy",
+  brief.push({ tone: "risk", href: "/admin/properties?tab=vacancy",
     ar: `أراضي الإيجار الفاضية فوّتت تقريباً ${money(vacancyLost, "ar")} إيجار من يوم نزلت، وتزيد ${money(vacancyPerDay, "ar")} كل يوم.`,
     en: `Vacant lease properties have missed about ${money(vacancyLost, "en")} in rent since listing, growing ${money(vacancyPerDay, "en")} a day.` });
   const staleWithBuyers = stale.filter((s) => s.affordableNow > 0);
-  if (staleWithBuyers.length) brief.push({ tone: "act", href: "#stale",
+  if (staleWithBuyers.length) brief.push({ tone: "act", href: "/admin/properties?tab=slow",
     ar: `${staleWithBuyers.length} أرض معروضة من أكثر من ${STALE_DAYS} يوم وعندنا مستثمرين ميزانيتهم تكفيها الحين. المشكلة مو السعر، محد عرضها عليهم.`,
     en: `${staleWithBuyers.length} properties listed over ${STALE_DAYS} days already fit the budgets of investors in our pipeline. The problem isn't price; nobody showed them.` });
 
