@@ -9,6 +9,7 @@ import { sessionId, track } from "@/lib/track";
 
 type Msg = { role: "user" | "assistant"; content: string; cards?: string[]; saved?: string[]; error?: boolean };
 const STORE = "sarj_chat_v1";
+const STORE_ADMIN = "sarj_chat_admin_v1";
 
 /** Opens the chat from anywhere: window.dispatchEvent(new CustomEvent("sarj:chat", { detail: "optional message" })) */
 export function openChat(message?: string) {
@@ -52,10 +53,11 @@ function MiniCard({ id }: { id: string }) {
   );
 }
 
-export default function ChatWidget() {
+function ChatWidget() {
   const { lang } = useLang();
   const ar = lang === "ar";
   const path = usePathname() ?? "/";
+  const isAdmin = path.startsWith("/admin");
   const parcelId = /^\/lands\/(SRE-\d{3})$/i.exec(path)?.[1]?.toUpperCase();
   const parcel = parcelId ? byId(parcelId) : undefined;
 
@@ -63,7 +65,7 @@ export default function ChatWidget() {
   // Restore this tab's conversation. Safe at first render: the panel starts closed, so nothing differs from the server HTML.
   const [msgs, setMsgs] = useState<Msg[]>(() => {
     if (typeof window === "undefined") return [];
-    try { return JSON.parse(sessionStorage.getItem(STORE) || "[]"); } catch { return []; }
+    try { return JSON.parse(sessionStorage.getItem(location.pathname.startsWith("/admin") ? STORE_ADMIN : STORE) || "[]"); } catch { return []; }
   });
   const sendRef = useRef<(t: string) => void>(() => {});
   const [input, setInput] = useState("");
@@ -71,7 +73,7 @@ export default function ChatWidget() {
   const scroller = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => { try { sessionStorage.setItem(STORE, JSON.stringify(msgs.slice(-30))); } catch {} }, [msgs]);
+  useEffect(() => { try { sessionStorage.setItem(isAdmin ? STORE_ADMIN : STORE, JSON.stringify(msgs.slice(-30))); } catch {} }, [msgs, isAdmin]);
   useEffect(() => { scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: "smooth" }); }, [msgs, busy, open]);
   useEffect(() => {
     const h = (e: Event) => {
@@ -98,7 +100,7 @@ export default function ChatWidget() {
     try {
       const r = await fetch("/api/chat", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })), context: { page: path, parcel_id: parcelId, lang }, session_id: sessionId() }),
+        body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })), context: { page: path, parcel_id: parcelId, lang }, session_id: sessionId(), mode: isAdmin ? "admin" : "investor" }),
       });
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(j.code || "error");
@@ -119,11 +121,15 @@ export default function ChatWidget() {
 
   useEffect(() => { sendRef.current = send; });
 
-  const suggestions = parcel
+  const suggestions = isAdmin
+    ? (ar ? ["لخص لي وضع الشركة بثلاث نقاط", "مين أكلم اليوم عن SRE-015؟", "ليش أراضي المهدية ما تتحرك؟", "وش أكثر شي يطلبونه وما عندنا؟"] : ["Summarise the business in 3 points", "Who should I call about SRE-015?", "Why isn't Al Mahdiyah selling?", "What do investors want that we don't have?"])
+    : parcel
     ? (ar ? ["وش يميز هالأرض؟", "كم تبعد عن المطار؟", "فيه أرخص منها بنفس المنطقة؟", "أبي أحجز زيارة"] : ["What makes this property special?", "How far is the airport?", "Anything cheaper nearby?", "I'd like to book a visit"])
     : (ar ? ["أبي أرض لبيت العايلة", "وش عندكم تجاري للإيجار؟", "وين أحلى سعر متر؟", "ميزانيتي 3 ملايين، وش يناسبني؟"] : ["Land for a family home", "Commercial properties to lease?", "Where's the best price per m²?", "What fits a 3M budget?"]);
 
-  const greeting = parcel
+  const greeting = isAdmin
+    ? (ar ? "هلا! أنا مساعد الإدارة. أشوف الطلبات كلها، الأراضي، ونشاط الموقع لين اليوم. اسألني وش تبي تعرف أو وش نسوي هالأسبوع." : "Hi! I'm the admin assistant. I can see every inquiry, every property and the website's activity up to today. Ask me anything, or what to do this week.")
+    : parcel
     ? (ar ? `هلا! تبي تعرف أكثر عن أرض ${district(parcel, "ar")}؟ اسألني أي شي عنها، أو عن أراضي ثانية.` : `Hi! Want to know more about this property in ${parcel.district_en}? Ask me anything about it, or about other properties.`)
     : (ar ? "هلا والله! أنا مستشار سرج. علّمني وش ناوي تبني أو وش ميزانيتك، وأطلع لك الأراضي اللي تناسبك من محفظتنا." : "Hi! I'm Sarj's property advisor. Tell me what you want to build or your budget, and I'll find properties that fit from our portfolio.");
 
@@ -134,7 +140,7 @@ export default function ChatWidget() {
           className="btn-primary fixed bottom-4 end-4 z-40 flex h-14 w-14 items-center justify-center gap-2 text-[15px] font-medium sm:bottom-6 sm:end-6 sm:h-auto sm:w-auto sm:px-4 sm:py-3"
           aria-label={ar ? "افتح المحادثة مع مستشار سرج" : "Chat with Sarj's advisor"}>
           <span aria-hidden className="text-xl leading-none sm:text-lg">💬</span>
-          <span className="hidden sm:inline">{ar ? "اسأل مستشار سرج" : "Ask our advisor"}</span>
+          <span className="hidden sm:inline">{isAdmin ? (ar ? "اسأل مساعد الإدارة" : "Ask the admin assistant") : (ar ? "اسأل مستشار سرج" : "Ask our advisor")}</span>
         </button>
       )}
 
@@ -145,7 +151,7 @@ export default function ChatWidget() {
             <div className="flex items-center gap-3 border-b border-hair px-4 py-3">
               <span aria-hidden className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-b from-[#d6b475] to-[#b4893f] text-lg font-bold text-white">س</span>
               <div className="min-w-0">
-                <p className="font-semibold leading-tight">{ar ? "مستشار سرج" : "Sarj advisor"}</p>
+                <p className="font-semibold leading-tight">{isAdmin ? (ar ? "مساعد الإدارة" : "Admin assistant") : (ar ? "مستشار سرج" : "Sarj advisor")}</p>
                 <p className="truncate text-[12px] text-muted">{ar ? "يرد فوراً، ومن بيانات أراضينا الفعلية" : "Instant answers from our real listings"}</p>
               </div>
               <div className="ms-auto flex items-center gap-1">
@@ -203,4 +209,10 @@ export default function ChatWidget() {
       )}
     </>
   );
+}
+
+/** Investor and admin conversations are kept apart: switching areas mounts a fresh widget with its own history. */
+export default function ChatRoot() {
+  const path = usePathname() ?? "/";
+  return <ChatWidget key={path.startsWith("/admin") ? "admin" : "investor"} />;
 }

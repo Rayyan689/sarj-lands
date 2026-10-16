@@ -1,0 +1,11 @@
+import { buildAnalytics } from "../src/lib/admin/analytics";
+const a = buildAnalytics("https://sarj-lands-skg5.vercel.app");
+console.log("today", a.today, "kpis", JSON.stringify(a.kpis));
+console.log("\nBRIEF"); a.brief.forEach((b) => console.log("-", b.ar));
+console.log("\nTOP CALLS"); a.calls.slice(0, 6).forEach((c) => console.log(c.id, c.name, c.intent, c.status, "wait", c.waiting, "fits", c.fits, "match", c.match, c.score.toFixed(1)));
+console.log("\nWA sample:\n" + a.calls[0].waText);
+console.log("\nHOT"); a.hot.forEach((h) => console.log(h.id, h.district_en, h.price, h.buyers.map((b) => `${b.id}:${b.budget}`).join(" ")));
+console.log("\nBUY NEXT"); a.buyNext.forEach((b) => console.log(b.area, b.type, b.deal, b.count, b.budgetMin, b.budgetMax, b.uses.join("/")));
+console.log("\nVACANCY top", a.vacancies.slice(0, 3).map((v) => `${v.id} ${v.days}d ${Math.round(v.lost)}`));
+console.log("\nSTALE"); a.stale.slice(0, 8).forEach((s) => console.log(s.id, s.district_en, s.days, "affordableNow", s.affordableNow, s.buyers.join(",")));
+console.log("\nDUPS", a.duplicates.map((d) => d.name).join(", "));

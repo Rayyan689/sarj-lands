@@ -7080,25 +7080,33 @@
    "parcel_id": "SRE-013",
    "field": "price",
    "issue": "No price per sqm and no total price in the source data.",
-   "action": "Kept in the portfolio and shown as 'Price on request'. Excluded from price statistics. Inquiries route to sales."
+   "action": "Kept in the portfolio and shown as 'Price on request'. Excluded from price statistics. Inquiries route to sales.",
+   "issue_ar": "ما فيه سعر للمتر ولا سعر إجمالي في البيانات.",
+   "action_ar": "خليناها معروضة بـ'السعر عند الطلب'، واستبعدناها من حسابات الأسعار، وأي استفسار عنها يروح للمبيعات."
   },
   {
    "parcel_id": "SRE-098",
    "field": "lat/lng",
    "issue": "Latitude and longitude were swapped (46.643477, 24.534333), which places the parcel outside Saudi Arabia.",
-   "action": "Swapped back so the parcel plots in its district."
+   "action": "Swapped back so the parcel plots in its district.",
+   "issue_ar": "خط العرض وخط الطول كانوا مقلوبين (46.643477, 24.534333)، فكانت الأرض تطلع برا السعودية.",
+   "action_ar": "رجعناهم لمكانهم الصحيح، والأرض الحين تطلع في حيّها."
   },
   {
    "parcel_id": null,
    "field": "days_on_market",
    "issue": "Days on market keeps counting to the 11 Aug 2026 snapshot even for sold and leased parcels, so it measures listing age, not time to close.",
-   "action": "Shown as 'listed X days ago'. Never presented as time to sell."
+   "action": "Shown as 'listed X days ago'. Never presented as time to sell.",
+   "issue_ar": "أيام العرض تكمل تعد لين تاريخ البيانات حتى للأراضي المباعة والمؤجرة، فهي عمر الإعلان مو مدة البيع.",
+   "action_ar": "نحسب عمر العرض من تاريخ نزول الأرض لين اليوم، وما نعرضه أبداً كمدة بيع."
   },
   {
    "parcel_id": null,
    "field": "total_price_sar",
    "issue": "Totals are size x price per sqm rounded to the nearest SAR 1,000 (e.g. SRE-105: 31,500 shown as 32,000).",
-   "action": "Source totals kept as the official price."
+   "action": "Source totals kept as the official price.",
+   "issue_ar": "السعر الإجمالي مقرّب لأقرب ألف ريال (مثلاً SRE-105: 31,500 صارت 32,000).",
+   "action_ar": "اعتمدنا السعر الإجمالي من المصدر كسعر رسمي."
   }
  ],
  "demand": [

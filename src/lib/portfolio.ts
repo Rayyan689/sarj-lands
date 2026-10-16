@@ -24,7 +24,7 @@ export type Parcel = {
 type Raw = {
   snapshot_date: string;
   parcels: Parcel[];
-  corrections: { parcel_id: string | null; field: string; issue: string; action: string }[];
+  corrections: { parcel_id: string | null; field: string; issue: string; action: string; issue_ar?: string; action_ar?: string }[];
   demand: { area_of_city: Area; land_type: LandType; listing_type: Deal; count: number }[];
   anchors: Record<string, { en: string; ar: string; lat: number; lng: number }>;
 };
