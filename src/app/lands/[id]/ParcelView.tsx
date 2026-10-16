@@ -69,10 +69,10 @@ export default function ParcelView({ id }: { id: string }) {
   const nearest = byDrive(p)[0];
   why.push({ icon: "🚗", t: { ar: `${minutes(p.drive[nearest].min, "ar")} بالسيارة عن ${anchors[nearest].ar}`, en: `${minutes(p.drive[nearest].min, "en")} drive to ${anchors[nearest].en}` } });
   if (p.segment_demand >= 2 && !closed)
-    why.push({ icon: "🔥", t: { ar: `${p.segment_demand} مستثمرين يدورون أراضي ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar} بنفس المنطقة`, en: `${p.segment_demand} investors are looking for ${TYPE_LABEL[p.land_type].en.toLowerCase()} land ${DEAL_LABEL[p.listing_type].en.toLowerCase()} in this area` } });
+    why.push({ icon: "🔥", t: { ar: `${p.segment_demand} مستثمرين يدورون أراضي ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar} بنفس المنطقة`, en: `${p.segment_demand} investors are looking for ${TYPE_LABEL[p.land_type].en.toLowerCase()} properties ${DEAL_LABEL[p.listing_type].en.toLowerCase()} in this area` } });
 
   const bars = [
-    { label: { ar: "هالأرض", en: "This land" }, v: p.price_per_sqm_sar, me: true },
+    { label: { ar: "هالأرض", en: "This property" }, v: p.price_per_sqm_sar, me: true },
     p.pricing.district_median_sqm ? { label: { ar: `متوسط ${district(p, "ar")}`, en: `${p.district_en} average` }, v: p.pricing.district_median_sqm } : null,
     p.pricing.area_median_sqm ? { label: { ar: `متوسط ${area.ar}`, en: `${area.en} average` }, v: p.pricing.area_median_sqm } : null,
     ...comps.map((c) => ({ label: { ar: `${STATUS_LABEL[c.status].ar} في ${district(c, "ar")}`, en: `${STATUS_LABEL[c.status].en} in ${c.district_en}` }, v: c.price_per_sqm_sar })),
@@ -98,9 +98,9 @@ export default function ParcelView({ id }: { id: string }) {
                 <Link href={`/lands?area=${p.area_of_city}`} className="text-[13px] text-muted hover:text-ink">{area[lang]}</Link>
               </div>
               <h1 className="mt-2 text-3xl font-bold sm:text-4xl">{district(p, lang)}</h1>
-              <p className="mt-1 text-muted">{ar ? `أرض ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar}` : `${TYPE_LABEL[p.land_type].en} land ${DEAL_LABEL[p.listing_type].en.toLowerCase()}`}</p>
+              <p className="mt-1 text-muted">{ar ? `أرض ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar}` : `${TYPE_LABEL[p.land_type].en} property ${DEAL_LABEL[p.listing_type].en.toLowerCase()}`}</p>
               {!closed && (
-                <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-mint-soft px-3 py-1 text-[13px] font-medium text-[#137a52]">
+                <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-mint-soft px-3 py-1 text-[13px] font-medium text-[#8C6A2F]">
                   <span aria-hidden>✦</span>{h[lang]}
                 </p>
               )}
@@ -136,7 +136,7 @@ export default function ParcelView({ id }: { id: string }) {
                         <span className={`tabular-nums ${b.me ? "font-semibold" : "text-muted"}`}>{num(b.v ?? 0, lang)}</span>
                       </div>
                       <div className="h-3 overflow-hidden rounded-full bg-white/70">
-                        <div className={`h-full rounded-full ${b.me ? "bg-gradient-to-l from-[#ffc266] to-apricot" : "bg-ink/15"}`} style={{ width: `${((b.v ?? 0) / maxBar) * 100}%` }} />
+                        <div className={`h-full rounded-full ${b.me ? "bg-gradient-to-l from-[#e2c891] to-apricot" : "bg-ink/15"}`} style={{ width: `${((b.v ?? 0) / maxBar) * 100}%` }} />
                       </div>
                     </div>
                   ))}
@@ -162,7 +162,7 @@ export default function ParcelView({ id }: { id: string }) {
 
             {similar.length > 0 && (
               <section>
-                <h2 className="px-1 text-2xl font-bold">{ar ? "أراضي تشبهها" : "Similar land"}</h2>
+                <h2 className="px-1 text-2xl font-bold">{ar ? "أراضي تشبهها" : "Similar properties"}</h2>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
                   {similar.map((s) => <ParcelCard key={s.parcel_id} p={s} from="similar" />)}
                 </div>
@@ -200,9 +200,9 @@ export default function ParcelView({ id }: { id: string }) {
                 {closed && (
                   <div>
                     <p className="text-lg font-semibold">{ar ? `هالأرض ${STATUS_LABEL[p.status].ar}` : `This one's ${STATUS_LABEL[p.status].en.toLowerCase()}`}</p>
-                    <p className="mt-1 text-[15px] text-muted">{ar ? "نعرضها عشان تقارن الأسعار. شوف اللي يشبهها ومتاح الحين." : "We show it so you can compare prices. See similar land that's available now."}</p>
+                    <p className="mt-1 text-[15px] text-muted">{ar ? "نعرضها عشان تقارن الأسعار. شوف اللي يشبهها ومتاح الحين." : "We show it so you can compare prices. See similar properties available now."}</p>
                     <Link href={`/lands?area=${p.area_of_city}&type=${p.land_type}&deal=${p.listing_type}`} className="btn-primary mt-3 block px-4 py-3 text-center font-medium">
-                      {ar ? "أراضي مشابهة متاحة" : "Similar available land"}
+                      {ar ? "أراضي مشابهة متاحة" : "Similar available properties"}
                     </Link>
                   </div>
                 )}

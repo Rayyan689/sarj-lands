@@ -107,11 +107,11 @@ export default function ParcelMap({
   function addParcels(m: MLMap) {
     if (m.getSource("parcels")) return;
     m.addSource("parcels", { type: "geojson", data: dataRef.current });
-    const color = ["match", ["get", "status"], "available", "#ffad33", "reserved", "#2f7bf6", "#a3acb9"] as unknown as string;
+    const color = ["match", ["get", "status"], "available", "#C9A15B", "reserved", "#5E6670", "#B9B4AC"] as unknown as string;
     m.addLayer({
       id: "halo", type: "circle", source: "parcels",
       filter: ["==", ["get", "sel"], true],
-      paint: { "circle-radius": 18, "circle-color": "#ffad33", "circle-opacity": 0.3, "circle-stroke-width": 3, "circle-stroke-color": "#ffffff" },
+      paint: { "circle-radius": 18, "circle-color": "#C9A15B", "circle-opacity": 0.3, "circle-stroke-width": 3, "circle-stroke-color": "#ffffff" },
     });
     m.addLayer({
       id: "dots", type: "circle", source: "parcels",
@@ -168,7 +168,7 @@ export default function ParcelMap({
 
   return (
     <div className={`relative ${className}`}>
-      <div ref={el} style={{ position: "absolute", inset: 0 }} aria-label={lang === "ar" ? "خريطة الأراضي" : "Map of parcels"} role="region" />
+      <div ref={el} style={{ position: "absolute", inset: 0 }} aria-label={lang === "ar" ? "خريطة الأراضي" : "Map of properties"} role="region" />
       {showBasemapToggle && (
         <div className="glass absolute top-3 start-3 z-10 flex gap-1 rounded-full p-1 text-xs">
           {(["clean", "streets", "satellite"] as Basemap[]).map((b) => (

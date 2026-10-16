@@ -120,21 +120,21 @@ export default function ChatWidget() {
   useEffect(() => { sendRef.current = send; });
 
   const suggestions = parcel
-    ? (ar ? ["وش يميز هالأرض؟", "كم تبعد عن المطار؟", "فيه أرخص منها بنفس المنطقة؟", "أبي أحجز زيارة"] : ["What makes this land special?", "How far is the airport?", "Anything cheaper nearby?", "I'd like to book a visit"])
-    : (ar ? ["أبي أرض لبيت العايلة", "وش عندكم تجاري للإيجار؟", "وين أحلى سعر متر؟", "ميزانيتي 3 ملايين، وش يناسبني؟"] : ["Land for a family home", "Commercial land to lease?", "Where's the best price per m²?", "What fits a 3M budget?"]);
+    ? (ar ? ["وش يميز هالأرض؟", "كم تبعد عن المطار؟", "فيه أرخص منها بنفس المنطقة؟", "أبي أحجز زيارة"] : ["What makes this property special?", "How far is the airport?", "Anything cheaper nearby?", "I'd like to book a visit"])
+    : (ar ? ["أبي أرض لبيت العايلة", "وش عندكم تجاري للإيجار؟", "وين أحلى سعر متر؟", "ميزانيتي 3 ملايين، وش يناسبني؟"] : ["Land for a family home", "Commercial properties to lease?", "Where's the best price per m²?", "What fits a 3M budget?"]);
 
   const greeting = parcel
-    ? (ar ? `هلا! تبي تعرف أكثر عن أرض ${district(parcel, "ar")}؟ اسألني أي شي عنها، أو عن أراضي ثانية.` : `Hi! Want to know more about this ${parcel.district_en} parcel? Ask me anything about it, or about other land.`)
-    : (ar ? "هلا والله! أنا مستشار سرج. علّمني وش ناوي تبني أو وش ميزانيتك، وأطلع لك الأراضي اللي تناسبك من محفظتنا." : "Hi! I'm Sarj's land advisor. Tell me what you want to build or your budget, and I'll find land that fits from our portfolio.");
+    ? (ar ? `هلا! تبي تعرف أكثر عن أرض ${district(parcel, "ar")}؟ اسألني أي شي عنها، أو عن أراضي ثانية.` : `Hi! Want to know more about this property in ${parcel.district_en}? Ask me anything about it, or about other properties.`)
+    : (ar ? "هلا والله! أنا مستشار سرج. علّمني وش ناوي تبني أو وش ميزانيتك، وأطلع لك الأراضي اللي تناسبك من محفظتنا." : "Hi! I'm Sarj's property advisor. Tell me what you want to build or your budget, and I'll find properties that fit from our portfolio.");
 
   return (
     <>
       {!open && (
         <button onClick={() => { setOpen(true); track("chat_open", { from: "bubble" }, parcelId); setTimeout(() => inputRef.current?.focus(), 50); }}
-          className="btn-primary fixed bottom-4 end-4 z-40 flex items-center gap-2 px-4 py-3 text-[15px] font-medium sm:bottom-6 sm:end-6"
+          className="btn-primary fixed bottom-4 end-4 z-40 flex h-14 w-14 items-center justify-center gap-2 text-[15px] font-medium sm:bottom-6 sm:end-6 sm:h-auto sm:w-auto sm:px-4 sm:py-3"
           aria-label={ar ? "افتح المحادثة مع مستشار سرج" : "Chat with Sarj's advisor"}>
-          <span aria-hidden className="text-lg leading-none">💬</span>
-          <span>{ar ? "اسأل مستشار سرج" : "Ask our advisor"}</span>
+          <span aria-hidden className="text-xl leading-none sm:text-lg">💬</span>
+          <span className="hidden sm:inline">{ar ? "اسأل مستشار سرج" : "Ask our advisor"}</span>
         </button>
       )}
 
@@ -143,7 +143,7 @@ export default function ChatWidget() {
           className="step-in fixed inset-0 z-50 flex flex-col sm:inset-auto sm:bottom-6 sm:end-6 sm:h-[min(640px,calc(100vh-7rem))] sm:w-[400px]">
           <div className="glass flex h-full flex-col overflow-hidden sm:rounded-[30px]" style={{ background: "linear-gradient(160deg, rgba(255,255,255,.92), rgba(246,249,253,.86))" }}>
             <div className="flex items-center gap-3 border-b border-hair px-4 py-3">
-              <span aria-hidden className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-b from-[#ffc266] to-[#ff9a1f] text-lg font-bold text-white">س</span>
+              <span aria-hidden className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-b from-[#d6b475] to-[#b4893f] text-lg font-bold text-white">س</span>
               <div className="min-w-0">
                 <p className="font-semibold leading-tight">{ar ? "مستشار سرج" : "Sarj advisor"}</p>
                 <p className="truncate text-[12px] text-muted">{ar ? "يرد فوراً، ومن بيانات أراضينا الفعلية" : "Instant answers from our real listings"}</p>
@@ -175,8 +175,8 @@ export default function ChatWidget() {
                   {m.cards && m.cards.length > 0 && (
                     <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">{m.cards.map((id) => <MiniCard key={id} id={id} />)}</div>
                   )}
-                  {m.saved?.includes("lead") && <p className="inline-block rounded-full bg-mint-soft px-3 py-1 text-[12px] text-[#137a52]">✓ {ar ? "سجلنا طلبك، وبيكلمك الفريق" : "Request saved, the team will call you"}</p>}
-                  {m.saved?.includes("alert") && <p className="inline-block rounded-full bg-mint-soft px-3 py-1 text-[12px] text-[#137a52]">✓ {ar ? "سجلنا تنبيهك" : "Alert saved"}</p>}
+                  {m.saved?.includes("lead") && <p className="inline-block rounded-full bg-mint-soft px-3 py-1 text-[12px] text-[#8C6A2F]">✓ {ar ? "سجلنا طلبك، وبيكلمك الفريق" : "Request saved, the team will call you"}</p>}
+                  {m.saved?.includes("alert") && <p className="inline-block rounded-full bg-mint-soft px-3 py-1 text-[12px] text-[#8C6A2F]">✓ {ar ? "سجلنا تنبيهك" : "Alert saved"}</p>}
                 </div>
               ))}
               {busy && (

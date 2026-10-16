@@ -54,7 +54,7 @@ function reasonsFor(p: Parcel, use: IntentKey): { score: number; reasons: T[] } 
       else if (a >= 900) { s += 10; r.push(size); }
       break;
     case "invest":
-      if (p.segment_demand >= 3) { s += 10; r.push({ ar: `${p.segment_demand} مستثمرين يدورون أراضي مثلها بنفس المنطقة`, en: `${p.segment_demand} investors are hunting for land like this here` }); }
+      if (p.segment_demand >= 3) { s += 10; r.push({ ar: `${p.segment_demand} مستثمرين يدورون أراضي مثلها بنفس المنطقة`, en: `${p.segment_demand} investors are hunting for properties like this here` }); }
       break;
   }
 

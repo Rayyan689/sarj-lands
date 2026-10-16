@@ -60,7 +60,7 @@ function Explorer() {
   return (
     <div className="mx-auto grid max-w-7xl gap-4 px-3 py-4 sm:px-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
       <div className="min-w-0">
-        <h1 className="text-3xl font-bold">{ar ? "كل أراضينا" : "All our land"}</h1>
+        <h1 className="text-3xl font-bold">{ar ? "كل أراضينا" : "All our properties"}</h1>
         <div className="mt-4 flex flex-wrap gap-2">
           <Seg value={area} onChange={setArea} options={[["all", ar ? "كل الرياض" : "All"], ...AREAS.map((a) => [a, AREA_SHORT[a][lang]] as [Area, string])]} />
           <Seg value={deal} onChange={setDeal} options={[["all", ar ? "بيع وإيجار" : "Buy & lease"], ["sale", ar ? "للبيع" : "For sale"], ["lease", ar ? "للإيجار" : "For lease"]]} />
@@ -98,7 +98,7 @@ function Explorer() {
         ) : (
           <div className="glass mt-3 rounded-[26px] p-6">
             <p className="text-lg font-semibold">{ar ? "ما فيه أراضي بهالمواصفات" : "Nothing matches these filters"}</p>
-            <p className="mt-1 text-muted">{ar ? "جرّب جهة ثانية، أو فعّل خيار اللي انباع عشان تشوف أسعار المنطقة." : "Try another area, or switch on sold land to see what prices look like there."}</p>
+            <p className="mt-1 text-muted">{ar ? "جرّب جهة ثانية، أو فعّل خيار اللي انباع عشان تشوف أسعار المنطقة." : "Try another area, or switch on sold properties to see what prices look like there."}</p>
           </div>
         )}
       </div>

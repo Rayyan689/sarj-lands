@@ -78,7 +78,7 @@ export default function MatchFlow() {
               <button key={d} onClick={() => { setDeal(d); go(2); }} className={`bubble px-5 py-5 text-start ${deal === d ? "ring-2 ring-blue/40" : ""}`} style={{ borderRadius: 24 }}>
                 <span aria-hidden className="mb-1 block text-2xl">{d === "sale" ? "🔑" : "📅"}</span>
                 <span className="block text-lg font-semibold">{d === "sale" ? (lang === "ar" ? "أشتري" : "Buy") : (lang === "ar" ? "أستأجر" : "Lease")}</span>
-                <span className="text-sm text-muted">{d === "sale" ? (lang === "ar" ? "تصير الأرض باسمك" : "The land is yours") : (lang === "ar" ? "إيجار سنوي، بدون دفعة كبيرة" : "Yearly rent, no big upfront cost")}</span>
+                <span className="text-sm text-muted">{d === "sale" ? (lang === "ar" ? "تصير الأرض باسمك" : "The property is yours") : (lang === "ar" ? "إيجار سنوي، بدون دفعة كبيرة" : "Yearly rent, no big upfront cost")}</span>
               </button>
             ))}
           </div>
@@ -89,7 +89,7 @@ export default function MatchFlow() {
           <p className="mb-3 text-[14px] text-muted">
             {lang === "ar"
               ? `من أصل ${available.length} أرض متاحة، فيه ${counts.any ?? 0} ${intent?.type ? `أرض ${intent.type === "residential" ? "سكنية" : "تجارية"}` : "أرض"} ${deal === "sale" ? "للبيع" : "للإيجار"}. هذا توزيعها:`
-              : `Of ${available.length} available parcels, ${counts.any ?? 0} are ${intent?.type ?? ""} land ${deal === "sale" ? "for sale" : "for lease"}. Here's where they are:`}
+              : `Of ${available.length} available properties, ${counts.any ?? 0} are ${intent?.type ?? ""} properties ${deal === "sale" ? "for sale" : "for lease"}. Here's where they are:`}
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {(["any", ...AREAS] as (Area | "any")[]).map((a) => {

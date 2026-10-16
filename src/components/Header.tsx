@@ -9,15 +9,15 @@ export default function Header() {
   const { lang, setLang } = useLang();
   const path = usePathname();
   const nav = [
-    { href: "/match", ar: "طلّع لي أرض", en: "Find my land" },
-    { href: "/lands", ar: "كل الأراضي", en: "All land" },
+    { href: "/match", ar: "طلّع لي أرض", en: "Find my property" },
+    { href: "/lands", ar: "كل الأراضي", en: "All properties" },
   ];
   return (
     <>
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5">
       <div className="glass mx-auto flex h-14 max-w-6xl items-center gap-2 rounded-full ps-4 pe-2 sm:gap-4">
         <Link href="/" className="flex items-center gap-2">
-          <span aria-hidden className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-b from-[#ffc266] to-[#ff9a1f] text-sm font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,.5)]">س</span>
+          <span aria-hidden className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-b from-[#d6b475] to-[#b4893f] text-sm font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,.5)]">س</span>
           <span className="text-[17px] font-semibold">{lang === "ar" ? "سرج العقارية" : "Sarj Real Estate"}</span>
         </Link>
         <nav className="ms-2 hidden gap-1 sm:flex">
@@ -29,7 +29,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="ms-auto flex items-center gap-1.5">
-          <a href={waLink(lang === "ar" ? "هلا، أدوّر أرض بالرياض" : "Hi, I'm looking for land in Riyadh")}
+          <a href={waLink(lang === "ar" ? "هلا، أدوّر أرض بالرياض" : "Hi, I'm looking for a property in Riyadh")}
             target="_blank" rel="noopener" onClick={() => track("whatsapp_click", { from: "header" })}
             className="btn-wa hidden px-4 py-2 text-[15px] sm:inline-block">
             {lang === "ar" ? "كلّمنا واتساب" : "WhatsApp us"}

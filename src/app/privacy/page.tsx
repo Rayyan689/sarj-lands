@@ -8,7 +8,7 @@ import { getConsent, setConsent, type Consent } from "@/lib/track";
 const SECTIONS = [
   {
     ar: ["وش نجمع؟", "إذا حجزت زيارة أو طلبت ننبهك، نحفظ اسمك ورقم جوالك والأرض أو الطلب اللي اخترته. هذا بس عشان فريقنا يتواصل معك."],
-    en: ["What we collect", "If you book a visit or ask us to notify you, we keep your name, mobile number and the land or request you picked, only so our team can reach you."],
+    en: ["What we collect", "If you book a visit or ask us to notify you, we keep your name, mobile number and the property or request you picked, only so our team can reach you."],
   },
   {
     ar: ["الكوكيز وتخزين المتصفح", "نحفظ في متصفحك لغتك المفضلة واختيارك للكوكيز. وإذا وافقت على الكوكيز، نسجل زياراتك للصفحات بشكل مجهول (بدون اسم أو رقم) عشان نعرف وش يعجب الزوار ونحسّن الموقع."],

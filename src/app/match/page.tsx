@@ -55,7 +55,7 @@ function Results() {
     return (
       <div className="mx-auto max-w-3xl px-3 py-10 sm:px-5">
         <div className="glass rounded-[34px] p-6 sm:p-8">
-          <h1 className="text-3xl font-bold sm:text-4xl">{lang === "ar" ? "خلّنا نلقى أرضك" : "Let's find your land"}</h1>
+          <h1 className="text-3xl font-bold sm:text-4xl">{lang === "ar" ? "خلّنا نلقى أرضك" : "Let's find your property"}</h1>
           <p className="mt-2 text-muted">{lang === "ar" ? "أربع أسئلة سريعة، وبعدها نوريك اللي يناسبك." : "Four quick questions, then we'll show you what fits."}</p>
           <div className="mt-6"><MatchFlow /></div>
         </div>
@@ -72,13 +72,13 @@ function Results() {
   if (r.fits.length) {
     headline = lang === "ar"
       ? (r.fits.length === 1 ? "لقينا لك أرض وحدة تناسبك 🎯" : r.fits.length === 2 ? "لقينا لك أرضين تناسبك 🎯" : `لقينا لك ${r.fits.length} أراضي تناسبك 🎯`)
-      : `We found ${r.fits.length} ${r.fits.length === 1 ? "parcel" : "parcels"} that fit 🎯`;
+      : `We found ${r.fits.length} ${r.fits.length === 1 ? "property" : "properties"} that fit 🎯`;
     sub = lang === "ar" ? "رتبناها حسب وش يناسب اللي ناوي تبنيه، مو بس حسب السعر." : "Sorted by how well each suits what you want to build, not just price.";
   } else if (r.considered === 0 || noneInArea) {
     headline = lang === "ar" ? "بصراحة، ما عندنا هالطلب الحين" : "Honestly, we don't have this right now";
     sub = lang === "ar"
       ? `ما فيه أراضي ${typeName.ar} ${c.deal === "sale" ? "للبيع" : "للإيجار"} في ${c.area === "any" ? "المحفظة" : AREA_LABEL[c.area].ar} حالياً. بس هذي أقرب الخيارات، وإذا تبي نعلمك أول ما ينزل شي.`
-      : `There's no ${typeName.en.toLowerCase()} land ${c.deal === "sale" ? "for sale" : "for lease"} in ${c.area === "any" ? "the portfolio" : AREA_LABEL[c.area].en} right now. Here are the closest options, and we can ping you when one comes up.`;
+      : `There are no ${typeName.en.toLowerCase()} properties ${c.deal === "sale" ? "for sale" : "for lease"} in ${c.area === "any" ? "the portfolio" : AREA_LABEL[c.area].en} right now. Here are the closest options, and we can ping you when one comes up.`;
   } else {
     headline = lang === "ar" ? "ما فيه شي بنفس ميزانيتك بالضبط" : "Nothing fits your budget exactly";
     sub = lang === "ar" ? "بس هذي أقرب شي، وكتبنا لك وش الفرق في كل وحدة." : "But these are close, and we've noted the difference on each one.";
@@ -108,7 +108,7 @@ function Results() {
         <div className="mt-10">
           <AlertForm criteria={c} summary={{
             ar: "خلّ اسمك ورقمك، وأول ما تنزل أرض تطابق طلبك بالضبط نرسلها لك.",
-            en: "Leave your name and number, and we'll send you the first land that matches exactly.",
+            en: "Leave your name and number, and we'll send you the first property that matches exactly.",
           }} />
         </div>
       </div>

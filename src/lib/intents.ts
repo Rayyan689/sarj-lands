@@ -16,7 +16,7 @@ export const INTENTS: Intent[] = [
   { key: "warehouse", icon: "📦", ar: "مستودع", en: "A warehouse", type: "commercial", defaultDeal: "lease" },
   { key: "office", icon: "💼", ar: "مبنى مكاتب", en: "An office building", type: "commercial", defaultDeal: "sale" },
   { key: "retail", icon: "🛍️", ar: "محل تجاري", en: "A shop", type: "commercial", defaultDeal: "lease" },
-  { key: "invest", icon: "📈", ar: "أستثمر في الأرض نفسها", en: "Just invest in the land", type: null, defaultDeal: "sale" },
+  { key: "invest", icon: "📈", ar: "أستثمر في الأرض نفسها", en: "Just invest in the plot", type: null, defaultDeal: "sale" },
 ];
 
 export const intentByKey = (k: string | null | undefined) => INTENTS.find((i) => i.key === k);

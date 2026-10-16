@@ -100,7 +100,7 @@ export function hook(p: Parcel): T {
   if (p.street_width_m >= 36) return { ar: `واجهتها على شارع ${p.street_width_m} م`, en: `Fronts a ${p.street_width_m} m road` };
   if (p.area_sqm >= 5000) return { ar: `مساحة كبيرة: ${p.area_sqm.toLocaleString("en-US")} م²`, en: `Big plot: ${p.area_sqm.toLocaleString("en-US")} m²` };
   if (p.segment_demand >= 4 && p.status === "available")
-    return { ar: `عليها طلب: ${p.segment_demand} مستثمرين يدورون مثلها`, en: `In demand: ${p.segment_demand} investors want land like this` };
+    return { ar: `عليها طلب: ${p.segment_demand} مستثمرين يدورون مثلها`, en: `In demand: ${p.segment_demand} investors want one like this` };
   const anchors = portfolio.anchors;
   const k = byDrive(p)[0];
   const m = p.drive[k]?.min;

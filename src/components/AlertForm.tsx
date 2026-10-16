@@ -30,14 +30,14 @@ export default function AlertForm({ criteria, title, summary }: { criteria: obje
     return (
       <div className="glass rounded-[26px] p-5">
         <p className="text-lg font-semibold">{lang === "ar" ? "أبشر! 🙌" : "You're on the list 🙌"}</p>
-        <p className="mt-1 text-muted">{lang === "ar" ? "أول ما تنزل أرض تناسبك بنرسل لك على الواتساب." : "The moment matching land comes up, we'll WhatsApp you."}</p>
+        <p className="mt-1 text-muted">{lang === "ar" ? "أول ما تنزل أرض تناسبك بنرسل لك على الواتساب." : "The moment a matching property comes up, we'll WhatsApp you."}</p>
       </div>
     );
 
   return (
     <form onSubmit={submit} className="glass rounded-[26px] p-5">
       <input type="text" name="website" value={hp} onChange={(e) => setHp(e.target.value)} tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
-      <p className="text-lg font-semibold">{(title ?? { ar: "علّمني أول ما تنزل أرض تناسبني", en: "Tell me when matching land comes up" })[lang]}</p>
+      <p className="text-lg font-semibold">{(title ?? { ar: "علّمني أول ما تنزل أرض تناسبني", en: "Tell me when a matching property comes up" })[lang]}</p>
       <p className="mt-1 text-[15px] text-muted">{summary[lang]}</p>
       <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
         <input aria-label={lang === "ar" ? "اسمك" : "Your name"} value={name} onChange={(e) => { setName(e.target.value); if (err === "name") { setErr(null); setState("idle"); } }} aria-invalid={err === "name"} placeholder={lang === "ar" ? "اسمك" : "Your name"} className="field" autoComplete="name" />

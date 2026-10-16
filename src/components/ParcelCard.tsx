@@ -6,7 +6,7 @@ import { AREA_LABEL, DEAL_LABEL, STATUS_LABEL, TYPE_LABEL, district, hook, price
 import { track } from "@/lib/track";
 
 const STATUS_STYLE = {
-  available: "bg-apricot-soft text-[#a86200]",
+  available: "bg-apricot-soft text-[#8C6A2F]",
   reserved: "bg-blue/10 text-blue-deep",
   sold: "bg-ink/5 text-muted",
   leased: "bg-ink/5 text-muted",
@@ -30,14 +30,14 @@ export default function ParcelCard({
         <div>
           <h3 className="text-lg font-semibold leading-snug">{district(p, lang)}</h3>
           <p className="text-sm text-muted">
-            {AREA_LABEL[p.area_of_city][lang]} · {TYPE_LABEL[p.land_type][lang]} {DEAL_LABEL[p.listing_type][lang]}
+            {AREA_LABEL[p.area_of_city][lang]} · {TYPE_LABEL[p.land_type][lang]} {lang === "ar" ? DEAL_LABEL[p.listing_type].ar : DEAL_LABEL[p.listing_type].en.toLowerCase()}
           </p>
         </div>
         <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLE[p.status]}`}>{STATUS_LABEL[p.status][lang]}</span>
       </div>
 
       {!closed && !reasons?.length && (
-        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-mint-soft px-3 py-1 text-[13px] font-medium text-[#137a52]">
+        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-mint-soft px-3 py-1 text-[13px] font-medium text-[#8C6A2F]">
           <span aria-hidden>✦</span>{h[lang]}
         </p>
       )}
