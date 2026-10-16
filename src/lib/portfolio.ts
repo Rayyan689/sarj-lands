@@ -1,5 +1,6 @@
 import raw from "../../data/portfolio.json";
 
+export type AnchorKey = "kafd" | "airport" | "kingdom" | "diriyah";
 export type Area = "Central" | "East" | "North" | "South" | "West";
 export type Deal = "sale" | "lease";
 export type LandType = "residential" | "commercial";
@@ -14,7 +15,9 @@ export type Parcel = {
   price_on_request: boolean; frontage: "main_road" | "collector" | "internal";
   size_class: string; listing_age_days: number;
   pricing: { area_median_sqm?: number; area_peer_count?: number; vs_area_pct?: number; district_median_sqm?: number; vs_district_pct?: number };
-  distances_km: Record<"kafd" | "airport" | "kingdom" | "diriyah", number>;
+  distances_km: Record<AnchorKey, number>;
+  /** Real road driving time (free-flow) and road distance to each landmark. */
+  drive: Record<AnchorKey, { min: number; km: number }>;
   closed_comps: string[]; segment_demand: number;
 };
 

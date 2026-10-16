@@ -59,6 +59,24 @@
     "kingdom": 13.3,
     "diriyah": 22.4
    },
+   "drive": {
+    "kafd": {
+     "min": 25,
+     "km": 25.1
+    },
+    "airport": {
+     "min": 34,
+     "km": 45.3
+    },
+    "kingdom": {
+     "min": 17,
+     "km": 16.4
+    },
+    "diriyah": {
+     "min": 29,
+     "km": 29.0
+    }
+   },
    "closed_comps": [],
    "segment_demand": 0
   },
@@ -93,6 +111,24 @@
     "airport": 31.7,
     "kingdom": 10.0,
     "diriyah": 20.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 25,
+     "km": 24.9
+    },
+    "airport": {
+     "min": 27,
+     "km": 36.3
+    },
+    "kingdom": {
+     "min": 17,
+     "km": 16.2
+    },
+    "diriyah": {
+     "min": 28,
+     "km": 28.7
+    }
    },
    "closed_comps": [
     "SRE-006",
@@ -132,6 +168,24 @@
     "kingdom": 10.7,
     "diriyah": 20.0
    },
+   "drive": {
+    "kafd": {
+     "min": 23,
+     "km": 22.5
+    },
+    "airport": {
+     "min": 32,
+     "km": 43.1
+    },
+    "kingdom": {
+     "min": 14,
+     "km": 13.8
+    },
+    "diriyah": {
+     "min": 26,
+     "km": 26.4
+    }
+   },
    "closed_comps": [],
    "segment_demand": 4
   },
@@ -166,6 +220,24 @@
     "airport": 37.6,
     "kingdom": 11.6,
     "diriyah": 20.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 23,
+     "km": 22.3
+    },
+    "airport": {
+     "min": 35,
+     "km": 45.9
+    },
+    "kingdom": {
+     "min": 14,
+     "km": 13.7
+    },
+    "diriyah": {
+     "min": 26,
+     "km": 26.7
+    }
    },
    "closed_comps": [
     "SRE-002",
@@ -206,6 +278,24 @@
     "kingdom": 13.0,
     "diriyah": 23.1
    },
+   "drive": {
+    "kafd": {
+     "min": 26,
+     "km": 29.4
+    },
+    "airport": {
+     "min": 28,
+     "km": 39.1
+    },
+    "kingdom": {
+     "min": 19,
+     "km": 18.4
+    },
+    "diriyah": {
+     "min": 31,
+     "km": 35.8
+    }
+   },
    "closed_comps": [
     "SRE-002",
     "SRE-006",
@@ -245,6 +335,24 @@
     "kingdom": 8.6,
     "diriyah": 16.9
    },
+   "drive": {
+    "kafd": {
+     "min": 18,
+     "km": 18.1
+    },
+    "airport": {
+     "min": 32,
+     "km": 43.9
+    },
+    "kingdom": {
+     "min": 9,
+     "km": 9.4
+    },
+    "diriyah": {
+     "min": 22,
+     "km": 22.0
+    }
+   },
    "closed_comps": [
     "SRE-002",
     "SRE-009"
@@ -283,6 +391,24 @@
     "kingdom": 14.6,
     "diriyah": 24.3
    },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 28.4
+    },
+    "airport": {
+     "min": 32,
+     "km": 42.0
+    },
+    "kingdom": {
+     "min": 19,
+     "km": 19.7
+    },
+    "diriyah": {
+     "min": 32,
+     "km": 32.3
+    }
+   },
    "closed_comps": [
     "SRE-010"
    ],
@@ -319,6 +445,24 @@
     "airport": 33.5,
     "kingdom": 7.0,
     "diriyah": 15.9
+   },
+   "drive": {
+    "kafd": {
+     "min": 18,
+     "km": 16.6
+    },
+    "airport": {
+     "min": 30,
+     "km": 41.5
+    },
+    "kingdom": {
+     "min": 9,
+     "km": 8.0
+    },
+    "diriyah": {
+     "min": 21,
+     "km": 20.6
+    }
    },
    "closed_comps": [
     "SRE-007",
@@ -358,6 +502,24 @@
     "kingdom": 8.8,
     "diriyah": 19.0
    },
+   "drive": {
+    "kafd": {
+     "min": 22,
+     "km": 20.9
+    },
+    "airport": {
+     "min": 28,
+     "km": 38.4
+    },
+    "kingdom": {
+     "min": 14,
+     "km": 12.3
+    },
+    "diriyah": {
+     "min": 25,
+     "km": 25.7
+    }
+   },
    "closed_comps": [
     "SRE-002",
     "SRE-006"
@@ -395,6 +557,24 @@
     "airport": 40.2,
     "kingdom": 13.9,
     "diriyah": 21.8
+   },
+   "drive": {
+    "kafd": {
+     "min": 24,
+     "km": 24.6
+    },
+    "airport": {
+     "min": 36,
+     "km": 49.6
+    },
+    "kingdom": {
+     "min": 15,
+     "km": 16.0
+    },
+    "diriyah": {
+     "min": 28,
+     "km": 28.6
+    }
    },
    "closed_comps": [
     "SRE-007"
@@ -434,6 +614,24 @@
     "airport": 25.3,
     "kingdom": 35.4,
     "diriyah": 42.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 37,
+     "km": 39.5
+    },
+    "airport": {
+     "min": 39,
+     "km": 41.1
+    },
+    "kingdom": {
+     "min": 40,
+     "km": 44.5
+    },
+    "diriyah": {
+     "min": 42,
+     "km": 45.9
+    }
    },
    "closed_comps": [
     "SRE-012",
@@ -481,6 +679,24 @@
     "kingdom": 35.4,
     "diriyah": 42.3
    },
+   "drive": {
+    "kafd": {
+     "min": 37,
+     "km": 39.5
+    },
+    "airport": {
+     "min": 39,
+     "km": 41.1
+    },
+    "kingdom": {
+     "min": 40,
+     "km": 44.5
+    },
+    "diriyah": {
+     "min": 42,
+     "km": 46.0
+    }
+   },
    "closed_comps": [
     "SRE-011",
     "SRE-025",
@@ -521,6 +737,24 @@
     "kingdom": 9.3,
     "diriyah": 16.6
    },
+   "drive": {
+    "kafd": {
+     "min": 17,
+     "km": 15.3
+    },
+    "airport": {
+     "min": 19,
+     "km": 25.0
+    },
+    "kingdom": {
+     "min": 17,
+     "km": 15.1
+    },
+    "diriyah": {
+     "min": 22,
+     "km": 21.8
+    }
+   },
    "closed_comps": [
     "SRE-014",
     "SRE-018",
@@ -560,6 +794,24 @@
     "kingdom": 13.9,
     "diriyah": 22.5
    },
+   "drive": {
+    "kafd": {
+     "min": 24,
+     "km": 22.7
+    },
+    "airport": {
+     "min": 26,
+     "km": 32.3
+    },
+    "kingdom": {
+     "min": 21,
+     "km": 18.8
+    },
+    "diriyah": {
+     "min": 29,
+     "km": 29.1
+    }
+   },
    "closed_comps": [
     "SRE-018",
     "SRE-028"
@@ -597,6 +849,24 @@
     "airport": 15.5,
     "kingdom": 20.2,
     "diriyah": 26.2
+   },
+   "drive": {
+    "kafd": {
+     "min": 21,
+     "km": 24.0
+    },
+    "airport": {
+     "min": 22,
+     "km": 25.7
+    },
+    "kingdom": {
+     "min": 24,
+     "km": 29.0
+    },
+    "diriyah": {
+     "min": 26,
+     "km": 30.5
+    }
    },
    "closed_comps": [
     "SRE-011",
@@ -643,6 +913,24 @@
     "kingdom": 25.2,
     "diriyah": 31.0
    },
+   "drive": {
+    "kafd": {
+     "min": 27,
+     "km": 32.1
+    },
+    "airport": {
+     "min": 23,
+     "km": 24.8
+    },
+    "kingdom": {
+     "min": 30,
+     "km": 37.1
+    },
+    "diriyah": {
+     "min": 32,
+     "km": 38.5
+    }
+   },
    "closed_comps": [
     "SRE-023",
     "SRE-027"
@@ -680,6 +968,24 @@
     "airport": 30.8,
     "kingdom": 10.8,
     "diriyah": 21.1
+   },
+   "drive": {
+    "kafd": {
+     "min": 21,
+     "km": 24.0
+    },
+    "airport": {
+     "min": 22,
+     "km": 33.7
+    },
+    "kingdom": {
+     "min": 15,
+     "km": 16.6
+    },
+    "diriyah": {
+     "min": 25,
+     "km": 30.5
+    }
    },
    "closed_comps": [
     "SRE-014",
@@ -720,6 +1026,24 @@
     "kingdom": 10.3,
     "diriyah": 19.8
    },
+   "drive": {
+    "kafd": {
+     "min": 22,
+     "km": 21.0
+    },
+    "airport": {
+     "min": 24,
+     "km": 30.6
+    },
+    "kingdom": {
+     "min": 17,
+     "km": 12.9
+    },
+    "diriyah": {
+     "min": 27,
+     "km": 27.4
+    }
+   },
    "closed_comps": [
     "SRE-014",
     "SRE-028"
@@ -757,6 +1081,24 @@
     "airport": 27.7,
     "kingdom": 9.6,
     "diriyah": 19.6
+   },
+   "drive": {
+    "kafd": {
+     "min": 20,
+     "km": 22.6
+    },
+    "airport": {
+     "min": 22,
+     "km": 32.2
+    },
+    "kingdom": {
+     "min": 14,
+     "km": 15.0
+    },
+    "diriyah": {
+     "min": 25,
+     "km": 27.5
+    }
    },
    "closed_comps": [
     "SRE-014",
@@ -796,6 +1138,24 @@
     "airport": 32.2,
     "kingdom": 17.5,
     "diriyah": 27.7
+   },
+   "drive": {
+    "kafd": {
+     "min": 32,
+     "km": 35.3
+    },
+    "airport": {
+     "min": 34,
+     "km": 45.0
+    },
+    "kingdom": {
+     "min": 26,
+     "km": 27.9
+    },
+    "diriyah": {
+     "min": 37,
+     "km": 41.8
+    }
    },
    "closed_comps": [
     "SRE-014",
@@ -838,6 +1198,24 @@
     "kingdom": 28.7,
     "diriyah": 34.9
    },
+   "drive": {
+    "kafd": {
+     "min": 35,
+     "km": 35.7
+    },
+    "airport": {
+     "min": 23,
+     "km": 24.9
+    },
+    "kingdom": {
+     "min": 38,
+     "km": 40.7
+    },
+    "diriyah": {
+     "min": 40,
+     "km": 42.1
+    }
+   },
    "closed_comps": [
     "SRE-014",
     "SRE-018",
@@ -879,6 +1257,24 @@
     "kingdom": 26.1,
     "diriyah": 33.1
    },
+   "drive": {
+    "kafd": {
+     "min": 27,
+     "km": 30.8
+    },
+    "airport": {
+     "min": 29,
+     "km": 32.5
+    },
+    "kingdom": {
+     "min": 30,
+     "km": 35.8
+    },
+    "diriyah": {
+     "min": 32,
+     "km": 37.3
+    }
+   },
    "closed_comps": [
     "SRE-014",
     "SRE-018",
@@ -918,6 +1314,24 @@
     "kingdom": 10.3,
     "diriyah": 20.6
    },
+   "drive": {
+    "kafd": {
+     "min": 25,
+     "km": 24.6
+    },
+    "airport": {
+     "min": 27,
+     "km": 38.5
+    },
+    "kingdom": {
+     "min": 16,
+     "km": 15.9
+    },
+    "diriyah": {
+     "min": 27,
+     "km": 28.4
+    }
+   },
    "closed_comps": [
     "SRE-016",
     "SRE-027"
@@ -955,6 +1369,24 @@
     "airport": 33.2,
     "kingdom": 14.7,
     "diriyah": 25.0
+   },
+   "drive": {
+    "kafd": {
+     "min": 29,
+     "km": 29.3
+    },
+    "airport": {
+     "min": 31,
+     "km": 38.9
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 21.8
+    },
+    "diriyah": {
+     "min": 34,
+     "km": 35.7
+    }
    },
    "closed_comps": [
     "SRE-014",
@@ -996,6 +1428,24 @@
     "airport": 19.7,
     "kingdom": 19.4,
     "diriyah": 26.9
+   },
+   "drive": {
+    "kafd": {
+     "min": 26,
+     "km": 27.7
+    },
+    "airport": {
+     "min": 27,
+     "km": 29.4
+    },
+    "kingdom": {
+     "min": 26,
+     "km": 25.9
+    },
+    "diriyah": {
+     "min": 31,
+     "km": 34.2
+    }
    },
    "closed_comps": [
     "SRE-011",
@@ -1043,6 +1493,24 @@
     "kingdom": 20.8,
     "diriyah": 28.2
    },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 27.7
+    },
+    "airport": {
+     "min": 29,
+     "km": 29.4
+    },
+    "kingdom": {
+     "min": 28,
+     "km": 27.3
+    },
+    "diriyah": {
+     "min": 33,
+     "km": 34.1
+    }
+   },
    "closed_comps": [
     "SRE-011",
     "SRE-012",
@@ -1087,6 +1555,24 @@
     "kingdom": 20.5,
     "diriyah": 27.8
    },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 27.5
+    },
+    "airport": {
+     "min": 29,
+     "km": 29.2
+    },
+    "kingdom": {
+     "min": 28,
+     "km": 27.1
+    },
+    "diriyah": {
+     "min": 33,
+     "km": 33.9
+    }
+   },
    "closed_comps": [
     "SRE-016",
     "SRE-023"
@@ -1124,6 +1610,24 @@
     "airport": 23.4,
     "kingdom": 9.8,
     "diriyah": 18.7
+   },
+   "drive": {
+    "kafd": {
+     "min": 19,
+     "km": 19.7
+    },
+    "airport": {
+     "min": 21,
+     "km": 29.3
+    },
+    "kingdom": {
+     "min": 14,
+     "km": 11.6
+    },
+    "diriyah": {
+     "min": 24,
+     "km": 26.1
+    }
    },
    "closed_comps": [
     "SRE-014",
@@ -1163,6 +1667,24 @@
     "kingdom": 7.3,
     "diriyah": 17.3
    },
+   "drive": {
+    "kafd": {
+     "min": 21,
+     "km": 19.5
+    },
+    "airport": {
+     "min": 27,
+     "km": 37.3
+    },
+    "kingdom": {
+     "min": 12,
+     "km": 10.8
+    },
+    "diriyah": {
+     "min": 24,
+     "km": 24.7
+    }
+   },
    "closed_comps": [],
    "segment_demand": 1
   },
@@ -1197,6 +1719,24 @@
     "airport": 22.6,
     "kingdom": 12.0,
     "diriyah": 20.6
+   },
+   "drive": {
+    "kafd": {
+     "min": 22,
+     "km": 19.9
+    },
+    "airport": {
+     "min": 24,
+     "km": 29.5
+    },
+    "kingdom": {
+     "min": 19,
+     "km": 16.0
+    },
+    "diriyah": {
+     "min": 27,
+     "km": 26.3
+    }
    },
    "closed_comps": [
     "SRE-014",
@@ -1236,6 +1776,24 @@
     "airport": 26.8,
     "kingdom": 13.0,
     "diriyah": 22.7
+   },
+   "drive": {
+    "kafd": {
+     "min": 23,
+     "km": 25.5
+    },
+    "airport": {
+     "min": 25,
+     "km": 35.1
+    },
+    "kingdom": {
+     "min": 16,
+     "km": 17.8
+    },
+    "diriyah": {
+     "min": 28,
+     "km": 30.4
+    }
    },
    "closed_comps": [
     "SRE-011",
@@ -1281,6 +1839,24 @@
     "kingdom": 16.2,
     "diriyah": 21.8
    },
+   "drive": {
+    "kafd": {
+     "min": 20,
+     "km": 20.3
+    },
+    "airport": {
+     "min": 20,
+     "km": 21.6
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 25.3
+    },
+    "diriyah": {
+     "min": 25,
+     "km": 26.7
+    }
+   },
    "closed_comps": [
     "SRE-011",
     "SRE-012",
@@ -1325,6 +1901,24 @@
     "kingdom": 17.8,
     "diriyah": 27.5
    },
+   "drive": {
+    "kafd": {
+     "min": 32,
+     "km": 36.5
+    },
+    "airport": {
+     "min": 34,
+     "km": 46.1
+    },
+    "kingdom": {
+     "min": 25,
+     "km": 28.9
+    },
+    "diriyah": {
+     "min": 36,
+     "km": 41.4
+    }
+   },
    "closed_comps": [
     "SRE-014",
     "SRE-018",
@@ -1363,6 +1957,24 @@
     "airport": 28.4,
     "kingdom": 14.0,
     "diriyah": 24.0
+   },
+   "drive": {
+    "kafd": {
+     "min": 25,
+     "km": 27.8
+    },
+    "airport": {
+     "min": 27,
+     "km": 37.5
+    },
+    "kingdom": {
+     "min": 18,
+     "km": 20.2
+    },
+    "diriyah": {
+     "min": 30,
+     "km": 32.7
+    }
    },
    "closed_comps": [
     "SRE-011",
@@ -1410,6 +2022,24 @@
     "kingdom": 29.8,
     "diriyah": 37.8
    },
+   "drive": {
+    "kafd": {
+     "min": 43,
+     "km": 40.7
+    },
+    "airport": {
+     "min": 44,
+     "km": 42.1
+    },
+    "kingdom": {
+     "min": 39,
+     "km": 37.7
+    },
+    "diriyah": {
+     "min": 48,
+     "km": 47.1
+    }
+   },
    "closed_comps": [
     "SRE-011",
     "SRE-012",
@@ -1455,6 +2085,24 @@
     "airport": 28.0,
     "kingdom": 31.8,
     "diriyah": 39.9
+   },
+   "drive": {
+    "kafd": {
+     "min": 51,
+     "km": 43.0
+    },
+    "airport": {
+     "min": 52,
+     "km": 44.5
+    },
+    "kingdom": {
+     "min": 47,
+     "km": 40.0
+    },
+    "diriyah": {
+     "min": 56,
+     "km": 49.5
+    }
    },
    "closed_comps": [
     "SRE-011",
@@ -1502,6 +2150,24 @@
     "kingdom": 16.4,
     "diriyah": 25.4
    },
+   "drive": {
+    "kafd": {
+     "min": 27,
+     "km": 25.7
+    },
+    "airport": {
+     "min": 29,
+     "km": 35.4
+    },
+    "kingdom": {
+     "min": 21,
+     "km": 22.4
+    },
+    "diriyah": {
+     "min": 32,
+     "km": 32.2
+    }
+   },
    "closed_comps": [
     "SRE-014",
     "SRE-018",
@@ -1543,6 +2209,24 @@
     "kingdom": 16.2,
     "diriyah": 25.3
    },
+   "drive": {
+    "kafd": {
+     "min": 26,
+     "km": 25.6
+    },
+    "airport": {
+     "min": 28,
+     "km": 35.3
+    },
+    "kingdom": {
+     "min": 20,
+     "km": 22.2
+    },
+    "diriyah": {
+     "min": 31,
+     "km": 32.0
+    }
+   },
    "closed_comps": [
     "SRE-014",
     "SRE-018",
@@ -1581,6 +2265,24 @@
     "airport": 18.0,
     "kingdom": 16.2,
     "diriyah": 23.1
+   },
+   "drive": {
+    "kafd": {
+     "min": 19,
+     "km": 21.3
+    },
+    "airport": {
+     "min": 22,
+     "km": 30.7
+    },
+    "kingdom": {
+     "min": 22,
+     "km": 26.3
+    },
+    "diriyah": {
+     "min": 24,
+     "km": 27.7
+    }
    },
    "closed_comps": [
     "SRE-014",
@@ -1621,6 +2323,24 @@
     "kingdom": 14.0,
     "diriyah": 19.9
    },
+   "drive": {
+    "kafd": {
+     "min": 18,
+     "km": 16.7
+    },
+    "airport": {
+     "min": 19,
+     "km": 23.1
+    },
+    "kingdom": {
+     "min": 21,
+     "km": 21.7
+    },
+    "diriyah": {
+     "min": 23,
+     "km": 23.2
+    }
+   },
    "closed_comps": [
     "SRE-014",
     "SRE-018",
@@ -1659,6 +2379,24 @@
     "airport": 20.0,
     "kingdom": 8.4,
     "diriyah": 9.1
+   },
+   "drive": {
+    "kafd": {
+     "min": 13,
+     "km": 7.2
+    },
+    "airport": {
+     "min": 22,
+     "km": 28.1
+    },
+    "kingdom": {
+     "min": 16,
+     "km": 15.0
+    },
+    "diriyah": {
+     "min": 18,
+     "km": 12.7
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -1704,6 +2442,24 @@
     "kingdom": 1.1,
     "diriyah": 9.3
    },
+   "drive": {
+    "kafd": {
+     "min": 12,
+     "km": 9.9
+    },
+    "airport": {
+     "min": 26,
+     "km": 36.0
+    },
+    "kingdom": {
+     "min": 5,
+     "km": 2.7
+    },
+    "diriyah": {
+     "min": 17,
+     "km": 13.7
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -1748,6 +2504,24 @@
     "kingdom": 2.3,
     "diriyah": 12.6
    },
+   "drive": {
+    "kafd": {
+     "min": 16,
+     "km": 12.5
+    },
+    "airport": {
+     "min": 28,
+     "km": 35.7
+    },
+    "kingdom": {
+     "min": 7,
+     "km": 4.2
+    },
+    "diriyah": {
+     "min": 22,
+     "km": 18.9
+    }
+   },
    "closed_comps": [
     "SRE-044",
     "SRE-045",
@@ -1790,6 +2564,24 @@
     "airport": 16.6,
     "kingdom": 12.3,
     "diriyah": 11.4
+   },
+   "drive": {
+    "kafd": {
+     "min": 14,
+     "km": 12.3
+    },
+    "airport": {
+     "min": 15,
+     "km": 21.4
+    },
+    "kingdom": {
+     "min": 15,
+     "km": 16.2
+    },
+    "diriyah": {
+     "min": 18,
+     "km": 20.0
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -1836,6 +2628,24 @@
     "kingdom": 18.0,
     "diriyah": 14.2
    },
+   "drive": {
+    "kafd": {
+     "min": 22,
+     "km": 19.3
+    },
+    "airport": {
+     "min": 20,
+     "km": 25.2
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 23.2
+    },
+    "diriyah": {
+     "min": 23,
+     "km": 23.6
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -1881,6 +2691,24 @@
     "kingdom": 23.6,
     "diriyah": 19.2
    },
+   "drive": {
+    "kafd": {
+     "min": 27,
+     "km": 23.0
+    },
+    "airport": {
+     "min": 27,
+     "km": 31.7
+    },
+    "kingdom": {
+     "min": 29,
+     "km": 26.9
+    },
+    "diriyah": {
+     "min": 29,
+     "km": 26.4
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -1925,6 +2753,24 @@
     "kingdom": 8.0,
     "diriyah": 7.3
    },
+   "drive": {
+    "kafd": {
+     "min": 11,
+     "km": 5.1
+    },
+    "airport": {
+     "min": 23,
+     "km": 28.6
+    },
+    "kingdom": {
+     "min": 15,
+     "km": 11.8
+    },
+    "diriyah": {
+     "min": 16,
+     "km": 10.9
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -1967,6 +2813,24 @@
     "airport": 28.4,
     "kingdom": 1.4,
     "diriyah": 11.6
+   },
+   "drive": {
+    "kafd": {
+     "min": 13,
+     "km": 11.0
+    },
+    "airport": {
+     "min": 28,
+     "km": 37.2
+    },
+    "kingdom": {
+     "min": 4,
+     "km": 2.4
+    },
+    "diriyah": {
+     "min": 19,
+     "km": 17.5
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2012,6 +2876,24 @@
     "kingdom": 7.3,
     "diriyah": 9.0
    },
+   "drive": {
+    "kafd": {
+     "min": 9,
+     "km": 5.5
+    },
+    "airport": {
+     "min": 24,
+     "km": 30.5
+    },
+    "kingdom": {
+     "min": 12,
+     "km": 10.5
+    },
+    "diriyah": {
+     "min": 14,
+     "km": 11.9
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2055,6 +2937,24 @@
     "airport": 17.6,
     "kingdom": 10.6,
     "diriyah": 15.7
+   },
+   "drive": {
+    "kafd": {
+     "min": 14,
+     "km": 13.0
+    },
+    "airport": {
+     "min": 17,
+     "km": 21.9
+    },
+    "kingdom": {
+     "min": 17,
+     "km": 18.0
+    },
+    "diriyah": {
+     "min": 19,
+     "km": 19.4
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2100,6 +3000,24 @@
     "airport": 20.3,
     "kingdom": 17.2,
     "diriyah": 10.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 23,
+     "km": 19.7
+    },
+    "airport": {
+     "min": 28,
+     "km": 36.1
+    },
+    "kingdom": {
+     "min": 25,
+     "km": 23.6
+    },
+    "diriyah": {
+     "min": 18,
+     "km": 16.3
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2147,6 +3065,24 @@
     "kingdom": 16.0,
     "diriyah": 11.6
    },
+   "drive": {
+    "kafd": {
+     "min": 16,
+     "km": 14.9
+    },
+    "airport": {
+     "min": 22,
+     "km": 28.5
+    },
+    "kingdom": {
+     "min": 18,
+     "km": 18.8
+    },
+    "diriyah": {
+     "min": 17,
+     "km": 15.9
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2191,6 +3127,24 @@
     "kingdom": 3.2,
     "diriyah": 7.3
    },
+   "drive": {
+    "kafd": {
+     "min": 11,
+     "km": 7.3
+    },
+    "airport": {
+     "min": 26,
+     "km": 34.5
+    },
+    "kingdom": {
+     "min": 8,
+     "km": 5.6
+    },
+    "diriyah": {
+     "min": 14,
+     "km": 11.5
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2233,6 +3187,24 @@
     "airport": 23.0,
     "kingdom": 4.5,
     "diriyah": 10.8
+   },
+   "drive": {
+    "kafd": {
+     "min": 12,
+     "km": 8.9
+    },
+    "airport": {
+     "min": 22,
+     "km": 29.6
+    },
+    "kingdom": {
+     "min": 9,
+     "km": 7.6
+    },
+    "diriyah": {
+     "min": 17,
+     "km": 15.3
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2278,6 +3250,24 @@
     "kingdom": 4.6,
     "diriyah": 10.1
    },
+   "drive": {
+    "kafd": {
+     "min": 11,
+     "km": 7.5
+    },
+    "airport": {
+     "min": 22,
+     "km": 29.4
+    },
+    "kingdom": {
+     "min": 10,
+     "km": 7.6
+    },
+    "diriyah": {
+     "min": 17,
+     "km": 13.6
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2321,6 +3311,24 @@
     "airport": 21.6,
     "kingdom": 5.9,
     "diriyah": 10.4
+   },
+   "drive": {
+    "kafd": {
+     "min": 10,
+     "km": 7.0
+    },
+    "airport": {
+     "min": 20,
+     "km": 27.7
+    },
+    "kingdom": {
+     "min": 11,
+     "km": 8.9
+    },
+    "diriyah": {
+     "min": 16,
+     "km": 13.4
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2366,6 +3374,24 @@
     "kingdom": 11.9,
     "diriyah": 7.9
    },
+   "drive": {
+    "kafd": {
+     "min": 13,
+     "km": 12.1
+    },
+    "airport": {
+     "min": 19,
+     "km": 25.7
+    },
+    "kingdom": {
+     "min": 15,
+     "km": 15.9
+    },
+    "diriyah": {
+     "min": 18,
+     "km": 17.0
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2408,6 +3434,24 @@
     "airport": 23.6,
     "kingdom": 3.8,
     "diriyah": 10.2
+   },
+   "drive": {
+    "kafd": {
+     "min": 11,
+     "km": 8.3
+    },
+    "airport": {
+     "min": 24,
+     "km": 30.2
+    },
+    "kingdom": {
+     "min": 8,
+     "km": 6.0
+    },
+    "diriyah": {
+     "min": 17,
+     "km": 14.7
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2452,6 +3496,24 @@
     "airport": 24.3,
     "kingdom": 4.4,
     "diriyah": 7.6
+   },
+   "drive": {
+    "kafd": {
+     "min": 8,
+     "km": 5.8
+    },
+    "airport": {
+     "min": 23,
+     "km": 33.0
+    },
+    "kingdom": {
+     "min": 8,
+     "km": 6.5
+    },
+    "diriyah": {
+     "min": 13,
+     "km": 11.1
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2499,6 +3561,24 @@
     "kingdom": 15.6,
     "diriyah": 16.6
    },
+   "drive": {
+    "kafd": {
+     "min": 22,
+     "km": 18.5
+    },
+    "airport": {
+     "min": 11,
+     "km": 14.9
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 23.5
+    },
+    "diriyah": {
+     "min": 26,
+     "km": 27.2
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2545,6 +3625,24 @@
     "kingdom": 17.6,
     "diriyah": 17.4
    },
+   "drive": {
+    "kafd": {
+     "min": 22,
+     "km": 19.9
+    },
+    "airport": {
+     "min": 17,
+     "km": 22.2
+    },
+    "kingdom": {
+     "min": 24,
+     "km": 24.0
+    },
+    "diriyah": {
+     "min": 22,
+     "km": 24.7
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2589,6 +3687,24 @@
     "kingdom": 5.8,
     "diriyah": 13.7
    },
+   "drive": {
+    "kafd": {
+     "min": 15,
+     "km": 12.8
+    },
+    "airport": {
+     "min": 22,
+     "km": 28.4
+    },
+    "kingdom": {
+     "min": 11,
+     "km": 9.0
+    },
+    "diriyah": {
+     "min": 20,
+     "km": 19.2
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2631,6 +3747,24 @@
     "airport": 24.6,
     "kingdom": 4.6,
     "diriyah": 13.6
+   },
+   "drive": {
+    "kafd": {
+     "min": 16,
+     "km": 13.7
+    },
+    "airport": {
+     "min": 23,
+     "km": 30.4
+    },
+    "kingdom": {
+     "min": 11,
+     "km": 8.4
+    },
+    "diriyah": {
+     "min": 21,
+     "km": 20.1
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2676,6 +3810,24 @@
     "kingdom": 9.2,
     "diriyah": 12.6
    },
+   "drive": {
+    "kafd": {
+     "min": 14,
+     "km": 10.6
+    },
+    "airport": {
+     "min": 19,
+     "km": 24.3
+    },
+    "kingdom": {
+     "min": 17,
+     "km": 15.6
+    },
+    "diriyah": {
+     "min": 19,
+     "km": 17.0
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2719,6 +3871,24 @@
     "airport": 15.1,
     "kingdom": 13.6,
     "diriyah": 12.8
+   },
+   "drive": {
+    "kafd": {
+     "min": 17,
+     "km": 14.9
+    },
+    "airport": {
+     "min": 15,
+     "km": 19.6
+    },
+    "kingdom": {
+     "min": 19,
+     "km": 18.8
+    },
+    "diriyah": {
+     "min": 19,
+     "km": 19.2
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2764,6 +3934,24 @@
     "kingdom": 30.4,
     "diriyah": 26.1
    },
+   "drive": {
+    "kafd": {
+     "min": 37,
+     "km": 37.8
+    },
+    "airport": {
+     "min": 43,
+     "km": 51.4
+    },
+    "kingdom": {
+     "min": 38,
+     "km": 41.7
+    },
+    "diriyah": {
+     "min": 39,
+     "km": 41.2
+    }
+   },
    "closed_comps": [],
    "segment_demand": 0
   },
@@ -2798,6 +3986,24 @@
     "airport": 23.3,
     "kingdom": 11.8,
     "diriyah": 4.7
+   },
+   "drive": {
+    "kafd": {
+     "min": 18,
+     "km": 16.4
+    },
+    "airport": {
+     "min": 22,
+     "km": 31.2
+    },
+    "kingdom": {
+     "min": 16,
+     "km": 15.7
+    },
+    "diriyah": {
+     "min": 12,
+     "km": 7.8
+    }
    },
    "closed_comps": [
     "SRE-043",
@@ -2843,6 +4049,24 @@
     "kingdom": 2.8,
     "diriyah": 11.4
    },
+   "drive": {
+    "kafd": {
+     "min": 12,
+     "km": 9.9
+    },
+    "airport": {
+     "min": 24,
+     "km": 31.6
+    },
+    "kingdom": {
+     "min": 8,
+     "km": 5.6
+    },
+    "diriyah": {
+     "min": 18,
+     "km": 16.0
+    }
+   },
    "closed_comps": [
     "SRE-043",
     "SRE-044",
@@ -2887,6 +4111,24 @@
     "kingdom": 25.4,
     "diriyah": 28.0
    },
+   "drive": {
+    "kafd": {
+     "min": 34,
+     "km": 38.3
+    },
+    "airport": {
+     "min": 48,
+     "km": 64.1
+    },
+    "kingdom": {
+     "min": 26,
+     "km": 29.6
+    },
+    "diriyah": {
+     "min": 38,
+     "km": 40.9
+    }
+   },
    "closed_comps": [],
    "segment_demand": 2
   },
@@ -2921,6 +4163,24 @@
     "airport": 46.0,
     "kingdom": 20.3,
     "diriyah": 28.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 33,
+     "km": 33.3
+    },
+    "airport": {
+     "min": 42,
+     "km": 54.4
+    },
+    "kingdom": {
+     "min": 24,
+     "km": 24.7
+    },
+    "diriyah": {
+     "min": 37,
+     "km": 37.3
+    }
    },
    "closed_comps": [
     "SRE-071",
@@ -2965,6 +4225,24 @@
     "kingdom": 21.5,
     "diriyah": 31.0
    },
+   "drive": {
+    "kafd": {
+     "min": 36,
+     "km": 33.6
+    },
+    "airport": {
+     "min": 43,
+     "km": 52.6
+    },
+    "kingdom": {
+     "min": 28,
+     "km": 25.0
+    },
+    "diriyah": {
+     "min": 40,
+     "km": 37.6
+    }
+   },
    "closed_comps": [
     "SRE-070",
     "SRE-076",
@@ -3008,6 +4286,24 @@
     "kingdom": 19.6,
     "diriyah": 29.0
    },
+   "drive": {
+    "kafd": {
+     "min": 31,
+     "km": 31.1
+    },
+    "airport": {
+     "min": 37,
+     "km": 50.1
+    },
+    "kingdom": {
+     "min": 22,
+     "km": 22.5
+    },
+    "diriyah": {
+     "min": 35,
+     "km": 35.1
+    }
+   },
    "closed_comps": [
     "SRE-070",
     "SRE-071",
@@ -3050,6 +4346,24 @@
     "kingdom": 15.7,
     "diriyah": 21.9
    },
+   "drive": {
+    "kafd": {
+     "min": 24,
+     "km": 25.8
+    },
+    "airport": {
+     "min": 38,
+     "km": 51.7
+    },
+    "kingdom": {
+     "min": 15,
+     "km": 17.2
+    },
+    "diriyah": {
+     "min": 28,
+     "km": 29.8
+    }
+   },
    "closed_comps": [
     "SRE-074",
     "SRE-088",
@@ -3089,6 +4403,24 @@
     "kingdom": 19.0,
     "diriyah": 28.1
    },
+   "drive": {
+    "kafd": {
+     "min": 34,
+     "km": 32.8
+    },
+    "airport": {
+     "min": 41,
+     "km": 51.0
+    },
+    "kingdom": {
+     "min": 26,
+     "km": 24.1
+    },
+    "diriyah": {
+     "min": 38,
+     "km": 36.7
+    }
+   },
    "closed_comps": [
     "SRE-088",
     "SRE-096"
@@ -3127,6 +4459,24 @@
     "kingdom": 30.2,
     "diriyah": 38.0
    },
+   "drive": {
+    "kafd": {
+     "min": 45,
+     "km": 44.3
+    },
+    "airport": {
+     "min": 54,
+     "km": 65.4
+    },
+    "kingdom": {
+     "min": 36,
+     "km": 35.6
+    },
+    "diriyah": {
+     "min": 49,
+     "km": 48.2
+    }
+   },
    "closed_comps": [],
    "segment_demand": 2
   },
@@ -3161,6 +4511,24 @@
     "airport": 46.6,
     "kingdom": 19.3,
     "diriyah": 24.5
+   },
+   "drive": {
+    "kafd": {
+     "min": 32,
+     "km": 35.1
+    },
+    "airport": {
+     "min": 46,
+     "km": 60.9
+    },
+    "kingdom": {
+     "min": 24,
+     "km": 26.5
+    },
+    "diriyah": {
+     "min": 36,
+     "km": 37.8
+    }
    },
    "closed_comps": [
     "SRE-070",
@@ -3203,6 +4571,24 @@
     "kingdom": 26.0,
     "diriyah": 36.0
    },
+   "drive": {
+    "kafd": {
+     "min": 41,
+     "km": 45.6
+    },
+    "airport": {
+     "min": 43,
+     "km": 55.3
+    },
+    "kingdom": {
+     "min": 35,
+     "km": 36.2
+    },
+    "diriyah": {
+     "min": 46,
+     "km": 52.0
+    }
+   },
    "closed_comps": [
     "SRE-090"
    ],
@@ -3239,6 +4625,24 @@
     "airport": 41.8,
     "kingdom": 20.4,
     "diriyah": 30.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 33,
+     "km": 35.7
+    },
+    "airport": {
+     "min": 35,
+     "km": 45.3
+    },
+    "kingdom": {
+     "min": 26,
+     "km": 25.9
+    },
+    "diriyah": {
+     "min": 38,
+     "km": 42.1
+    }
    },
    "closed_comps": [
     "SRE-070",
@@ -3282,6 +4686,24 @@
     "kingdom": 18.8,
     "diriyah": 26.7
    },
+   "drive": {
+    "kafd": {
+     "min": 32,
+     "km": 32.1
+    },
+    "airport": {
+     "min": 41,
+     "km": 53.2
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 23.5
+    },
+    "diriyah": {
+     "min": 36,
+     "km": 36.1
+    }
+   },
    "closed_comps": [
     "SRE-074",
     "SRE-088",
@@ -3322,6 +4744,24 @@
     "airport": 40.4,
     "kingdom": 16.6,
     "diriyah": 25.9
+   },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 28.3
+    },
+    "airport": {
+     "min": 35,
+     "km": 47.3
+    },
+    "kingdom": {
+     "min": 19,
+     "km": 19.7
+    },
+    "diriyah": {
+     "min": 32,
+     "km": 32.2
+    }
    },
    "closed_comps": [
     "SRE-070",
@@ -3367,6 +4807,24 @@
     "kingdom": 19.0,
     "diriyah": 28.3
    },
+   "drive": {
+    "kafd": {
+     "min": 31,
+     "km": 30.5
+    },
+    "airport": {
+     "min": 37,
+     "km": 49.5
+    },
+    "kingdom": {
+     "min": 22,
+     "km": 21.9
+    },
+    "diriyah": {
+     "min": 35,
+     "km": 34.5
+    }
+   },
    "closed_comps": [
     "SRE-070",
     "SRE-071",
@@ -3411,6 +4869,24 @@
     "kingdom": 19.3,
     "diriyah": 28.6
    },
+   "drive": {
+    "kafd": {
+     "min": 31,
+     "km": 30.9
+    },
+    "airport": {
+     "min": 38,
+     "km": 49.9
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 22.3
+    },
+    "diriyah": {
+     "min": 35,
+     "km": 34.9
+    }
+   },
    "closed_comps": [
     "SRE-070",
     "SRE-071",
@@ -3452,6 +4928,24 @@
     "kingdom": 17.4,
     "diriyah": 26.7
    },
+   "drive": {
+    "kafd": {
+     "min": 30,
+     "km": 29.3
+    },
+    "airport": {
+     "min": 37,
+     "km": 48.3
+    },
+    "kingdom": {
+     "min": 22,
+     "km": 20.7
+    },
+    "diriyah": {
+     "min": 34,
+     "km": 33.2
+    }
+   },
    "closed_comps": [
     "SRE-090"
    ],
@@ -3490,6 +4984,24 @@
     "airport": 48.0,
     "kingdom": 23.1,
     "diriyah": 31.4
+   },
+   "drive": {
+    "kafd": {
+     "min": 41,
+     "km": 37.5
+    },
+    "airport": {
+     "min": 50,
+     "km": 58.6
+    },
+    "kingdom": {
+     "min": 32,
+     "km": 28.9
+    },
+    "diriyah": {
+     "min": 44,
+     "km": 41.5
+    }
    },
    "closed_comps": [
     "SRE-070",
@@ -3535,6 +5047,24 @@
     "kingdom": 23.1,
     "diriyah": 31.3
    },
+   "drive": {
+    "kafd": {
+     "min": 40,
+     "km": 37.1
+    },
+    "airport": {
+     "min": 49,
+     "km": 58.2
+    },
+    "kingdom": {
+     "min": 31,
+     "km": 28.4
+    },
+    "diriyah": {
+     "min": 43,
+     "km": 41.0
+    }
+   },
    "closed_comps": [
     "SRE-070",
     "SRE-071",
@@ -3578,6 +5108,24 @@
     "kingdom": 22.9,
     "diriyah": 31.4
    },
+   "drive": {
+    "kafd": {
+     "min": 42,
+     "km": 38.9
+    },
+    "airport": {
+     "min": 49,
+     "km": 57.9
+    },
+    "kingdom": {
+     "min": 34,
+     "km": 30.2
+    },
+    "diriyah": {
+     "min": 46,
+     "km": 42.8
+    }
+   },
    "closed_comps": [
     "SRE-070",
     "SRE-071",
@@ -3620,6 +5168,24 @@
     "kingdom": 15.9,
     "diriyah": 25.9
    },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 31.0
+    },
+    "airport": {
+     "min": 29,
+     "km": 40.6
+    },
+    "kingdom": {
+     "min": 22,
+     "km": 23.5
+    },
+    "diriyah": {
+     "min": 32,
+     "km": 37.4
+    }
+   },
    "closed_comps": [
     "SRE-070",
     "SRE-071",
@@ -3661,6 +5227,24 @@
     "kingdom": 17.4,
     "diriyah": 24.3
    },
+   "drive": {
+    "kafd": {
+     "min": 32,
+     "km": 30.1
+    },
+    "airport": {
+     "min": 44,
+     "km": 55.7
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 21.5
+    },
+    "diriyah": {
+     "min": 36,
+     "km": 34.1
+    }
+   },
    "closed_comps": [
     "SRE-074",
     "SRE-096"
@@ -3701,6 +5285,24 @@
     "kingdom": 24.5,
     "diriyah": 33.8
    },
+   "drive": {
+    "kafd": {
+     "min": 38,
+     "km": 36.3
+    },
+    "airport": {
+     "min": 44,
+     "km": 55.3
+    },
+    "kingdom": {
+     "min": 29,
+     "km": 27.7
+    },
+    "diriyah": {
+     "min": 42,
+     "km": 40.3
+    }
+   },
    "closed_comps": [
     "SRE-090"
    ],
@@ -3740,6 +5342,24 @@
     "kingdom": 22.1,
     "diriyah": 31.4
    },
+   "drive": {
+    "kafd": {
+     "min": 36,
+     "km": 33.9
+    },
+    "airport": {
+     "min": 43,
+     "km": 52.9
+    },
+    "kingdom": {
+     "min": 28,
+     "km": 25.2
+    },
+    "diriyah": {
+     "min": 40,
+     "km": 37.8
+    }
+   },
    "closed_comps": [],
    "segment_demand": 2
   },
@@ -3776,6 +5396,24 @@
     "airport": 46.6,
     "kingdom": 23.7,
     "diriyah": 32.9
+   },
+   "drive": {
+    "kafd": {
+     "min": 40,
+     "km": 36.1
+    },
+    "airport": {
+     "min": 47,
+     "km": 55.1
+    },
+    "kingdom": {
+     "min": 32,
+     "km": 27.5
+    },
+    "diriyah": {
+     "min": 44,
+     "km": 40.1
+    }
    },
    "closed_comps": [
     "SRE-070",
@@ -3821,6 +5459,24 @@
     "kingdom": 23.8,
     "diriyah": 33.1
    },
+   "drive": {
+    "kafd": {
+     "min": 40,
+     "km": 36.2
+    },
+    "airport": {
+     "min": 47,
+     "km": 55.2
+    },
+    "kingdom": {
+     "min": 32,
+     "km": 27.6
+    },
+    "diriyah": {
+     "min": 44,
+     "km": 40.2
+    }
+   },
    "closed_comps": [
     "SRE-070",
     "SRE-071",
@@ -3864,6 +5520,24 @@
     "airport": 47.4,
     "kingdom": 25.0,
     "diriyah": 34.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 40,
+     "km": 38.0
+    },
+    "airport": {
+     "min": 46,
+     "km": 57.0
+    },
+    "kingdom": {
+     "min": 31,
+     "km": 29.4
+    },
+    "diriyah": {
+     "min": 43,
+     "km": 42.0
+    }
    },
    "closed_comps": [
     "SRE-070",
@@ -3909,6 +5583,24 @@
     "kingdom": 23.9,
     "diriyah": 33.2
    },
+   "drive": {
+    "kafd": {
+     "min": 39,
+     "km": 36.5
+    },
+    "airport": {
+     "min": 45,
+     "km": 55.5
+    },
+    "kingdom": {
+     "min": 30,
+     "km": 27.8
+    },
+    "diriyah": {
+     "min": 42,
+     "km": 40.4
+    }
+   },
    "closed_comps": [
     "SRE-090"
    ],
@@ -3947,6 +5639,24 @@
     "airport": 57.0,
     "kingdom": 30.0,
     "diriyah": 35.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 52,
+     "km": 55.3
+    },
+    "airport": {
+     "min": 66,
+     "km": 81.1
+    },
+    "kingdom": {
+     "min": 44,
+     "km": 46.6
+    },
+    "diriyah": {
+     "min": 56,
+     "km": 57.9
+    }
    },
    "closed_comps": [
     "SRE-074",
@@ -3989,6 +5699,24 @@
     "kingdom": 29.6,
     "diriyah": 34.5
    },
+   "drive": {
+    "kafd": {
+     "min": 51,
+     "km": 53.9
+    },
+    "airport": {
+     "min": 65,
+     "km": 79.8
+    },
+    "kingdom": {
+     "min": 42,
+     "km": 45.3
+    },
+    "diriyah": {
+     "min": 54,
+     "km": 56.5
+    }
+   },
    "closed_comps": [
     "SRE-074",
     "SRE-088"
@@ -4027,6 +5755,24 @@
     "kingdom": 22.2,
     "diriyah": 26.0
    },
+   "drive": {
+    "kafd": {
+     "min": 31,
+     "km": 34.9
+    },
+    "airport": {
+     "min": 45,
+     "km": 60.7
+    },
+    "kingdom": {
+     "min": 22,
+     "km": 26.3
+    },
+    "diriyah": {
+     "min": 34,
+     "km": 37.5
+    }
+   },
    "closed_comps": [
     "SRE-090"
    ],
@@ -4063,6 +5809,24 @@
     "airport": 47.4,
     "kingdom": 19.9,
     "diriyah": 23.3
+   },
+   "drive": {
+    "kafd": {
+     "min": 31,
+     "km": 33.6
+    },
+    "airport": {
+     "min": 45,
+     "km": 59.4
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 24.9
+    },
+    "diriyah": {
+     "min": 33,
+     "km": 34.7
+    }
    },
    "closed_comps": [
     "SRE-100",
@@ -4102,6 +5866,24 @@
     "kingdom": 13.8,
     "diriyah": 20.5
    },
+   "drive": {
+    "kafd": {
+     "min": 23,
+     "km": 25.0
+    },
+    "airport": {
+     "min": 37,
+     "km": 50.8
+    },
+    "kingdom": {
+     "min": 14,
+     "km": 16.3
+    },
+    "diriyah": {
+     "min": 27,
+     "km": 28.9
+    }
+   },
    "closed_comps": [
     "SRE-100",
     "SRE-111"
@@ -4140,6 +5922,24 @@
     "kingdom": 13.2,
     "diriyah": 18.4
    },
+   "drive": {
+    "kafd": {
+     "min": 25,
+     "km": 25.5
+    },
+    "airport": {
+     "min": 39,
+     "km": 51.3
+    },
+    "kingdom": {
+     "min": 17,
+     "km": 16.9
+    },
+    "diriyah": {
+     "min": 29,
+     "km": 29.5
+    }
+   },
    "closed_comps": [
     "SRE-111"
    ],
@@ -4176,6 +5976,24 @@
     "airport": 43.5,
     "kingdom": 16.4,
     "diriyah": 18.4
+   },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 31.9
+    },
+    "airport": {
+     "min": 40,
+     "km": 57.1
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 26.7
+    },
+    "diriyah": {
+     "min": 25,
+     "km": 28.0
+    }
    },
    "closed_comps": [
     "SRE-100",
@@ -4215,6 +6033,24 @@
     "kingdom": 15.0,
     "diriyah": 16.8
    },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 31.5
+    },
+    "airport": {
+     "min": 41,
+     "km": 56.7
+    },
+    "kingdom": {
+     "min": 21,
+     "km": 21.8
+    },
+    "diriyah": {
+     "min": 26,
+     "km": 27.6
+    }
+   },
    "closed_comps": [
     "SRE-100",
     "SRE-111"
@@ -4252,6 +6088,24 @@
     "airport": 39.2,
     "kingdom": 11.8,
     "diriyah": 16.0
+   },
+   "drive": {
+    "kafd": {
+     "min": 27,
+     "km": 27.9
+    },
+    "airport": {
+     "min": 41,
+     "km": 53.8
+    },
+    "kingdom": {
+     "min": 19,
+     "km": 19.3
+    },
+    "diriyah": {
+     "min": 31,
+     "km": 31.9
+    }
    },
    "closed_comps": [
     "SRE-100",
@@ -4293,6 +6147,24 @@
     "kingdom": 19.9,
     "diriyah": 13.1
    },
+   "drive": {
+    "kafd": {
+     "min": 29,
+     "km": 28.9
+    },
+    "airport": {
+     "min": 41,
+     "km": 54.1
+    },
+    "kingdom": {
+     "min": 30,
+     "km": 31.4
+    },
+    "diriyah": {
+     "min": 27,
+     "km": 25.0
+    }
+   },
    "closed_comps": [
     "SRE-100",
     "SRE-111"
@@ -4333,6 +6205,24 @@
     "kingdom": 15.9,
     "diriyah": 9.3
    },
+   "drive": {
+    "kafd": {
+     "min": 21,
+     "km": 22.3
+    },
+    "airport": {
+     "min": 34,
+     "km": 47.5
+    },
+    "kingdom": {
+     "min": 23,
+     "km": 24.8
+    },
+    "diriyah": {
+     "min": 19,
+     "km": 18.4
+    }
+   },
    "closed_comps": [],
    "segment_demand": 2
   },
@@ -4369,6 +6259,24 @@
     "airport": 38.6,
     "kingdom": 18.1,
     "diriyah": 11.0
+   },
+   "drive": {
+    "kafd": {
+     "min": 25,
+     "km": 24.9
+    },
+    "airport": {
+     "min": 38,
+     "km": 50.1
+    },
+    "kingdom": {
+     "min": 27,
+     "km": 27.4
+    },
+    "diriyah": {
+     "min": 23,
+     "km": 21.0
+    }
    },
    "closed_comps": [
     "SRE-100",
@@ -4410,6 +6318,24 @@
     "kingdom": 21.8,
     "diriyah": 15.4
    },
+   "drive": {
+    "kafd": {
+     "min": 31,
+     "km": 30.0
+    },
+    "airport": {
+     "min": 44,
+     "km": 55.2
+    },
+    "kingdom": {
+     "min": 33,
+     "km": 32.5
+    },
+    "diriyah": {
+     "min": 29,
+     "km": 26.1
+    }
+   },
    "closed_comps": [
     "SRE-100",
     "SRE-111"
@@ -4450,6 +6376,24 @@
     "kingdom": 21.5,
     "diriyah": 14.8
    },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 28.1
+    },
+    "airport": {
+     "min": 40,
+     "km": 53.3
+    },
+    "kingdom": {
+     "min": 29,
+     "km": 30.6
+    },
+    "diriyah": {
+     "min": 25,
+     "km": 24.2
+    }
+   },
    "closed_comps": [],
    "segment_demand": 2
   },
@@ -4486,6 +6430,24 @@
     "airport": 41.9,
     "kingdom": 21.6,
     "diriyah": 14.6
+   },
+   "drive": {
+    "kafd": {
+     "min": 31,
+     "km": 30.4
+    },
+    "airport": {
+     "min": 43,
+     "km": 55.6
+    },
+    "kingdom": {
+     "min": 32,
+     "km": 32.9
+    },
+    "diriyah": {
+     "min": 28,
+     "km": 26.5
+    }
    },
    "closed_comps": [
     "SRE-100",
@@ -4527,6 +6489,24 @@
     "kingdom": 22.0,
     "diriyah": 14.9
    },
+   "drive": {
+    "kafd": {
+     "min": 31,
+     "km": 30.5
+    },
+    "airport": {
+     "min": 44,
+     "km": 55.7
+    },
+    "kingdom": {
+     "min": 33,
+     "km": 33.0
+    },
+    "diriyah": {
+     "min": 29,
+     "km": 26.6
+    }
+   },
    "closed_comps": [
     "SRE-100",
     "SRE-111"
@@ -4567,6 +6547,24 @@
     "kingdom": 18.5,
     "diriyah": 11.8
    },
+   "drive": {
+    "kafd": {
+     "min": 24,
+     "km": 24.9
+    },
+    "airport": {
+     "min": 37,
+     "km": 50.1
+    },
+    "kingdom": {
+     "min": 26,
+     "km": 27.4
+    },
+    "diriyah": {
+     "min": 22,
+     "km": 21.0
+    }
+   },
    "closed_comps": [
     "SRE-100"
    ],
@@ -4603,6 +6601,24 @@
     "airport": 31.4,
     "kingdom": 4.6,
     "diriyah": 9.4
+   },
+   "drive": {
+    "kafd": {
+     "min": 17,
+     "km": 19.2
+    },
+    "airport": {
+     "min": 30,
+     "km": 44.3
+    },
+    "kingdom": {
+     "min": 10,
+     "km": 9.9
+    },
+    "diriyah": {
+     "min": 14,
+     "km": 12.8
+    }
    },
    "closed_comps": [
     "SRE-100",
@@ -4642,6 +6658,24 @@
     "kingdom": 27.8,
     "diriyah": 27.2
    },
+   "drive": {
+    "kafd": {
+     "min": 47,
+     "km": 52.5
+    },
+    "airport": {
+     "min": 61,
+     "km": 78.3
+    },
+    "kingdom": {
+     "min": 39,
+     "km": 43.8
+    },
+    "diriyah": {
+     "min": 47,
+     "km": 51.5
+    }
+   },
    "closed_comps": [
     "SRE-100",
     "SRE-111"
@@ -4680,6 +6714,24 @@
     "kingdom": 25.9,
     "diriyah": 25.5
    },
+   "drive": {
+    "kafd": {
+     "min": 50,
+     "km": 54.7
+    },
+    "airport": {
+     "min": 64,
+     "km": 80.5
+    },
+    "kingdom": {
+     "min": 42,
+     "km": 46.0
+    },
+    "diriyah": {
+     "min": 50,
+     "km": 53.7
+    }
+   },
    "closed_comps": [],
    "segment_demand": 0
   },
@@ -4714,6 +6766,24 @@
     "airport": 48.9,
     "kingdom": 24.4,
     "diriyah": 21.2
+   },
+   "drive": {
+    "kafd": {
+     "min": 32,
+     "km": 35.5
+    },
+    "airport": {
+     "min": 44,
+     "km": 60.7
+    },
+    "kingdom": {
+     "min": 26,
+     "km": 29.9
+    },
+    "diriyah": {
+     "min": 29,
+     "km": 31.8
+    }
    },
    "closed_comps": [
     "SRE-100",
@@ -4752,6 +6822,24 @@
     "airport": 41.0,
     "kingdom": 13.6,
     "diriyah": 17.4
+   },
+   "drive": {
+    "kafd": {
+     "min": 28,
+     "km": 28.5
+    },
+    "airport": {
+     "min": 42,
+     "km": 54.3
+    },
+    "kingdom": {
+     "min": 19,
+     "km": 19.8
+    },
+    "diriyah": {
+     "min": 32,
+     "km": 32.4
+    }
    },
    "closed_comps": [
     "SRE-100",
@@ -4793,6 +6881,24 @@
     "kingdom": 19.3,
     "diriyah": 13.9
    },
+   "drive": {
+    "kafd": {
+     "min": 30,
+     "km": 31.3
+    },
+    "airport": {
+     "min": 43,
+     "km": 56.5
+    },
+    "kingdom": {
+     "min": 27,
+     "km": 28.5
+    },
+    "diriyah": {
+     "min": 28,
+     "km": 27.4
+    }
+   },
    "closed_comps": [
     "SRE-100",
     "SRE-111"
@@ -4833,6 +6939,24 @@
     "kingdom": 19.0,
     "diriyah": 13.8
    },
+   "drive": {
+    "kafd": {
+     "min": 29,
+     "km": 31.2
+    },
+    "airport": {
+     "min": 41,
+     "km": 56.4
+    },
+    "kingdom": {
+     "min": 26,
+     "km": 28.3
+    },
+    "diriyah": {
+     "min": 26,
+     "km": 27.3
+    }
+   },
    "closed_comps": [
     "SRE-100",
     "SRE-111"
@@ -4871,6 +6995,24 @@
     "kingdom": 19.7,
     "diriyah": 20.3
    },
+   "drive": {
+    "kafd": {
+     "min": 34,
+     "km": 35.9
+    },
+    "airport": {
+     "min": 47,
+     "km": 61.1
+    },
+    "kingdom": {
+     "min": 29,
+     "km": 29.6
+    },
+    "diriyah": {
+     "min": 32,
+     "km": 32.0
+    }
+   },
    "closed_comps": [
     "SRE-114"
    ],
@@ -4907,6 +7049,24 @@
     "airport": 33.4,
     "kingdom": 10.2,
     "diriyah": 6.4
+   },
+   "drive": {
+    "kafd": {
+     "min": 24,
+     "km": 17.9
+    },
+    "airport": {
+     "min": 37,
+     "km": 44.3
+    },
+    "kingdom": {
+     "min": 20,
+     "km": 15.2
+    },
+    "diriyah": {
+     "min": 22,
+     "km": 14.9
+    }
    },
    "closed_comps": [
     "SRE-100",

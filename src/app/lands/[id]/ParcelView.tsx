@@ -9,7 +9,7 @@ import LeadForm from "@/components/LeadForm";
 import AlertForm from "@/components/AlertForm";
 import { useLang } from "@/lib/i18n";
 import { byId, available, portfolio } from "@/lib/portfolio";
-import { AREA_LABEL, DEAL_LABEL, STATUS_LABEL, TYPE_LABEL, district, hook, money, num, priceLabel, sqm, sqmPrice, street, type T } from "@/lib/format";
+import { AREA_LABEL, DEAL_LABEL, STATUS_LABEL, TYPE_LABEL, byDrive, district, hook, minutes, money, num, priceLabel, sqm, sqmPrice, street, type T } from "@/lib/format";
 import { waLink } from "@/lib/contact";
 import { track } from "@/lib/track";
 
@@ -65,8 +65,8 @@ export default function ParcelView({ id }: { id: string }) {
     else why.push({ icon: "⚖️", t: { ar: `سعر المتر قريب من متوسط ${area.ar}، يعني سعر عادل`, en: `Priced right around the ${area.en} average, a fair price` } });
   }
   why.push({ icon: "📐", t: { ar: `${num(p.area_sqm, "ar")} م²، تكفي ${USES[p.land_type][scale].ar}`, en: `${num(p.area_sqm, "en")} m², enough for ${USES[p.land_type][scale].en}` } });
-  const nearest = (Object.keys(p.distances_km) as (keyof typeof p.distances_km)[]).sort((a, b) => p.distances_km[a] - p.distances_km[b])[0];
-  why.push({ icon: "📍", t: { ar: `${p.distances_km[nearest]} كم عن ${anchors[nearest].ar}`, en: `${p.distances_km[nearest]} km from ${anchors[nearest].en}` } });
+  const nearest = byDrive(p)[0];
+  why.push({ icon: "🚗", t: { ar: `${minutes(p.drive[nearest].min, "ar")} بالسيارة عن ${anchors[nearest].ar}`, en: `${minutes(p.drive[nearest].min, "en")} drive to ${anchors[nearest].en}` } });
   if (p.segment_demand >= 2 && !closed)
     why.push({ icon: "🔥", t: { ar: `${p.segment_demand} مستثمرين يدورون أراضي ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar} بنفس المنطقة`, en: `${p.segment_demand} investors are looking for ${TYPE_LABEL[p.land_type].en.toLowerCase()} land ${DEAL_LABEL[p.listing_type].en.toLowerCase()} in this area` } });
 
@@ -146,14 +146,17 @@ export default function ParcelView({ id }: { id: string }) {
             <section className="glass rounded-[30px] p-6">
               <h2 className="text-2xl font-bold">{ar ? "وين موقعها؟" : "Where is it?"}</h2>
               <div className="mt-4 flex flex-wrap gap-2">
-                {(Object.keys(p.distances_km) as (keyof typeof p.distances_km)[]).sort((a, b) => p.distances_km[a] - p.distances_km[b]).map((k) => (
+                {byDrive(p).map((k) => (
                   <span key={k} className="rounded-full bg-white/80 px-4 py-2 text-[15px]">
-                    <b className="font-semibold">{ar ? `${p.distances_km[k]} كم` : `${p.distances_km[k]} km`}</b>
+                    <span aria-hidden>🚗 </span>
+                    <b className="font-semibold">{minutes(p.drive[k].min, lang)}</b>
                     <span className="text-muted">{ar ? " عن " : " to "}{anchors[k][lang]}</span>
                   </span>
                 ))}
               </div>
-              <p className="mt-3 text-[13px] text-muted">{ar ? "المسافات تقريبية بخط مستقيم." : "Approximate straight-line distances."}</p>
+              <p className="mt-3 text-[13px] text-muted">
+                {ar ? "وقت السواقة بدون زحمة، محسوب على الطرق الفعلية. وقت الذروة غالباً أطول." : "Driving time without traffic, on real roads. Rush hour usually takes longer."}
+              </p>
             </section>
 
             {similar.length > 0 && (

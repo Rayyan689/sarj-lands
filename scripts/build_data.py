@@ -15,6 +15,10 @@ parcels = json.loads((SRC / "sarj-lands-riyadh.json").read_text())
 inquiries = json.loads((SRC / "investor-inquiries.json").read_text())
 corrections = []
 
+# Real road driving times (free-flow) from OSRM on OpenStreetMap, fetched once and stored.
+_dt = Path(__file__).resolve().parent.parent / "data" / "drive_times.json"
+DRIVE = {k: v for k, v in json.loads(_dt.read_text()).items() if not k.startswith("_")} if _dt.exists() else {}
+
 # Approximate public coordinates of well-known Riyadh anchors (used for straight-line distances only).
 ANCHORS = {
     "kafd": {"en": "King Abdullah Financial District", "ar": "مركز الملك عبدالله المالي", "lat": 24.7636, "lng": 46.6400},
@@ -93,6 +97,10 @@ for p in parcels:
             d["district_median_sqm"] = med[dk]
             d["vs_district_pct"] = round((p["price_per_sqm_sar"] / med[dk] - 1) * 100)
     dist = {key: round(km(p["lat"], p["lng"], a["lat"], a["lng"]), 1) for key, a in ANCHORS.items()}
+    drive = {}
+    if p["parcel_id"] in DRIVE:
+        for key, secs, meters in DRIVE[p["parcel_id"]]:
+            drive[key] = {"min": max(1, round(secs / 60)), "km": round(meters / 1000, 1)}
     comps = [q["parcel_id"] for q in parcels
              if q["parcel_id"] != p["parcel_id"] and q["status"] in ("sold", "leased")
              and q["listing_type"] == p["listing_type"] and q["land_type"] == p["land_type"]
@@ -103,6 +111,7 @@ for p in parcels:
         "listing_age_days": p["days_on_market"],
         "pricing": d,
         "distances_km": dist,
+        "drive": drive,
         "closed_comps": comps,
         "segment_demand": demand[(p["area_of_city"], p["land_type"], p["listing_type"])],
     })
