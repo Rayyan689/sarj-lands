@@ -1,43 +1,110 @@
 @import "tailwindcss";
 @import "maplibre-gl/dist/maplibre-gl.css";
 
-/* Sarj palette: Riyadh stone, palm night, palm green, Najdi sun. */
+/*
+  Sarj, liquid glass edition.
+  Soft daylight over Riyadh: sky blue, apricot sunset, fresh mint.
+  Glass panels float over a gently tinted canvas and the live map.
+*/
 :root {
-  --stone: #eef1ec;      /* page */
-  --stone-2: #e3e8e1;    /* sunken panels */
-  --sheet: #fbfcfa;      /* raised surfaces */
-  --ink: #13261e;        /* text */
-  --muted: #56665e;      /* secondary text */
-  --line: #cdd6cc;       /* rules and borders */
-  --palm: #1f5c45;       /* actions */
-  --palm-deep: #164634;
-  --sun: #e0a526;        /* available land, highlights */
-  --sun-soft: #f6e6bd;
-  --closed: #9aa59f;     /* sold / leased */
+  --canvas: #f5f8fc;
+  --ink: #1d2433;
+  --muted: #667085;
+  --hair: rgba(29, 36, 51, 0.08);
+  --blue: #2f7bf6;        /* actions */
+  --blue-deep: #1f63d6;
+  --apricot: #ffad33;     /* available land */
+  --apricot-soft: #fff1db;
+  --mint: #1fa874;        /* good value */
+  --mint-soft: #ddf6ea;
+  --closed: #a3acb9;
+  --wa: #25d366;
 }
 
 @theme inline {
-  --color-stone: var(--stone);
-  --color-stone-2: var(--stone-2);
-  --color-sheet: var(--sheet);
+  --color-canvas: var(--canvas);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
-  --color-line: var(--line);
-  --color-palm: var(--palm);
-  --color-palm-deep: var(--palm-deep);
-  --color-sun: var(--sun);
-  --color-sun-soft: var(--sun-soft);
+  --color-hair: var(--hair);
+  --color-blue: var(--blue);
+  --color-blue-deep: var(--blue-deep);
+  --color-apricot: var(--apricot);
+  --color-apricot-soft: var(--apricot-soft);
+  --color-mint: var(--mint);
+  --color-mint-soft: var(--mint-soft);
   --color-closed: var(--closed);
-  --font-sans: "Readex Pro", system-ui, sans-serif;
-  --font-display: "Reem Kufi", "Readex Pro", sans-serif;
+  --color-wa: var(--wa);
+  --font-sans: "Rubik", system-ui, -apple-system, sans-serif;
 }
 
-html { background: var(--stone); }
-body { background: var(--stone); color: var(--ink); font-family: var(--font-sans); }
+html { background: var(--canvas); }
+body {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(60rem 40rem at 0% 0%, #d6e9ff 0%, transparent 60%),
+    radial-gradient(50rem 36rem at 100% 8%, #ffe6c9 0%, transparent 55%),
+    radial-gradient(56rem 40rem at 60% 100%, #d9f4e8 0%, transparent 60%),
+    var(--canvas);
+  background-attachment: fixed;
+}
 
-:focus-visible { outline: 2px solid var(--palm); outline-offset: 2px; }
+@layer components {
+  /* The liquid glass surface: translucent, blurred, with a lit top edge. */
+  .glass {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.5));
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.3),
+      0 18px 50px -20px rgba(31, 61, 120, 0.25);
+  }
+  .glass-soft {
+    background: rgba(255, 255, 255, 0.55);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+  }
+  .bubble {
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: inset 0 1px 0 #fff, 0 4px 14px -6px rgba(31, 61, 120, 0.22);
+    transition: transform .15s ease, background-color .15s ease, box-shadow .15s ease;
+  }
+  .bubble:hover { background: #fff; box-shadow: inset 0 1px 0 #fff, 0 8px 22px -8px rgba(31, 61, 120, 0.3); }
+  .bubble:active { transform: scale(0.97); }
+  .bubble-on { background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 0 6px 18px -6px rgba(29, 36, 51, 0.5); }
+  .bubble-on:hover { background: var(--ink); }
+  .btn-primary {
+    border-radius: 9999px; background: linear-gradient(180deg, #4b8dff, var(--blue)); color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 10px 24px -10px rgba(47, 123, 246, 0.8);
+    transition: transform .15s ease, filter .15s ease;
+  }
+  .btn-primary:hover { filter: brightness(1.05); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-wa {
+    border-radius: 9999px; background: linear-gradient(180deg, #3ee07a, #1fbf5b); color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 10px 24px -12px rgba(31, 191, 91, 0.9);
+  }
+  .field {
+    width: 100%; border-radius: 16px; background: rgba(255,255,255,.85);
+    border: 1px solid rgba(29, 36, 51, 0.1); padding: .7rem .95rem;
+  }
+  .field:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+}
 
-.maplibregl-ctrl-attrib { font-size: 10px; }
-.pin-pulse { animation: pin 2.4s ease-out infinite; }
-@keyframes pin { 0% { transform: scale(1); opacity: .55 } 100% { transform: scale(2.6); opacity: 0 } }
-@media (prefers-reduced-motion: reduce) { .pin-pulse { animation: none } * { scroll-behavior: auto !important } }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+.step-in { animation: stepIn .28s cubic-bezier(.2,.8,.2,1); }
+@keyframes stepIn { from { opacity: 0; transform: translateY(8px) scale(.99) } to { opacity: 1; transform: none } }
+
+.maplibregl-ctrl-attrib { font-size: 10px; border-radius: 9999px !important; }
+.maplibregl-ctrl-group { border-radius: 16px !important; overflow: hidden; box-shadow: 0 6px 20px -8px rgba(31,61,120,.35) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .step-in { animation: none }
+  .bubble, .btn-primary { transition: none }
+}

@@ -7,18 +7,14 @@ import { AREA_LABEL } from "@/lib/format";
 import { useLang } from "@/lib/i18n";
 import { track } from "@/lib/track";
 
-const chip = (on: boolean) =>
-  `rounded-md border px-3.5 py-2.5 text-start text-[15px] transition-colors ${
-    on ? "border-ink bg-ink text-white" : "border-line bg-sheet hover:border-ink"
-  }`;
-
-export default function MatchFlow({ compact = false }: { compact?: boolean }) {
+/** One question at a time. Four taps from intent to a shortlist. */
+export default function MatchFlow() {
   const { lang } = useLang();
   const router = useRouter();
+  const [step, setStep] = useState(0);
   const [use, setUse] = useState<IntentKey | null>(null);
   const [deal, setDeal] = useState<Deal>("sale");
-  const [area, setArea] = useState<Area | "any" | null>(null);
-  const [step, setStep] = useState(1);
+  const [area, setArea] = useState<Area | "any">("any");
 
   const intent = intentByKey(use);
   const counts = useMemo(() => {
@@ -32,77 +28,88 @@ export default function MatchFlow({ compact = false }: { compact?: boolean }) {
     return c;
   }, [intent, deal]);
 
-  const pickUse = (k: IntentKey) => {
-    setUse(k);
-    setDeal(intentByKey(k)!.defaultDeal);
-    setStep(2);
-    track("match_started", { use: k });
-  };
+  const go = (n: number) => { setStep(n); track("match_step", { step: n, use, deal, area }); };
   const finish = (budget: number | null) => {
-    const q = new URLSearchParams({ use: use!, deal, area: area ?? "any" });
+    const q = new URLSearchParams({ use: use!, deal, area });
     if (budget != null) q.set("budget", String(budget));
     track("match_completed", { use, deal, area, budget });
     router.push(`/match?${q}`);
   };
 
-  const label = (n: number, ar: string, en: string) => (
-    <h2 className="mb-3 flex items-baseline gap-2 text-base font-semibold">
-      <span className="font-display text-sun">{n}</span>
-      {lang === "ar" ? ar : en}
-    </h2>
-  );
+  const Q = [
+    { ar: "وش ناوي تبني؟", en: "What are you planning to build?" },
+    { ar: "بتشتري ولا بتستأجر؟", en: "Buying or leasing?" },
+    { ar: "وين تبيها في الرياض؟", en: "Where in Riyadh?" },
+    { ar: deal === "sale" ? "كم ميزانيتك تقريباً؟" : "كم تقدر تدفع إيجار بالسنة؟", en: deal === "sale" ? "Roughly what's your budget?" : "How much rent a year works for you?" },
+  ];
 
   return (
-    <div className="space-y-6">
-      <section>
-        {label(1, "ماذا تخطط أن تبني؟", "What are you planning to build?")}
-        <div className={`grid gap-2 ${compact ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3"}`}>
-          {INTENTS.map((i) => (
-            <button key={i.key} onClick={() => pickUse(i.key)} className={chip(use === i.key)}>{i[lang]}</button>
+    <div>
+      <div className="mb-4 flex items-center gap-3">
+        {step > 0 && (
+          <button onClick={() => go(step - 1)} className="bubble grid h-9 w-9 place-items-center text-lg" aria-label={lang === "ar" ? "رجوع" : "Back"}>
+            <span aria-hidden className={lang === "ar" ? "" : "rotate-180"}>›</span>
+          </button>
+        )}
+        <h2 className="text-xl font-semibold sm:text-2xl">{Q[step][lang]}</h2>
+        <div className="ms-auto flex gap-1.5" aria-label={lang === "ar" ? `السؤال ${step + 1} من 4` : `Question ${step + 1} of 4`}>
+          {[0, 1, 2, 3].map((i) => (
+            <span key={i} className={`h-2 rounded-full transition-all ${i === step ? "w-6 bg-blue" : i < step ? "w-2 bg-blue/50" : "w-2 bg-ink/15"}`} />
           ))}
         </div>
-      </section>
+      </div>
 
-      {step >= 2 && (
-        <section>
-          {label(2, "تشتري أم تستأجر؟", "Buy or lease?")}
+      <div key={step} className="step-in">
+        {step === 0 && (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {INTENTS.map((i) => (
+              <button key={i.key} onClick={() => { setUse(i.key); setDeal(i.defaultDeal); track("match_started", { use: i.key }); go(1); }}
+                className={`bubble flex items-center gap-2.5 px-4 py-3 text-start text-[15px] ${use === i.key ? "bubble-on" : ""}`}
+                style={{ borderRadius: 20 }}>
+                <span aria-hidden className="text-xl leading-none">{i.icon}</span>{i[lang]}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {step === 1 && (
           <div className="grid grid-cols-2 gap-2">
             {(["sale", "lease"] as Deal[]).map((d) => (
-              <button key={d} onClick={() => { setDeal(d); setStep(Math.max(step, 3)); }} className={chip(deal === d && step >= 3)}>
-                {d === "sale" ? (lang === "ar" ? "أشتري الأرض" : "Buy the land") : (lang === "ar" ? "أستأجرها سنوياً" : "Lease it yearly")}
+              <button key={d} onClick={() => { setDeal(d); go(2); }} className={`bubble px-5 py-5 text-start ${deal === d ? "ring-2 ring-blue/40" : ""}`} style={{ borderRadius: 24 }}>
+                <span aria-hidden className="mb-1 block text-2xl">{d === "sale" ? "🔑" : "📅"}</span>
+                <span className="block text-lg font-semibold">{d === "sale" ? (lang === "ar" ? "أشتري" : "Buy") : (lang === "ar" ? "أستأجر" : "Lease")}</span>
+                <span className="text-sm text-muted">{d === "sale" ? (lang === "ar" ? "تصير الأرض باسمك" : "The land is yours") : (lang === "ar" ? "إيجار سنوي، بدون دفعة كبيرة" : "Yearly rent, no big upfront cost")}</span>
               </button>
             ))}
           </div>
-        </section>
-      )}
+        )}
 
-      {step >= 3 && (
-        <section>
-          {label(3, "في أي جزء من الرياض؟", "Which part of Riyadh?")}
+        {step === 2 && (
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {(["any", ...AREAS] as (Area | "any")[]).map((a) => (
-              <button key={a} onClick={() => { setArea(a); setStep(4); }} className={chip(area === a)}>
-                <span className="block">{a === "any" ? (lang === "ar" ? "أي مكان مناسب" : "Anywhere that fits") : AREA_LABEL[a][lang]}</span>
-                <span className={`text-xs ${area === a ? "text-white/70" : "text-muted"}`}>
-                  {lang === "ar" ? `${counts[a] ?? 0} متاحة` : `${counts[a] ?? 0} available`}
-                </span>
-              </button>
-            ))}
+            {(["any", ...AREAS] as (Area | "any")[]).map((a) => {
+              const n = counts[a] ?? 0;
+              return (
+                <button key={a} onClick={() => { setArea(a); go(3); }} className={`bubble px-4 py-3 text-start ${area === a && step > 2 ? "bubble-on" : ""}`} style={{ borderRadius: 20 }}>
+                  <span className="block text-[15px] font-medium">{a === "any" ? (lang === "ar" ? "ما تفرق معي" : "Anywhere works") : AREA_LABEL[a][lang]}</span>
+                  <span className={`text-xs ${n ? "text-muted" : "text-muted/70"}`}>
+                    {n ? (lang === "ar" ? `${n} أرض متاحة` : `${n} available`) : (lang === "ar" ? "ما فيه شي الحين" : "None right now")}
+                  </span>
+                </button>
+              );
+            })}
           </div>
-        </section>
-      )}
+        )}
 
-      {step >= 4 && (
-        <section>
-          {label(4, deal === "sale" ? "ميزانية الشراء" : "الإيجار السنوي الذي يناسبك",
-            deal === "sale" ? "Purchase budget" : "Annual rent you can pay")}
+        {step === 3 && (
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {BUDGETS[deal].map((b) => (
-              <button key={b.en} onClick={() => finish(b.max)} className={chip(false)}>{b[lang]}</button>
+              <button key={b.en} onClick={() => finish(b.max)} className="bubble px-4 py-3.5 text-start text-[15px] font-medium" style={{ borderRadius: 20 }}>
+                {b[lang]}
+              </button>
             ))}
           </div>
-        </section>
-      )}
+        )}
+      </div>
     </div>
   );
 }

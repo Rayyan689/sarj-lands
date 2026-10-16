@@ -4,7 +4,7 @@ import { useLang } from "@/lib/i18n";
 import { postJSON, track } from "@/lib/track";
 
 /** Captures demand the portfolio can't serve today. Feeds the admin demand-gap view. */
-export default function AlertForm({ criteria, summary }: { criteria: object; summary: { ar: string; en: string } }) {
+export default function AlertForm({ criteria, title, summary }: { criteria: object; title?: { ar: string; en: string }; summary: { ar: string; en: string } }) {
   const { lang } = useLang();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -22,30 +22,24 @@ export default function AlertForm({ criteria, summary }: { criteria: object; sum
 
   if (state === "done")
     return (
-      <div className="border border-palm bg-sheet p-5">
-        <p className="font-semibold">{lang === "ar" ? "تم حفظ طلبك" : "Your request is saved"}</p>
-        <p className="mt-1 text-sm text-muted">
-          {lang === "ar" ? "سنتواصل معك على واتساب فور توفر أرض تطابق طلبك." : "We'll message you on WhatsApp as soon as matching land comes up."}
-        </p>
+      <div className="glass rounded-[26px] p-5">
+        <p className="text-lg font-semibold">{lang === "ar" ? "أبشر! 🙌" : "You're on the list 🙌"}</p>
+        <p className="mt-1 text-muted">{lang === "ar" ? "أول ما تنزل أرض تناسبك بنرسل لك على الواتساب." : "The moment matching land comes up, we'll WhatsApp you."}</p>
       </div>
     );
 
   return (
-    <form onSubmit={submit} className="border border-line bg-sheet p-5">
-      <p className="font-semibold">{lang === "ar" ? "أبلغني عند توفر أرض مناسبة" : "Tell me when matching land comes up"}</p>
-      <p className="mt-1 text-sm text-muted">{summary[lang]}</p>
+    <form onSubmit={submit} className="glass rounded-[26px] p-5">
+      <p className="text-lg font-semibold">{(title ?? { ar: "علّمني أول ما تنزل أرض تناسبني", en: "Tell me when matching land comes up" })[lang]}</p>
+      <p className="mt-1 text-[15px] text-muted">{summary[lang]}</p>
       <div className="mt-4 grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
-        <label className="sr-only" htmlFor="al-name">{lang === "ar" ? "الاسم" : "Name"}</label>
-        <input id="al-name" required value={name} onChange={(e) => setName(e.target.value)} placeholder={lang === "ar" ? "الاسم" : "Name"}
-          className="rounded-md border border-line bg-white px-3 py-2.5" />
-        <label className="sr-only" htmlFor="al-phone">{lang === "ar" ? "رقم الجوال" : "Mobile number"}</label>
-        <input id="al-phone" required inputMode="tel" dir="ltr" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="05X XXX XXXX"
-          className="rounded-md border border-line bg-white px-3 py-2.5 text-start" />
-        <button disabled={state === "sending"} className="rounded-md bg-palm px-4 py-2.5 text-white hover:bg-palm-deep disabled:opacity-60">
-          {state === "sending" ? (lang === "ar" ? "جارٍ الحفظ" : "Saving") : (lang === "ar" ? "أبلغني" : "Notify me")}
+        <input aria-label={lang === "ar" ? "اسمك" : "Your name"} required value={name} onChange={(e) => setName(e.target.value)} placeholder={lang === "ar" ? "اسمك" : "Your name"} className="field" autoComplete="name" />
+        <input aria-label={lang === "ar" ? "جوالك" : "Mobile"} required inputMode="tel" dir="ltr" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="05X XXX XXXX" className="field text-start" autoComplete="tel" />
+        <button disabled={state === "sending"} className="btn-primary px-6 py-3 font-medium disabled:opacity-60">
+          {state === "sending" ? (lang === "ar" ? "لحظة..." : "One sec...") : (lang === "ar" ? "علّمني" : "Notify me")}
         </button>
       </div>
-      {state === "error" && <p className="mt-2 text-sm text-red-700">{lang === "ar" ? "تعذر الحفظ. تأكد من الاسم ورقم الجوال وحاول مرة أخرى." : "Couldn't save. Check your name and mobile number, then try again."}</p>}
+      {state === "error" && <p className="mt-2 text-sm text-red-600">{lang === "ar" ? "ما ضبط الحفظ. تأكد من اسمك ورقم جوالك وجرّب مرة ثانية." : "That didn't save. Check your name and number, then try again."}</p>}
     </form>
   );
 }

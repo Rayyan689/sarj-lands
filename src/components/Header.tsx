@@ -9,44 +9,39 @@ export default function Header() {
   const { lang, setLang } = useLang();
   const path = usePathname();
   const nav = [
-    { href: "/match", ar: "اختر لي أرضاً", en: "Find my land" },
+    { href: "/match", ar: "طلّع لي أرض", en: "Find my land" },
     { href: "/lands", ar: "كل الأراضي", en: "All land" },
   ];
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-stone/90 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2.5">
-          <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden>
-            <rect x="2" y="2" width="24" height="24" fill="none" stroke="var(--ink)" strokeWidth="2" />
-            <rect x="9" y="9" width="10" height="10" fill="var(--sun)" />
-          </svg>
-          <span className="font-display text-xl font-semibold leading-none">
-            {lang === "ar" ? "سرج العقارية" : "Sarj Real Estate"}
-          </span>
+    <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5">
+      <div className="glass mx-auto flex h-14 max-w-6xl items-center gap-2 rounded-full ps-4 pe-2 sm:gap-4">
+        <Link href="/" className="flex items-center gap-2">
+          <span aria-hidden className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-b from-[#ffc266] to-[#ff9a1f] text-sm font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,.5)]">س</span>
+          <span className="text-[17px] font-semibold">{lang === "ar" ? "سرج العقارية" : "Sarj Real Estate"}</span>
         </Link>
-        <nav className="hidden gap-1 sm:flex">
+        <nav className="ms-2 hidden gap-1 sm:flex">
           {nav.map((n) => (
             <Link key={n.href} href={n.href}
-              className={`rounded-md px-3 py-2 text-sm ${path?.startsWith(n.href) ? "bg-stone-2 text-ink" : "text-muted hover:text-ink"}`}>
+              className={`rounded-full px-4 py-2 text-[15px] transition-colors ${path?.startsWith(n.href) ? "bg-white text-ink shadow-sm" : "text-muted hover:text-ink"}`}>
               {n[lang]}
             </Link>
           ))}
         </nav>
-        <div className="ms-auto flex items-center gap-2">
-          <a href={waLink(lang === "ar" ? "السلام عليكم، أبحث عن أرض في الرياض" : "Hello, I'm looking for land in Riyadh")}
+        <div className="ms-auto flex items-center gap-1.5">
+          <a href={waLink(lang === "ar" ? "هلا، أدوّر أرض بالرياض" : "Hi, I'm looking for land in Riyadh")}
             target="_blank" rel="noopener" onClick={() => track("whatsapp_click", { from: "header" })}
-            className="hidden rounded-md bg-palm px-3.5 py-2 text-sm text-white hover:bg-palm-deep sm:inline-block">
-            {lang === "ar" ? "تحدث معنا عبر واتساب" : "WhatsApp us"}
+            className="btn-wa hidden px-4 py-2 text-[15px] sm:inline-block">
+            {lang === "ar" ? "كلّمنا واتساب" : "WhatsApp us"}
           </a>
-          <button onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-            className="rounded-md border border-line px-3 py-2 text-sm hover:bg-stone-2" lang={lang === "ar" ? "en" : "ar"}>
-            {lang === "ar" ? "English" : "العربية"}
+          <button onClick={() => setLang(lang === "ar" ? "en" : "ar")} lang={lang === "ar" ? "en" : "ar"}
+            className="rounded-full px-3.5 py-2 text-[15px] text-muted hover:bg-white hover:text-ink">
+            {lang === "ar" ? "EN" : "عربي"}
           </button>
         </div>
       </div>
-      <nav className="flex gap-1 border-t border-line px-4 py-1.5 sm:hidden">
+      <nav className="glass-soft mx-auto mt-2 flex max-w-6xl gap-1 rounded-full p-1 sm:hidden">
         {nav.map((n) => (
-          <Link key={n.href} href={n.href} className={`flex-1 rounded-md py-1.5 text-center text-sm ${path?.startsWith(n.href) ? "bg-stone-2" : "text-muted"}`}>
+          <Link key={n.href} href={n.href} className={`flex-1 rounded-full py-2 text-center text-sm ${path?.startsWith(n.href) ? "bg-white shadow-sm" : "text-muted"}`}>
             {n[lang]}
           </Link>
         ))}

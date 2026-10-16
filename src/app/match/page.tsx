@@ -14,23 +14,25 @@ import { AREA_LABEL, TYPE_LABEL } from "@/lib/format";
 import { parcels } from "@/lib/portfolio";
 import { track } from "@/lib/track";
 
-function summary(c: Criteria) {
+function chips(c: Criteria) {
   const i = intentByKey(c.use)!;
   const b = BUDGETS[c.deal].find((x) => x.max === c.budget) ?? BUDGETS[c.deal][BUDGETS[c.deal].length - 1];
-  const area = c.area === "any" ? { ar: "أي منطقة", en: "any area" } : AREA_LABEL[c.area];
-  return {
-    ar: `${i.ar}، ${c.deal === "sale" ? "شراء" : "إيجار"}، ${area.ar}، ${b.ar}`,
-    en: `${i.en}, ${c.deal === "sale" ? "buy" : "lease"}, ${area.en}, ${b.en}`,
-  };
+  const area = c.area === "any" ? { ar: "أي مكان بالرياض", en: "Anywhere in Riyadh" } : AREA_LABEL[c.area];
+  return [
+    { ar: `${i.icon} ${i.ar}`, en: `${i.icon} ${i.en}` },
+    c.deal === "sale" ? { ar: "شراء", en: "Buy" } : { ar: "إيجار", en: "Lease" },
+    area,
+    b,
+  ];
 }
 
 function Group({ title, sub, items, hover, sel, from }: { title: string; sub?: string; items: Match[]; hover: (id: string | null) => void; sel: string | null; from: string }) {
   if (!items.length) return null;
   return (
     <section className="mt-8">
-      <h2 className="text-lg font-semibold">{title}</h2>
-      {sub && <p className="mt-1 text-sm text-muted">{sub}</p>}
-      <div className="mt-3 space-y-px border border-line bg-line">
+      <h2 className="text-xl font-semibold">{title}</h2>
+      {sub && <p className="mt-0.5 text-[15px] text-muted">{sub}</p>}
+      <div className="mt-3 grid gap-3">
         {items.map((m) => (
           <ParcelCard key={m.parcel.parcel_id} p={m.parcel} reasons={m.reasons} note={m.note} onHover={hover} selected={sel === m.parcel.parcel_id} from={from} />
         ))}
@@ -47,71 +49,70 @@ function Results() {
   const [editing, setEditing] = useState(false);
   const [sel, setSel] = useState<string | null>(null);
 
-  useEffect(() => { track("page_view", { page: "match", ...(c ?? {}) }); }, [c]);
+  useEffect(() => { track("page_view", { page: "match", ...(c ?? {}) }); setEditing(false); }, [c]);
 
   if (!c || !r || editing) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-        <h1 className="font-display text-4xl font-semibold">{lang === "ar" ? "ماذا تريد أن تبني؟" : "What do you want to build?"}</h1>
-        <p className="mt-2 text-muted">{lang === "ar" ? "أربعة أسئلة قصيرة، ثم نريك الأراضي المناسبة." : "Four short questions, then we show you the land that fits."}</p>
-        <div className="mt-8"><MatchFlow /></div>
+      <div className="mx-auto max-w-3xl px-3 py-10 sm:px-5">
+        <div className="glass rounded-[34px] p-6 sm:p-8">
+          <h1 className="text-3xl font-bold sm:text-4xl">{lang === "ar" ? "خلّنا نلقى أرضك" : "Let's find your land"}</h1>
+          <p className="mt-2 text-muted">{lang === "ar" ? "أربع أسئلة سريعة، وبعدها نوريك اللي يناسبك." : "Four quick questions, then we'll show you what fits."}</p>
+          <div className="mt-6"><MatchFlow /></div>
+        </div>
       </div>
     );
   }
 
-  const shown = [...r.fits, ...r.stretch, ...r.alternatives];
-  const ids = new Set(shown.map((m) => m.parcel.parcel_id));
-  const s = summary(c);
+  const ids = new Set([...r.fits, ...r.stretch, ...r.alternatives].map((m) => m.parcel.parcel_id));
   const intent = intentByKey(c.use)!;
   const typeName = intent.type ? TYPE_LABEL[intent.type] : { ar: "", en: "" };
+  const noneInArea = c.area !== "any" && !parcels.some((p) => p.status === "available" && p.area_of_city === c.area && (!intent.type || p.land_type === intent.type) && p.listing_type === c.deal);
 
   let headline: string, sub: string;
   if (r.fits.length) {
     headline = lang === "ar"
-      ? (r.fits.length === 1 ? "وجدنا أرضاً واحدة تناسب خطتك" : `وجدنا ${r.fits.length} أراضٍ تناسب خطتك`)
-      : `${r.fits.length} ${r.fits.length === 1 ? "parcel fits" : "parcels fit"} your plan`;
-    sub = lang === "ar" ? "مرتبة بحسب ملاءمتها لما تريد بناءه، وليس بالسعر فقط." : "Ranked by how well each suits what you want to build, not just by price.";
-  } else if (r.considered === 0 || (c.area !== "any" && !parcels.some((p) => p.status === "available" && p.area_of_city === c.area && (!intent.type || p.land_type === intent.type) && p.listing_type === c.deal))) {
-    headline = lang === "ar" ? "لا توجد لدينا أرض بهذه المواصفات الآن" : "We don't have land like this right now";
+      ? (r.fits.length === 1 ? "لقينا لك أرض وحدة تناسبك 🎯" : r.fits.length === 2 ? "لقينا لك أرضين تناسبك 🎯" : `لقينا لك ${r.fits.length} أراضي تناسبك 🎯`)
+      : `We found ${r.fits.length} ${r.fits.length === 1 ? "parcel" : "parcels"} that fit 🎯`;
+    sub = lang === "ar" ? "رتبناها حسب وش يناسب اللي ناوي تبنيه، مو بس حسب السعر." : "Sorted by how well each suits what you want to build, not just price.";
+  } else if (r.considered === 0 || noneInArea) {
+    headline = lang === "ar" ? "بصراحة، ما عندنا هالطلب الحين" : "Honestly, we don't have this right now";
     sub = lang === "ar"
-      ? `لا تتوفر حالياً أراضٍ ${typeName.ar} ${c.deal === "sale" ? "للبيع" : "للإيجار"} في ${c.area === "any" ? "المحفظة" : AREA_LABEL[c.area].ar}. هذه أقرب الخيارات، ويمكنك أن تطلب إبلاغك عند توفر أرض مناسبة.`
-      : `There's no available ${typeName.en.toLowerCase()} land ${c.deal === "sale" ? "for sale" : "for lease"} in ${c.area === "any" ? "the portfolio" : AREA_LABEL[c.area].en} today. Here are the closest options, and we can notify you when one comes up.`;
+      ? `ما فيه أراضي ${typeName.ar} ${c.deal === "sale" ? "للبيع" : "للإيجار"} في ${c.area === "any" ? "المحفظة" : AREA_LABEL[c.area].ar} حالياً. بس هذي أقرب الخيارات، وإذا تبي نعلمك أول ما ينزل شي.`
+      : `There's no ${typeName.en.toLowerCase()} land ${c.deal === "sale" ? "for sale" : "for lease"} in ${c.area === "any" ? "the portfolio" : AREA_LABEL[c.area].en} right now. Here are the closest options, and we can ping you when one comes up.`;
   } else {
-    headline = lang === "ar" ? "لا توجد أرض ضمن ميزانيتك تماماً" : "Nothing fits your budget exactly";
-    sub = lang === "ar" ? "هذه الأقرب لطلبك، مع توضيح الفرق في كل خيار." : "These are the closest to your ask, with the trade-off spelled out for each.";
+    headline = lang === "ar" ? "ما فيه شي بنفس ميزانيتك بالضبط" : "Nothing fits your budget exactly";
+    sub = lang === "ar" ? "بس هذي أقرب شي، وكتبنا لك وش الفرق في كل وحدة." : "But these are close, and we've noted the difference on each one.";
   }
 
   return (
-    <div className="mx-auto grid max-w-7xl gap-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-      <div className="px-4 py-8 sm:px-6">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
-          <span>{s[lang]}</span>
-          <button onClick={() => setEditing(true)} className="font-medium text-palm underline underline-offset-4">
-            {lang === "ar" ? "عدّل طلبك" : "Change"}
+    <div className="mx-auto grid max-w-7xl gap-4 px-3 py-4 sm:px-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <div className="min-w-0 py-2">
+        <div className="flex flex-wrap items-center gap-1.5">
+          {chips(c).map((x, i) => <span key={i} className="glass-soft rounded-full px-3 py-1.5 text-[13px]">{x[lang]}</span>)}
+          <button onClick={() => setEditing(true)} className="rounded-full px-3 py-1.5 text-[13px] font-medium text-blue hover:bg-white">
+            {lang === "ar" ? "غيّر طلبك" : "Change"}
           </button>
         </div>
-        <h1 className="mt-3 font-display text-3xl font-semibold leading-snug sm:text-4xl">{headline}</h1>
-        <p className="mt-2 max-w-xl text-muted">{sub}</p>
+        <h1 className="mt-4 text-3xl font-bold leading-snug sm:text-4xl">{headline}</h1>
+        <p className="mt-2 max-w-xl text-[16px] text-muted">{sub}</p>
 
         <Group title={lang === "ar" ? "تناسبك" : "Good fits"} items={r.fits.slice(0, 6)} hover={setSel} sel={sel} from="match_fit" />
-        {r.fits.length > 6 && (
-          <Group title={lang === "ar" ? "خيارات أخرى تناسبك" : "More that fit"} items={r.fits.slice(6)} hover={setSel} sel={sel} from="match_fit_more" />
-        )}
+        {r.fits.length > 6 && <Group title={lang === "ar" ? "وفيه بعد" : "There's more"} items={r.fits.slice(6)} hover={setSel} sel={sel} from="match_fit_more" />}
         <Group title={lang === "ar" ? "قريبة من ميزانيتك" : "Close to your budget"}
-          sub={lang === "ar" ? "تتجاوز ميزانيتك بقليل، أو سعرها عند الطلب." : "Slightly above your budget, or priced on request."}
+          sub={lang === "ar" ? "فوقها بشوي، أو سعرها عند الطلب." : "A little over, or priced on request."}
           items={r.stretch} hover={setSel} sel={sel} from="match_stretch" />
-        <Group title={lang === "ar" ? "بدائل تستحق النظر" : "Alternatives worth a look"}
-          sub={lang === "ar" ? "كل بديل يوضح ما يختلف عن طلبك." : "Each one says what differs from your ask."}
+        <Group title={lang === "ar" ? "بدائل تستاهل" : "Alternatives worth a look"}
+          sub={lang === "ar" ? "كل وحدة مكتوب عليها وش يختلف عن طلبك." : "Each one says how it differs from your ask."}
           items={r.alternatives} hover={setSel} sel={sel} from="match_alt" />
 
         <div className="mt-10">
           <AlertForm criteria={c} summary={{
-            ar: `نحفظ طلبك (${s.ar}) ونرسل لك أول أرض تطابقه.`,
-            en: `We'll save your request (${s.en}) and send you the first land that matches.`,
+            ar: "خلّ اسمك ورقمك، وأول ما تنزل أرض تطابق طلبك بالضبط نرسلها لك.",
+            en: "Leave your name and number, and we'll send you the first land that matches exactly.",
           }} />
         </div>
       </div>
-      <div className="h-[50vh] border-line lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:border-s">
+      <div className="order-first h-[44vh] overflow-hidden rounded-[30px] lg:order-none lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)]">
         <ParcelMap parcels={parcels} highlight={ids} selected={sel} onSelect={(id) => setSel(id)} fit showBasemapToggle basemap="streets" className="h-full" />
       </div>
     </div>

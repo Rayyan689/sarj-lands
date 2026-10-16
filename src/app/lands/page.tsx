@@ -6,10 +6,23 @@ import ParcelMap from "@/components/ParcelMap";
 import ParcelCard from "@/components/ParcelCard";
 import { useLang } from "@/lib/i18n";
 import { AREAS, parcels, type Area, type Deal, type LandType } from "@/lib/portfolio";
-import { AREA_LABEL, num } from "@/lib/format";
+import { AREA_SHORT, num } from "@/lib/format";
 import { track } from "@/lib/track";
 
-type Sort = "fit" | "price_asc" | "price_desc" | "size_desc" | "value";
+type Sort = "new" | "price_asc" | "price_desc" | "size_desc" | "value";
+
+function Seg<V extends string>({ value, onChange, options }: { value: V; onChange: (v: V) => void; options: [V, string][] }) {
+  return (
+    <div className="glass-soft inline-flex flex-wrap gap-0.5 rounded-full p-1">
+      {options.map(([v, label]) => (
+        <button key={v} onClick={() => onChange(v)}
+          className={`rounded-full px-3.5 py-1.5 text-[14px] transition-colors ${value === v ? "bg-white font-medium shadow-sm" : "text-muted hover:text-ink"}`}>
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 function Explorer() {
   const { lang } = useLang();
@@ -18,8 +31,9 @@ function Explorer() {
   const [deal, setDeal] = useState<Deal | "all">((sp.get("deal") as Deal) || "all");
   const [type, setType] = useState<LandType | "all">((sp.get("type") as LandType) || "all");
   const [showClosed, setShowClosed] = useState(sp.get("closed") === "1");
-  const [sort, setSort] = useState<Sort>("fit");
+  const [sort, setSort] = useState<Sort>("value");
   const [sel, setSel] = useState<string | null>(null);
+  const ar = lang === "ar";
 
   useEffect(() => { track("page_view", { page: "explorer" }); }, []);
   useEffect(() => { track("explorer_filter", { area, deal, type, showClosed, sort }); }, [area, deal, type, showClosed, sort]);
@@ -37,67 +51,52 @@ function Explorer() {
       if (sort === "price_desc") return (b.total_price_sar ?? 0) - (a.total_price_sar ?? 0);
       if (sort === "size_desc") return b.area_sqm - a.area_sqm;
       if (sort === "value") return (a.pricing.vs_area_pct ?? 999) - (b.pricing.vs_area_pct ?? 999);
-      return a.listing_age_days - b.listing_age_days; // newest first
+      return a.listing_age_days - b.listing_age_days;
     });
   }, [area, deal, type, showClosed, sort]);
 
   const ids = useMemo(() => new Set(list.map((p) => p.parcel_id)), [list]);
-  const sel_ = (on: boolean) => `rounded-md border px-3 py-1.5 text-sm ${on ? "border-ink bg-ink text-white" : "border-line bg-sheet hover:border-ink"}`;
 
   return (
-    <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+    <div className="mx-auto grid max-w-7xl gap-4 px-3 py-4 sm:px-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
       <div className="min-w-0">
-        <div className="sticky top-16 z-20 space-y-3 border-b border-line bg-stone px-4 py-4 sm:px-6">
-          <div className="flex flex-wrap gap-1.5">
-            <button className={sel_(area === "all")} onClick={() => setArea("all")}>{lang === "ar" ? "كل الرياض" : "All Riyadh"}</button>
-            {AREAS.map((a) => (
-              <button key={a} className={sel_(area === a)} onClick={() => setArea(a)}>{AREA_LABEL[a][lang].replace(" الرياض", "").replace(" Riyadh", "")}</button>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center gap-1.5">
-            {([["all", "الكل", "All"], ["sale", "للبيع", "For sale"], ["lease", "للإيجار", "For lease"]] as const).map(([v, ar, en]) => (
-              <button key={v} className={sel_(deal === v)} onClick={() => setDeal(v)}>{lang === "ar" ? ar : en}</button>
-            ))}
-            <span className="mx-1 h-5 w-px bg-line" />
-            {([["all", "كل الأنواع", "All types"], ["residential", "سكني", "Residential"], ["commercial", "تجاري", "Commercial"]] as const).map(([v, ar, en]) => (
-              <button key={v} className={sel_(type === v)} onClick={() => setType(v)}>{lang === "ar" ? ar : en}</button>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" checked={showClosed} onChange={(e) => setShowClosed(e.target.checked)} className="accent-[var(--palm)]" />
-              {lang === "ar" ? "أظهر المباعة والمؤجرة للمقارنة" : "Show sold and leased, for comparison"}
-            </label>
-            <label className="flex items-center gap-2">
-              <span className="text-muted">{lang === "ar" ? "الترتيب" : "Sort"}</span>
-              <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="rounded-md border border-line bg-sheet px-2 py-1.5">
-                <option value="fit">{lang === "ar" ? "الأحدث" : "Newest"}</option>
-                <option value="value">{lang === "ar" ? "الأفضل سعراً مقارنة بالمنطقة" : "Best value for the area"}</option>
-                <option value="price_asc">{lang === "ar" ? "السعر: الأقل أولاً" : "Price: low to high"}</option>
-                <option value="price_desc">{lang === "ar" ? "السعر: الأعلى أولاً" : "Price: high to low"}</option>
-                <option value="size_desc">{lang === "ar" ? "المساحة: الأكبر أولاً" : "Size: largest first"}</option>
-              </select>
-            </label>
-          </div>
+        <h1 className="text-3xl font-bold">{ar ? "كل أراضينا" : "All our land"}</h1>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Seg value={area} onChange={setArea} options={[["all", ar ? "كل الرياض" : "All"], ...AREAS.map((a) => [a, AREA_SHORT[a][lang]] as [Area, string])]} />
+          <Seg value={deal} onChange={setDeal} options={[["all", ar ? "بيع وإيجار" : "Buy & lease"], ["sale", ar ? "للبيع" : "For sale"], ["lease", ar ? "للإيجار" : "For lease"]]} />
+          <Seg value={type} onChange={setType} options={[["all", ar ? "الكل" : "All types"], ["residential", ar ? "سكني" : "Residential"], ["commercial", ar ? "تجاري" : "Commercial"]]} />
         </div>
-        <p className="px-4 pt-4 text-sm text-muted sm:px-6">
-          {lang === "ar" ? `${num(list.length, lang)} أرض` : `${list.length} parcels`}
-        </p>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-[14px]">
+          <label className="flex cursor-pointer items-center gap-2">
+            <input type="checkbox" checked={showClosed} onChange={(e) => setShowClosed(e.target.checked)} className="h-4 w-4 accent-[var(--blue)]" />
+            {ar ? "ورّني اللي انباع وتأجر عشان أقارن" : "Show sold and leased so I can compare"}
+          </label>
+          <label className="flex items-center gap-2">
+            <span className="text-muted">{ar ? "رتّب حسب" : "Sort by"}</span>
+            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="glass-soft rounded-full px-3 py-1.5">
+              <option value="value">{ar ? "الأحلى سعراً مقارنة بالمنطقة" : "Best value for the area"}</option>
+              <option value="price_asc">{ar ? "الأرخص أول" : "Cheapest first"}</option>
+              <option value="price_desc">{ar ? "الأغلى أول" : "Priciest first"}</option>
+              <option value="size_desc">{ar ? "الأكبر مساحة" : "Biggest first"}</option>
+              <option value="new">{ar ? "الأحدث" : "Newest"}</option>
+            </select>
+          </label>
+        </div>
+        <p className="mt-4 text-[14px] text-muted">{ar ? `${num(list.length, lang)} أرض` : `${list.length} parcels`}</p>
         {list.length ? (
-          <div className="mx-4 my-3 space-y-px border border-line bg-line sm:mx-6">
+          <div className="mt-2 grid gap-3 pb-6 xl:grid-cols-2">
             {list.map((p) => <ParcelCard key={p.parcel_id} p={p} onHover={setSel} selected={sel === p.parcel_id} from="explorer" />)}
           </div>
         ) : (
-          <div className="mx-4 my-6 border border-line bg-sheet p-6 sm:mx-6">
-            <p className="font-semibold">{lang === "ar" ? "لا توجد أراضٍ بهذه المواصفات" : "No land matches these filters"}</p>
-            <p className="mt-1 text-sm text-muted">
-              {lang === "ar" ? "جرّب منطقة أخرى، أو اعرض المباعة والمؤجرة لتعرف أسعار المنطقة." : "Try another area, or show sold and leased land to see prices in this area."}
-            </p>
+          <div className="glass mt-3 rounded-[26px] p-6">
+            <p className="text-lg font-semibold">{ar ? "ما فيه أراضي بهالمواصفات" : "Nothing matches these filters"}</p>
+            <p className="mt-1 text-muted">{ar ? "جرّب جهة ثانية، أو فعّل خيار اللي انباع عشان تشوف أسعار المنطقة." : "Try another area, or switch on sold land to see what prices look like there."}</p>
           </div>
         )}
       </div>
-      <div className="order-first h-[42vh] border-line lg:order-none lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] lg:border-s">
-        <ParcelMap parcels={parcels} highlight={ids} selected={sel} onSelect={(id) => { setSel(id); document.getElementById(`card-${id}`)?.scrollIntoView({ block: "center", behavior: "smooth" }); }}
+      <div className="order-first h-[40vh] overflow-hidden rounded-[30px] lg:order-none lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)]">
+        <ParcelMap parcels={parcels} highlight={ids} selected={sel}
+          onSelect={(id) => { setSel(id); document.getElementById(`card-${id}`)?.scrollIntoView({ block: "center", behavior: "smooth" }); }}
           fit showBasemapToggle basemap="streets" className="h-full" />
       </div>
     </div>

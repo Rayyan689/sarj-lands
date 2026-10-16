@@ -14,51 +14,51 @@ function reasonsFor(p: Parcel, use: IntentKey): { score: number; reasons: T[] } 
   let s = 0;
   const r: T[] = [];
   const w = p.street_width_m, a = p.area_sqm;
-  const street: T = { ar: `على شارع بعرض ${w} م`, en: `On a ${w} m wide street` };
-  const size: T = { ar: `مساحة ${a.toLocaleString("en-US")} م²`, en: `${a.toLocaleString("en-US")} m² plot` };
+  const street: T = { ar: `على شارع ${w} م`, en: `On a ${w} m street` };
+  const size: T = { ar: `مساحتها ${a.toLocaleString("en-US")} م²`, en: `${a.toLocaleString("en-US")} m² plot` };
 
   switch (use) {
     case "warehouse":
-      if (a >= 5000) { s += 20; r.push({ ar: `مساحة ${a.toLocaleString("en-US")} م² تكفي لمستودع كبير`, en: `${a.toLocaleString("en-US")} m², room for a large warehouse` }); }
+      if (a >= 5000) { s += 20; r.push({ ar: `مساحتها ${a.toLocaleString("en-US")} م²، تكفي مستودع كبير`, en: `${a.toLocaleString("en-US")} m², room for a big warehouse` }); }
       else if (a >= 2000) { s += 10; r.push(size); }
-      if (w >= 20) { s += 6; r.push({ ar: `شارع بعرض ${w} م يسهّل دخول الشاحنات`, en: `${w} m street makes truck access easier` }); }
+      if (w >= 20) { s += 6; r.push({ ar: `شارعها ${w} م، الشاحنات تدخل وتطلع براحتها`, en: `${w} m street, easy in and out for trucks` }); }
       break;
     case "showroom":
-      if (w >= 36) { s += 20; r.push({ ar: `واجهة على شارع رئيسي بعرض ${w} م، وهذا ما تحتاجه المعارض`, en: `Frontage on a ${w} m main road, what showrooms need` }); }
+      if (w >= 36) { s += 20; r.push({ ar: `واجهتها على شارع ${w} م، يعني معرضك بيشوفه كل اللي يمر`, en: `Fronts a ${w} m road, so everyone driving by sees your showroom` }); }
       else if (w >= 30) { s += 12; r.push(street); }
       if (a >= 1500) { s += 5; r.push(size); }
       break;
     case "office":
-      if (w >= 30) { s += 15; r.push({ ar: `على شارع بعرض ${w} م يمنح المبنى حضوراً`, en: `A ${w} m street gives the building presence` }); }
+      if (w >= 30) { s += 15; r.push({ ar: `شارع ${w} م يعطي المبنى حضور وهيبة`, en: `A ${w} m street gives the building real presence` }); }
       if (a >= 1000) { s += 5; r.push(size); }
       break;
     case "retail":
-      if (w >= 20) { s += 12; r.push({ ar: `شارع بعرض ${w} م يجلب حركة المارة`, en: `A ${w} m street brings passing trade` }); }
+      if (w >= 20) { s += 12; r.push({ ar: `شارع ${w} م فيه حركة وزباين`, en: `A ${w} m street with steady passing trade` }); }
       break;
     case "family_home":
-      if (a >= 300 && a <= 900) { s += 15; r.push({ ar: `مساحة ${a.toLocaleString("en-US")} م² مناسبة لبيت عائلي`, en: `${a.toLocaleString("en-US")} m², a comfortable family plot` }); }
-      if (p.frontage === "internal") { s += 5; r.push({ ar: `على شارع داخلي بعرض ${w} م بعيداً عن الزحام`, en: `On a ${w} m internal street, away from traffic` }); }
+      if (a >= 300 && a <= 900) { s += 15; r.push({ ar: `${a.toLocaleString("en-US")} م²، مساحة مريحة لبيت العايلة`, en: `${a.toLocaleString("en-US")} m², a comfy size for a family home` }); }
+      if (p.frontage === "internal") { s += 5; r.push({ ar: `على شارع داخلي ${w} م، هادي وبعيد عن الزحمة`, en: `On a quiet ${w} m inner street, away from traffic` }); }
       break;
     case "villas_sell":
-      if (a >= 700) { s += 15; r.push({ ar: `مساحة ${a.toLocaleString("en-US")} م² تتسع لأكثر من فيلا`, en: `${a.toLocaleString("en-US")} m², room for more than one villa` }); }
+      if (a >= 700) { s += 15; r.push({ ar: `${a.toLocaleString("en-US")} م² تكفي أكثر من فيلا`, en: `${a.toLocaleString("en-US")} m², room for more than one villa` }); }
       break;
     case "apartments_rent":
       if (w >= 20) { s += 12; r.push(street); }
       if (a >= 500) { s += 8; r.push(size); }
       break;
     case "compound":
-      if (a >= 1500) { s += 20; r.push({ ar: `مساحة ${a.toLocaleString("en-US")} م² تكفي لمجمع`, en: `${a.toLocaleString("en-US")} m², enough for a compound` }); }
+      if (a >= 1500) { s += 20; r.push({ ar: `${a.toLocaleString("en-US")} م² تكفي مجمع`, en: `${a.toLocaleString("en-US")} m², enough for a compound` }); }
       else if (a >= 900) { s += 10; r.push(size); }
       break;
     case "invest":
-      if (p.segment_demand >= 3) { s += 10; r.push({ ar: `${p.segment_demand} مستثمرين طلبوا أراضي من هذا النوع في المنطقة`, en: `${p.segment_demand} investors asked for land like this in this area` }); }
+      if (p.segment_demand >= 3) { s += 10; r.push({ ar: `${p.segment_demand} مستثمرين يدورون أراضي مثلها بنفس المنطقة`, en: `${p.segment_demand} investors are hunting for land like this here` }); }
       break;
   }
 
   const v = p.pricing.vs_area_pct;
   if (v != null && v <= -10) {
     s += 10;
-    r.push({ ar: `سعر المتر أقل بـ ${pct(v)}% من متوسط ${AREA_LABEL[p.area_of_city].ar}`, en: `Price per m² is ${pct(v)}% below the ${AREA_LABEL[p.area_of_city].en} median` });
+    r.push({ ar: `سعر المتر أرخص بـ ${pct(v)}% من متوسط ${AREA_LABEL[p.area_of_city].ar}`, en: `${pct(v)}% cheaper per m² than the ${AREA_LABEL[p.area_of_city].en} average` });
   } else if (v != null && v >= 30) s -= 5;
 
   if (r.length === 0) r.push(size, street);
@@ -77,12 +77,12 @@ export function runMatch(c: Criteria): MatchResult {
     const { score, reasons } = reasonsFor(p, c.use);
     const price = p.total_price_sar;
     if (price == null) {
-      stretch.push({ parcel: p, score, reasons, note: { ar: "السعر عند الطلب، تواصل معنا لمعرفته", en: "Price on request, ask us for it" } });
+      stretch.push({ parcel: p, score, reasons, note: { ar: "سعرها عند الطلب، كلّمنا ونعطيك إياه", en: "Price on request, message us and we'll tell you" } });
     } else if (price <= budget) {
       fits.push({ parcel: p, score: score + 30, reasons });
     } else if (price <= budget * 1.15) {
       const over = pct((price / budget - 1) * 100);
-      stretch.push({ parcel: p, score, reasons, note: { ar: `أعلى من ميزانيتك بـ ${over}%، والسعر قابل للنقاش`, en: `${over}% above your budget, open to discussion` } });
+      stretch.push({ parcel: p, score, reasons, note: { ar: `فوق ميزانيتك بـ ${over}% بس، تستاهل تسأل عنها`, en: `Only ${over}% over your budget, worth asking about` } });
     }
   }
   fits.sort((a, b) => b.score - a.score);
@@ -104,7 +104,7 @@ export function runMatch(c: Criteria): MatchResult {
         .map((p) => ({ p, s: reasonsFor(p, c.use).score }))
         .sort((a, b) => b.s - a.s).slice(0, 3)
         .forEach(({ p }) => add(p, {
-          ar: `في ${AREA_LABEL[p.area_of_city].ar} بدلاً من ${AREA_LABEL[c.area as Area].ar}`,
+          ar: `في ${AREA_LABEL[p.area_of_city].ar} بدال ${AREA_LABEL[c.area as Area].ar}`,
           en: `In ${AREA_LABEL[p.area_of_city].en} instead of ${AREA_LABEL[c.area as Area].en}`,
         }));
     }
@@ -114,14 +114,14 @@ export function runMatch(c: Criteria): MatchResult {
       .sort((a, b) => a.total_price_sar! - b.total_price_sar!)
       .slice(0, 2)
       .forEach((p) => add(p, other === "lease"
-        ? { ar: "متاحة للإيجار بدلاً من الشراء", en: "Available to lease instead of buy" }
-        : { ar: "متاحة للشراء بدلاً من الإيجار", en: "Available to buy instead of lease" }));
+        ? { ar: "متاحة للإيجار بدال الشراء", en: "You can lease this one instead of buying" }
+        : { ar: "متاحة للشراء بدال الإيجار", en: "You can buy this one instead of leasing" }));
     // 3) Same everything, closest over budget.
     if (c.budget != null) {
       pool.filter((p) => areaOk(p) && (p.total_price_sar ?? 0) > budget * 1.15)
         .sort((a, b) => (a.total_price_sar ?? 0) - (b.total_price_sar ?? 0)).slice(0, 1)
         .forEach((p) => add(p, {
-          ar: `أقرب خيار لطلبك، بسعر ${money(p.total_price_sar!, "ar")}`,
+          ar: `أقرب شي لطلبك، بـ ${money(p.total_price_sar!, "ar")}`,
           en: `Closest to your ask, at ${money(p.total_price_sar!, "en")}`,
         }));
     }

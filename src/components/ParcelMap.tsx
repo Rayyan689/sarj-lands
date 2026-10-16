@@ -7,8 +7,8 @@ import { useLang } from "@/lib/i18n";
 export type Basemap = "clean" | "streets" | "satellite";
 
 const TILES: Record<Basemap, { url: string; attribution: string }> = {
-  clean: { url: "https://basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png", attribution: "© OpenStreetMap © CARTO" },
-  streets: { url: "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png", attribution: "© OpenStreetMap © CARTO" },
+  clean: { url: "https://basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}@2x.png", attribution: "© OpenStreetMap © CARTO" },
+  streets: { url: "https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png", attribution: "© OpenStreetMap © CARTO" },
   satellite: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", attribution: "Imagery © Esri" },
 };
 
@@ -99,20 +99,20 @@ export default function ParcelMap({
     const src = m.getSource("parcels") as GeoJSONSource | undefined;
     if (src) { src.setData(data); return; }
     m.addSource("parcels", { type: "geojson", data });
-    const color = ["match", ["get", "status"], "available", "#e0a526", "reserved", "#1f5c45", "#9aa59f"] as unknown as string;
+    const color = ["match", ["get", "status"], "available", "#ffad33", "reserved", "#2f7bf6", "#a3acb9"] as unknown as string;
     m.addLayer({
       id: "halo", type: "circle", source: "parcels",
       filter: ["==", ["get", "sel"], true],
-      paint: { "circle-radius": 16, "circle-color": "#e0a526", "circle-opacity": 0.25, "circle-stroke-width": 2, "circle-stroke-color": "#13261e" },
+      paint: { "circle-radius": 18, "circle-color": "#ffad33", "circle-opacity": 0.3, "circle-stroke-width": 3, "circle-stroke-color": "#ffffff" },
     });
     m.addLayer({
       id: "dots", type: "circle", source: "parcels",
       paint: {
-        "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, ["case", ["get", "dim"], 3, 5.5], 14, ["case", ["get", "dim"], 6, 10]],
+        "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, ["case", ["get", "dim"], 3.5, 6.5], 14, ["case", ["get", "dim"], 6, 11]],
         "circle-color": color,
-        "circle-opacity": ["case", ["get", "dim"], 0.35, 1],
-        "circle-stroke-width": ["case", ["get", "dim"], 0, 1.5],
-        "circle-stroke-color": "#13261e",
+        "circle-opacity": ["case", ["get", "dim"], 0.4, 1],
+        "circle-stroke-width": ["case", ["get", "dim"], 1, 2.5],
+        "circle-stroke-color": "#ffffff",
       },
     });
     if (interactive) {
@@ -142,17 +142,17 @@ export default function ParcelMap({
   }, [selected, loaded, parcels, interactive]);
 
   const labels: Record<Basemap, { ar: string; en: string }> = {
-    clean: { ar: "خريطة", en: "Map" }, streets: { ar: "شوارع", en: "Streets" }, satellite: { ar: "قمر صناعي", en: "Satellite" },
+    clean: { ar: "خريطة", en: "Map" }, streets: { ar: "شوارع", en: "Streets" }, satellite: { ar: "صورة جوية", en: "Satellite" },
   };
 
   return (
     <div className={`relative ${className}`}>
       <div ref={el} className="absolute inset-0" aria-label={lang === "ar" ? "خريطة الأراضي" : "Map of parcels"} role="region" />
       {showBasemapToggle && (
-        <div className="absolute bottom-3 start-3 z-10 flex overflow-hidden rounded-md border border-line bg-sheet text-xs shadow-sm">
+        <div className="glass absolute top-3 start-3 z-10 flex gap-1 rounded-full p-1 text-xs">
           {(["clean", "streets", "satellite"] as Basemap[]).map((b) => (
             <button key={b} onClick={() => setBase(b)}
-              className={`px-3 py-1.5 ${base === b ? "bg-ink text-white" : "hover:bg-stone-2"}`}>{labels[b][lang]}</button>
+              className={`rounded-full px-3 py-1.5 ${base === b ? "bg-ink text-white" : "hover:bg-white"}`}>{labels[b][lang]}</button>
           ))}
         </div>
       )}

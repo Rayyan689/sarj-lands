@@ -9,193 +9,206 @@ import LeadForm from "@/components/LeadForm";
 import AlertForm from "@/components/AlertForm";
 import { useLang } from "@/lib/i18n";
 import { byId, available, portfolio } from "@/lib/portfolio";
-import { AREA_LABEL, DEAL_LABEL, FRONTAGE_LABEL, STATUS_LABEL, TYPE_LABEL, district, money, num, priceLabel, sqm, sqmPrice } from "@/lib/format";
+import { AREA_LABEL, DEAL_LABEL, STATUS_LABEL, TYPE_LABEL, district, hook, money, num, priceLabel, sqm, sqmPrice, street, type T } from "@/lib/format";
 import { waLink } from "@/lib/contact";
 import { track } from "@/lib/track";
 
 const USES = {
   residential: {
-    small: { ar: "بيت عائلي أو فيلا", en: "A family home or villa" },
-    mid: { ar: "فلل للبيع أو عمارة شقق", en: "Villas to sell or an apartment building" },
-    large: { ar: "مجمع سكني أو مشروع فلل", en: "A residential compound or villa project" },
+    small: { ar: "بيت للعايلة أو فيلا", en: "a family home or villa" },
+    mid: { ar: "فلل للبيع أو عمارة شقق", en: "villas to sell or an apartment building" },
+    large: { ar: "مجمع سكني أو مشروع فلل", en: "a residential compound or villa project" },
   },
   commercial: {
-    small: { ar: "محل تجاري أو مكتب", en: "A shop or office" },
-    mid: { ar: "معرض أو مبنى مكاتب", en: "A showroom or office building" },
-    large: { ar: "مستودع أو مركز تجاري أو معرض سيارات", en: "A warehouse, retail centre or car showroom" },
+    small: { ar: "محل أو مكتب", en: "a shop or office" },
+    mid: { ar: "معرض أو مبنى مكاتب", en: "a showroom or office building" },
+    large: { ar: "مستودع أو مركز تجاري أو معرض سيارات", en: "a warehouse, retail centre or car showroom" },
   },
+} as const;
+
+const STATUS_STYLE = {
+  available: "bg-apricot text-white",
+  reserved: "bg-blue text-white",
+  sold: "bg-ink/60 text-white",
+  leased: "bg-ink/60 text-white",
 } as const;
 
 export default function ParcelView({ id }: { id: string }) {
   const { lang } = useLang();
+  const ar = lang === "ar";
   const p = byId(id)!;
   useEffect(() => { track("parcel_view", { status: p.status }, p.parcel_id); }, [p]);
 
   const comps = useMemo(() => p.closed_comps.map((c) => byId(c)!).filter((x) => x.price_per_sqm_sar)
-    .sort((a, b) => Number(b.district_en === p.district_en) - Number(a.district_en === p.district_en)).slice(0, 4), [p]);
+    .sort((a, b) => Number(b.district_en === p.district_en) - Number(a.district_en === p.district_en)).slice(0, 3), [p]);
   const similar = useMemo(() => available.filter((x) => x.parcel_id !== p.parcel_id && x.land_type === p.land_type &&
     x.listing_type === p.listing_type && x.area_of_city === p.area_of_city)
-    .sort((a, b) => Math.abs(a.area_sqm - p.area_sqm) - Math.abs(b.area_sqm - p.area_sqm)).slice(0, 3), [p]);
+    .sort((a, b) => Math.abs(a.area_sqm - p.area_sqm) - Math.abs(b.area_sqm - p.area_sqm)).slice(0, 2), [p]);
 
   const closed = p.status === "sold" || p.status === "leased";
   const scale = p.area_sqm < 700 ? "small" : p.area_sqm < 2500 ? "mid" : "large";
   const anchors = portfolio.anchors;
+  const area = AREA_LABEL[p.area_of_city];
 
-  // "Why this land": only facts from the data.
-  const why: { ar: string; en: string }[] = [];
-  why.push({
-    ar: `${FRONTAGE_LABEL[p.frontage].ar} بعرض ${p.street_width_m} م${p.frontage === "main_road" ? "، واجهة يراها كل من يمر" : ""}`,
-    en: `${FRONTAGE_LABEL[p.frontage].en}, ${p.street_width_m} m wide${p.frontage === "main_road" ? ", frontage everyone passing will see" : ""}`,
-  });
-  const v = p.pricing.vs_area_pct, vd = p.pricing.vs_district_pct;
+  // "What makes it special": facts from the data, said like a person would say them.
+  const why: { icon: string; t: T }[] = [];
+  const w = p.street_width_m;
+  why.push(p.frontage === "main_road"
+    ? { icon: "🛣️", t: { ar: `واجهتها على شارع ${w} م، تنشاف من بعيد`, en: `Fronts a ${w} m road, visible from far away` } }
+    : p.frontage === "collector"
+      ? { icon: "🛣️", t: { ar: `على شارع ${w} م، حركة معقولة ووصول سهل`, en: `On a ${w} m street, steady traffic and easy access` } }
+      : { icon: "🌙", t: { ar: `على شارع داخلي ${w} م، هادي وفيه خصوصية`, en: `On a quiet ${w} m inner street, calm and private` } });
+  const v = p.pricing.vs_area_pct;
   if (v != null) {
-    if (v <= -5) why.push({ ar: `سعر المتر أقل بـ ${Math.abs(v)}% من متوسط ${AREA_LABEL[p.area_of_city].ar} لنفس النوع`, en: `Price per m² is ${Math.abs(v)}% below the ${AREA_LABEL[p.area_of_city].en} median for this type` });
-    else if (v >= 25) why.push({ ar: `من الأراضي المميزة في ${AREA_LABEL[p.area_of_city].ar}، وسعرها أعلى من المتوسط بـ ${v}%`, en: `A premium parcel for ${AREA_LABEL[p.area_of_city].en}, priced ${v}% above the median` });
-    else why.push({ ar: `سعر المتر قريب من متوسط ${AREA_LABEL[p.area_of_city].ar}`, en: `Price per m² is in line with the ${AREA_LABEL[p.area_of_city].en} median` });
+    if (v <= -5) why.push({ icon: "💰", t: { ar: `سعر المتر أرخص بـ ${Math.abs(v)}% من متوسط ${area.ar}`, en: `${Math.abs(v)}% cheaper per m² than the ${area.en} average` } });
+    else if (v >= 25) why.push({ icon: "⭐", t: { ar: `من الأراضي المميزة في ${area.ar}، وسعرها فوق المتوسط بـ ${v}%`, en: `One of the standout plots in ${area.en}, priced ${v}% above average` } });
+    else why.push({ icon: "⚖️", t: { ar: `سعر المتر قريب من متوسط ${area.ar}، يعني سعر عادل`, en: `Priced right around the ${area.en} average, a fair price` } });
   }
-  why.push({ ar: `مساحة ${num(p.area_sqm, "ar")} م² تناسب ${USES[p.land_type][scale].ar}`, en: `${num(p.area_sqm, "en")} m² suits ${USES[p.land_type][scale].en.toLowerCase()}` });
+  why.push({ icon: "📐", t: { ar: `${num(p.area_sqm, "ar")} م²، تكفي ${USES[p.land_type][scale].ar}`, en: `${num(p.area_sqm, "en")} m², enough for ${USES[p.land_type][scale].en}` } });
   const nearest = (Object.keys(p.distances_km) as (keyof typeof p.distances_km)[]).sort((a, b) => p.distances_km[a] - p.distances_km[b])[0];
-  why.push({ ar: `على بعد ${p.distances_km[nearest]} كم من ${anchors[nearest].ar}`, en: `${p.distances_km[nearest]} km from ${anchors[nearest].en}` });
+  why.push({ icon: "📍", t: { ar: `${p.distances_km[nearest]} كم عن ${anchors[nearest].ar}`, en: `${p.distances_km[nearest]} km from ${anchors[nearest].en}` } });
   if (p.segment_demand >= 2 && !closed)
-    why.push({ ar: `${p.segment_demand} مستثمرين طلبوا أراضي ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar} في هذه المنطقة`, en: `${p.segment_demand} investors have asked for ${TYPE_LABEL[p.land_type].en.toLowerCase()} land ${DEAL_LABEL[p.listing_type].en.toLowerCase()} in this area` });
+    why.push({ icon: "🔥", t: { ar: `${p.segment_demand} مستثمرين يدورون أراضي ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar} بنفس المنطقة`, en: `${p.segment_demand} investors are looking for ${TYPE_LABEL[p.land_type].en.toLowerCase()} land ${DEAL_LABEL[p.listing_type].en.toLowerCase()} in this area` } });
 
-  // Price context bars
   const bars = [
-    { label: { ar: "هذه الأرض", en: "This land" }, v: p.price_per_sqm_sar, me: true },
-    p.pricing.district_median_sqm ? { label: { ar: `متوسط ${district(p, "ar")}`, en: `${p.district_en} median` }, v: p.pricing.district_median_sqm } : null,
-    p.pricing.area_median_sqm ? { label: { ar: `متوسط ${AREA_LABEL[p.area_of_city].ar}`, en: `${AREA_LABEL[p.area_of_city].en} median` }, v: p.pricing.area_median_sqm } : null,
+    { label: { ar: "هالأرض", en: "This land" }, v: p.price_per_sqm_sar, me: true },
+    p.pricing.district_median_sqm ? { label: { ar: `متوسط ${district(p, "ar")}`, en: `${p.district_en} average` }, v: p.pricing.district_median_sqm } : null,
+    p.pricing.area_median_sqm ? { label: { ar: `متوسط ${area.ar}`, en: `${area.en} average` }, v: p.pricing.area_median_sqm } : null,
     ...comps.map((c) => ({ label: { ar: `${STATUS_LABEL[c.status].ar} في ${district(c, "ar")}`, en: `${STATUS_LABEL[c.status].en} in ${c.district_en}` }, v: c.price_per_sqm_sar })),
-  ].filter(Boolean) as { label: { ar: string; en: string }; v: number | null; me?: boolean }[];
+  ].filter(Boolean) as { label: T; v: number | null; me?: boolean }[];
   const maxBar = Math.max(...bars.map((b) => b.v ?? 0), 1);
 
-  const wa = waLink(lang === "ar"
-    ? `السلام عليكم، أرغب في معرفة المزيد عن الأرض ${p.parcel_id} في حي ${p.district_ar}`
-    : `Hello, I'd like to know more about parcel ${p.parcel_id} in ${p.district_en}`);
+  const wa = waLink(ar
+    ? `هلا، ودّي أعرف أكثر عن الأرض ${p.parcel_id} في حي ${p.district_ar}`
+    : `Hi, I'd like to know more about parcel ${p.parcel_id} in ${p.district_en}`);
+  const h = hook(p);
 
   return (
     <>
       <Header />
       <main className="flex-1">
-        <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6">
-          <nav className="text-sm text-muted">
-            <Link href="/lands" className="hover:text-ink">{lang === "ar" ? "كل الأراضي" : "All land"}</Link>
-            <span className="mx-2">/</span>
-            <Link href={`/lands?area=${p.area_of_city}`} className="hover:text-ink">{AREA_LABEL[p.area_of_city][lang]}</Link>
-          </nav>
-          <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <h1 className="font-display text-4xl font-semibold sm:text-5xl">{district(p, lang)}</h1>
-              <p className="mt-2 text-muted">
-                {AREA_LABEL[p.area_of_city][lang]}، {lang === "ar" ? `أرض ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar}` : `${TYPE_LABEL[p.land_type].en} land ${DEAL_LABEL[p.listing_type].en.toLowerCase()}`}
-                <span className="mx-2 text-line">|</span>
-                <span dir="ltr">{p.parcel_id}</span>
-              </p>
+        {/* Hero: the land from above, with a glass name card */}
+        <section className="relative mx-3 mt-3 h-[58vh] min-h-[380px] overflow-hidden rounded-[34px] sm:mx-5 sm:rounded-[40px]">
+          <ParcelMap parcels={[p]} selected={p.parcel_id} basemap="satellite" showBasemapToggle zoom={16} center={[p.lng, p.lat]} className="h-full" />
+          <div className="pointer-events-none absolute inset-x-3 bottom-4 sm:inset-x-auto sm:bottom-6 sm:start-6 sm:w-[26rem]">
+            <div className="glass pointer-events-auto rounded-[28px] p-5">
+              <div className="flex items-center gap-2">
+                <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLE[p.status]}`}>{STATUS_LABEL[p.status][lang]}</span>
+                <Link href={`/lands?area=${p.area_of_city}`} className="text-[13px] text-muted hover:text-ink">{area[lang]}</Link>
+              </div>
+              <h1 className="mt-2 text-3xl font-bold sm:text-4xl">{district(p, lang)}</h1>
+              <p className="mt-1 text-muted">{ar ? `أرض ${TYPE_LABEL[p.land_type].ar} ${DEAL_LABEL[p.listing_type].ar}` : `${TYPE_LABEL[p.land_type].en} land ${DEAL_LABEL[p.listing_type].en.toLowerCase()}`}</p>
+              {!closed && (
+                <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-mint-soft px-3 py-1 text-[13px] font-medium text-[#137a52]">
+                  <span aria-hidden>✦</span>{h[lang]}
+                </p>
+              )}
             </div>
-            <span className={`px-3 py-1 text-sm ${p.status === "available" ? "bg-sun text-ink" : p.status === "reserved" ? "bg-palm text-white" : "bg-closed text-white"}`}>
-              {STATUS_LABEL[p.status][lang]}
-            </span>
           </div>
-        </div>
+        </section>
 
-        <div className="mx-auto mt-6 grid max-w-7xl gap-8 px-4 pb-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_380px]">
-          <div className="min-w-0 space-y-10">
-            <ParcelMap parcels={[p]} selected={p.parcel_id} basemap="satellite" showBasemapToggle zoom={15.5} center={[p.lng, p.lat]}
-              className="h-[340px] border border-line sm:h-[440px]" />
-
-            <section>
-              <h2 className="font-display text-2xl font-semibold">{lang === "ar" ? "لماذا هذه الأرض" : "Why this land"}</h2>
+        <div className="mx-auto mt-5 grid max-w-6xl gap-5 px-3 pb-6 sm:px-5 lg:grid-cols-[minmax(0,1fr)_370px]">
+          <div className="min-w-0 space-y-5">
+            <section className="glass rounded-[30px] p-6">
+              <h2 className="text-2xl font-bold">{ar ? "وش يميزها؟" : "What makes it special?"}</h2>
               <ul className="mt-4 space-y-3">
-                {why.map((w, i) => (
-                  <li key={i} className="flex gap-3 text-[17px] leading-relaxed">
-                    <span aria-hidden className="mt-2.5 h-2 w-2 shrink-0 bg-sun" />{w[lang]}
+                {why.map((x, i) => (
+                  <li key={i} className="flex items-start gap-3 text-[17px] leading-relaxed">
+                    <span aria-hidden className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-white/80 text-lg">{x.icon}</span>
+                    <span className="pt-1">{x.t[lang]}</span>
                   </li>
                 ))}
               </ul>
             </section>
 
             {p.price_per_sqm_sar != null && (
-              <section>
-                <h2 className="font-display text-2xl font-semibold">{lang === "ar" ? "السعر مقارنة بما حوله" : "Price against its neighbours"}</h2>
-                <p className="mt-1 text-sm text-muted">
-                  {lang === "ar" ? `سعر المتر ${p.listing_type === "lease" ? "السنوي " : ""}من أراضي محفظتنا الفعلية` : `Price per m²${p.listing_type === "lease" ? " per year" : ""}, from our actual portfolio`}
+              <section className="glass rounded-[30px] p-6">
+                <h2 className="text-2xl font-bold">{ar ? "سعرها جنب جيرانها" : "Price next to its neighbours"}</h2>
+                <p className="mt-1 text-[15px] text-muted">
+                  {ar ? `سعر المتر${p.listing_type === "lease" ? " بالسنة" : ""}، من أراضي محفظتنا الفعلية` : `Price per m²${p.listing_type === "lease" ? " a year" : ""}, from our actual portfolio`}
                 </p>
-                <div className="mt-5 space-y-3">
+                <div className="mt-5 space-y-3.5">
                   {bars.map((b, i) => (
-                    <div key={i} className="grid grid-cols-[minmax(0,10rem)_1fr_auto] items-center gap-3 text-sm sm:grid-cols-[14rem_1fr_auto]">
-                      <span className={b.me ? "font-semibold" : "text-muted"}>{b.label[lang]}</span>
-                      <div className="h-3 bg-stone-2"><div className={`h-full ${b.me ? "bg-sun" : "bg-closed"}`} style={{ width: `${((b.v ?? 0) / maxBar) * 100}%` }} /></div>
-                      <span className={`tabular-nums ${b.me ? "font-semibold" : ""}`}>{num(b.v ?? 0, lang)}</span>
+                    <div key={i}>
+                      <div className="mb-1 flex items-baseline justify-between text-[14px]">
+                        <span className={b.me ? "font-semibold" : "text-muted"}>{b.label[lang]}</span>
+                        <span className={`tabular-nums ${b.me ? "font-semibold" : "text-muted"}`}>{num(b.v ?? 0, lang)}</span>
+                      </div>
+                      <div className="h-3 overflow-hidden rounded-full bg-white/70">
+                        <div className={`h-full rounded-full ${b.me ? "bg-gradient-to-l from-[#ffc266] to-apricot" : "bg-ink/15"}`} style={{ width: `${((b.v ?? 0) / maxBar) * 100}%` }} />
+                      </div>
                     </div>
                   ))}
                 </div>
               </section>
             )}
 
-            <section>
-              <h2 className="font-display text-2xl font-semibold">{lang === "ar" ? "الموقع" : "Location"}</h2>
-              <dl className="mt-4 grid gap-px border border-line bg-line sm:grid-cols-2">
+            <section className="glass rounded-[30px] p-6">
+              <h2 className="text-2xl font-bold">{ar ? "وين موقعها؟" : "Where is it?"}</h2>
+              <div className="mt-4 flex flex-wrap gap-2">
                 {(Object.keys(p.distances_km) as (keyof typeof p.distances_km)[]).sort((a, b) => p.distances_km[a] - p.distances_km[b]).map((k) => (
-                  <div key={k} className="flex items-baseline justify-between bg-sheet px-4 py-3">
-                    <dt className="text-muted">{anchors[k][lang]}</dt>
-                    <dd className="font-semibold">{lang === "ar" ? `${p.distances_km[k]} كم` : `${p.distances_km[k]} km`}</dd>
-                  </div>
+                  <span key={k} className="rounded-full bg-white/80 px-4 py-2 text-[15px]">
+                    <b className="font-semibold">{ar ? `${p.distances_km[k]} كم` : `${p.distances_km[k]} km`}</b>
+                    <span className="text-muted">{ar ? " عن " : " to "}{anchors[k][lang]}</span>
+                  </span>
                 ))}
-              </dl>
-              <p className="mt-2 text-xs text-muted">{lang === "ar" ? "مسافات تقريبية بخط مستقيم." : "Approximate straight-line distances."}</p>
+              </div>
+              <p className="mt-3 text-[13px] text-muted">{ar ? "المسافات تقريبية بخط مستقيم." : "Approximate straight-line distances."}</p>
             </section>
 
             {similar.length > 0 && (
               <section>
-                <h2 className="font-display text-2xl font-semibold">{lang === "ar" ? "أراضٍ مشابهة متاحة" : "Similar land available"}</h2>
-                <div className="mt-4 space-y-px border border-line bg-line">
+                <h2 className="px-1 text-2xl font-bold">{ar ? "أراضي تشبهها" : "Similar land"}</h2>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
                   {similar.map((s) => <ParcelCard key={s.parcel_id} p={s} from="similar" />)}
                 </div>
               </section>
             )}
           </div>
 
-          {/* Action panel */}
-          <aside className="lg:sticky lg:top-20 lg:self-start">
-            <div className="border border-line bg-sheet p-5">
-              <p className={`text-3xl font-semibold ${closed ? "text-muted" : ""}`}>{priceLabel(p, lang)}</p>
+          {/* Action card */}
+          <aside className="order-first lg:order-none lg:sticky lg:top-24 lg:self-start">
+            <div className="glass rounded-[30px] p-6">
+              <p className={`text-[32px] font-bold leading-tight ${closed ? "text-muted" : ""}`}>{priceLabel(p, lang)}</p>
               {p.price_per_sqm_sar != null && <p className="mt-1 text-muted">{sqmPrice(p, lang)}</p>}
-              <dl className="mt-4 grid grid-cols-2 gap-y-3 border-t border-line pt-4 text-sm">
-                <dt className="text-muted">{lang === "ar" ? "المساحة" : "Size"}</dt><dd className="font-semibold">{sqm(p.area_sqm, lang)}</dd>
-                <dt className="text-muted">{lang === "ar" ? "عرض الشارع" : "Street width"}</dt><dd className="font-semibold">{lang === "ar" ? `${p.street_width_m} م` : `${p.street_width_m} m`}</dd>
-                <dt className="text-muted">{lang === "ar" ? "الاستخدام" : "Zoning"}</dt><dd className="font-semibold">{TYPE_LABEL[p.land_type][lang]}</dd>
-                {p.total_price_sar != null && p.listing_type === "sale" && (<>
-                  <dt className="text-muted">{lang === "ar" ? "ضريبة التصرفات العقارية 5% (تقدير)" : "5% real estate transaction tax (estimate)"}</dt>
-                  <dd className="font-semibold">{money(p.total_price_sar * 0.05, lang)}</dd>
-                </>)}
-                {p.total_price_sar != null && p.listing_type === "lease" && (<>
-                  <dt className="text-muted">{lang === "ar" ? "ما يعادل شهرياً" : "Monthly equivalent"}</dt>
-                  <dd className="font-semibold">{money(Math.round(p.total_price_sar / 12), lang)}</dd>
-                </>)}
-              </dl>
+              <div className="mt-4 flex flex-wrap gap-1.5 text-[14px]">
+                <span className="rounded-full bg-white/80 px-3 py-1.5">📐 {sqm(p.area_sqm, lang)}</span>
+                <span className="rounded-full bg-white/80 px-3 py-1.5">🛣️ {street(p.street_width_m, lang)}</span>
+                <span className="rounded-full bg-white/80 px-3 py-1.5">{p.land_type === "residential" ? "🏡" : "🏬"} {TYPE_LABEL[p.land_type][lang]}</span>
+              </div>
+              {p.total_price_sar != null && p.listing_type === "sale" && !closed && (
+                <p className="mt-3 text-[13px] text-muted">
+                  {ar ? `ضريبة التصرفات العقارية 5% تقريباً ${money(p.total_price_sar * 0.05, lang)}` : `5% real estate transaction tax, roughly ${money(p.total_price_sar * 0.05, lang)}`}
+                </p>
+              )}
+              {p.total_price_sar != null && p.listing_type === "lease" && !closed && (
+                <p className="mt-3 text-[13px] text-muted">{ar ? `يعني تقريباً ${money(Math.round(p.total_price_sar / 12), lang)} بالشهر` : `About ${money(Math.round(p.total_price_sar / 12), lang)} a month`}</p>
+              )}
 
-              <div className="mt-5 border-t border-line pt-5">
+              <div className="mt-5 border-t border-hair pt-5">
                 {p.status === "available" && <LeadForm parcelId={p.parcel_id} />}
                 {p.status === "reserved" && (
-                  <AlertForm criteria={{ waitlist: p.parcel_id }} summary={{
-                    ar: "هذه الأرض محجوزة لمستثمر آخر الآن. اترك بياناتك وسنبلغك فوراً إن عادت متاحة.",
-                    en: "Another investor has reserved this land. Leave your details and we'll tell you right away if it becomes available.",
+                  <AlertForm criteria={{ waitlist: p.parcel_id }} title={{ ar: "أحد حجزها قبلك 😅", en: "Someone reserved it first 😅" }} summary={{
+                    ar: "بس الحجوزات أحياناً ما تكمل. خلّ رقمك ونعلمك أول ما ترجع متاحة.",
+                    en: "Reservations sometimes fall through. Leave your number and we'll tell you first if it opens up.",
                   }} />
                 )}
                 {closed && (
                   <div>
-                    <p className="font-semibold">{lang === "ar" ? `هذه الأرض ${STATUS_LABEL[p.status].ar}` : `This land is ${STATUS_LABEL[p.status].en.toLowerCase()}`}</p>
-                    <p className="mt-1 text-sm text-muted">{lang === "ar" ? "نعرضها لتقارن الأسعار. الأراضي المشابهة المتاحة في الأسفل." : "We show it so you can compare prices. Similar available land is below."}</p>
-                    <Link href={`/lands?area=${p.area_of_city}&type=${p.land_type}&deal=${p.listing_type}`} className="mt-3 inline-block rounded-md bg-palm px-4 py-2.5 text-white">
-                      {lang === "ar" ? "أراضٍ مشابهة متاحة" : "Similar available land"}
+                    <p className="text-lg font-semibold">{ar ? `هالأرض ${STATUS_LABEL[p.status].ar}` : `This one's ${STATUS_LABEL[p.status].en.toLowerCase()}`}</p>
+                    <p className="mt-1 text-[15px] text-muted">{ar ? "نعرضها عشان تقارن الأسعار. شوف اللي يشبهها ومتاح الحين." : "We show it so you can compare prices. See similar land that's available now."}</p>
+                    <Link href={`/lands?area=${p.area_of_city}&type=${p.land_type}&deal=${p.listing_type}`} className="btn-primary mt-3 block px-4 py-3 text-center font-medium">
+                      {ar ? "أراضي مشابهة متاحة" : "Similar available land"}
                     </Link>
                   </div>
                 )}
                 <a href={wa} target="_blank" rel="noopener" onClick={() => track("whatsapp_click", { from: "parcel" }, p.parcel_id)}
-                  className="mt-3 block w-full rounded-md border border-ink px-4 py-3 text-center font-medium hover:bg-stone-2">
-                  {lang === "ar" ? "اسأل عن هذه الأرض عبر واتساب" : "Ask about this land on WhatsApp"}
+                  className="btn-wa mt-3 block w-full px-4 py-3.5 text-center font-semibold">
+                  {ar ? "اسألنا عنها واتساب" : "Ask us on WhatsApp"}
                 </a>
               </div>
             </div>
+            <p className="mt-2 px-2 text-center text-[12px] text-muted" dir="ltr">{p.parcel_id}</p>
           </aside>
         </div>
       </main>
