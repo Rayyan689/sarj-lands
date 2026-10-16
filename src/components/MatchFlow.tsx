@@ -85,6 +85,12 @@ export default function MatchFlow() {
         )}
 
         {step === 2 && (
+          <>
+          <p className="mb-3 text-[14px] text-muted">
+            {lang === "ar"
+              ? `من أصل ${available.length} أرض متاحة، فيه ${counts.any ?? 0} ${intent?.type ? `أرض ${intent.type === "residential" ? "سكنية" : "تجارية"}` : "أرض"} ${deal === "sale" ? "للبيع" : "للإيجار"}. هذا توزيعها:`
+              : `Of ${available.length} available parcels, ${counts.any ?? 0} are ${intent?.type ?? ""} land ${deal === "sale" ? "for sale" : "for lease"}. Here's where they are:`}
+          </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {(["any", ...AREAS] as (Area | "any")[]).map((a) => {
               const n = counts[a] ?? 0;
@@ -92,12 +98,13 @@ export default function MatchFlow() {
                 <button key={a} onClick={() => { setArea(a); go(3); }} className={`bubble px-4 py-3 text-start ${area === a && step > 2 ? "bubble-on" : ""}`} style={{ borderRadius: 20 }}>
                   <span className="block text-[15px] font-medium">{a === "any" ? (lang === "ar" ? "ما تفرق معي" : "Anywhere works") : AREA_LABEL[a][lang]}</span>
                   <span className={`text-xs ${n ? "text-muted" : "text-muted/70"}`}>
-                    {n ? (lang === "ar" ? `${n} أرض متاحة` : `${n} available`) : (lang === "ar" ? "ما فيه شي الحين" : "None right now")}
+                    {n ? (lang === "ar" ? `${n} تناسب طلبك` : `${n} match`) : (lang === "ar" ? "ما فيه شي الحين" : "None right now")}
                   </span>
                 </button>
               );
             })}
           </div>
+          </>
         )}
 
         {step === 3 && (

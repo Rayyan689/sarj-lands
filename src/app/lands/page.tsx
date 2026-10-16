@@ -82,7 +82,15 @@ function Explorer() {
             </select>
           </label>
         </div>
-        <p className="mt-4 text-[14px] text-muted">{ar ? `${num(list.length, lang)} أرض` : `${list.length} parcels`}</p>
+        <p className="mt-4 text-[14px] text-muted">
+          {(() => {
+            const c = (st: string) => list.filter((p) => p.status === st).length;
+            const av = c("available"), rs = c("reserved"), cl = c("sold") + c("leased");
+            return ar
+              ? [`${num(av, lang)} متاحة`, rs ? `${num(rs, lang)} محجوزة` : "", cl ? `${num(cl, lang)} انباعت أو تأجرت` : ""].filter(Boolean).join(" · ")
+              : [`${av} available`, rs ? `${rs} reserved` : "", cl ? `${cl} sold or leased` : ""].filter(Boolean).join(" · ");
+          })()}
+        </p>
         {list.length ? (
           <div className="mt-2 grid gap-3 pb-6 xl:grid-cols-2">
             {list.map((p) => <ParcelCard key={p.parcel_id} p={p} onHover={setSel} selected={sel === p.parcel_id} from="explorer" />)}
