@@ -108,3 +108,5 @@ body {
   .step-in { animation: none }
   .bubble, .btn-primary { transition: none }
 }
+
+.field[aria-invalid="true"] { border-color: #e5484d; background: #fff6f6; }

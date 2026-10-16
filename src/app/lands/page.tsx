@@ -51,7 +51,7 @@ function Explorer() {
       if (sort === "price_desc") return (b.total_price_sar ?? 0) - (a.total_price_sar ?? 0);
       if (sort === "size_desc") return b.area_sqm - a.area_sqm;
       if (sort === "value") return (a.pricing.vs_area_pct ?? 999) - (b.pricing.vs_area_pct ?? 999);
-      return a.listing_age_days - b.listing_age_days;
+      return b.listed_date.localeCompare(a.listed_date);
     });
   }, [area, deal, type, showClosed, sort]);
 

@@ -9,17 +9,26 @@ import "@fontsource/rubik/600.css";
 import "@fontsource/rubik/700.css";
 import "./globals.css";
 import { LangProvider } from "@/lib/i18n";
+import CookieNotice from "@/components/CookieNotice";
 
 export const metadata: Metadata = {
   title: "سرج العقارية | أرضك في الرياض",
-  description: "علّمنا وش ناوي تبني، ونطلع لك الأراضي اللي تناسبك من ١٢٠ أرض في ٨٨ حي بالرياض.",
+  description: "علّمنا وش ناوي تبني، ونطلع لك الأراضي اللي تناسبك من 120 أرض في 88 حي بالرياض.",
+  openGraph: {
+    title: "سرج العقارية | أرضك في الرياض",
+    description: "علّمنا وش ناوي تبني، ونطلع لك الأراضي اللي تناسبك.",
+    locale: "ar_SA",
+    type: "website",
+  },
 };
+
+export const viewport = { themeColor: "#f5f8fc" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <LangProvider>{children}</LangProvider>
+        <LangProvider>{children}<CookieNotice /></LangProvider>
       </body>
     </html>
   );

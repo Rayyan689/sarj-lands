@@ -8,6 +8,9 @@ export type Match = { parcel: Parcel; score: number; reasons: T[]; note?: T };
 export type MatchResult = { fits: Match[]; stretch: Match[]; alternatives: Match[]; considered: number };
 
 const pct = (n: number) => Math.abs(Math.round(n));
+const priceTxt = (p: Parcel): T => p.listing_type === "lease"
+  ? { ar: `${money(p.total_price_sar!, "ar")} بالسنة`, en: `${money(p.total_price_sar!, "en")} a year` }
+  : { ar: money(p.total_price_sar!, "ar"), en: money(p.total_price_sar!, "en") };
 
 /** Plain facts about why a parcel suits the stated use. Only uses fields from the data. */
 function reasonsFor(p: Parcel, use: IntentKey): { score: number; reasons: T[] } {
@@ -124,6 +127,21 @@ export function runMatch(c: Criteria): MatchResult {
           ar: `أقرب شي لطلبك، بـ ${money(p.total_price_sar!, "ar")}`,
           en: `Closest to your ask, at ${money(p.total_price_sar!, "en")}`,
         }));
+    }
+  }
+
+  // Never leave the visitor with an empty page: show the cheapest real options of the same type anywhere.
+  if (!fits.length && !stretch.length && !alternatives.length) {
+    const near = (pool.length ? pool : available.filter(typeOk))
+      .filter((p) => p.total_price_sar != null)
+      .sort((a, b) => a.total_price_sar! - b.total_price_sar!).slice(0, 3);
+    for (const p of near) {
+      const { score, reasons } = reasonsFor(p, c.use);
+      const price = priceTxt(p);
+      alternatives.push({ parcel: p, score, reasons, note: {
+        ar: `أقرب شي لطلبك: في ${AREA_LABEL[p.area_of_city].ar}، بـ ${price.ar}`,
+        en: `Closest to your ask: in ${AREA_LABEL[p.area_of_city].en}, at ${price.en}`,
+      } });
     }
   }
 
