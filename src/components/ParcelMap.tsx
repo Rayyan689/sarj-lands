@@ -6,16 +6,22 @@ import { useLang } from "@/lib/i18n";
 
 export type Basemap = "clean" | "streets" | "satellite";
 
-const TILES: Record<Basemap, { url: string; attribution: string }> = {
-  clean: { url: "https://basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}@2x.png", attribution: "© OpenStreetMap © CARTO" },
-  streets: { url: "https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png", attribution: "© OpenStreetMap © CARTO" },
-  satellite: { url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", attribution: "Imagery © Esri" },
-};
+// Free, keyless basemaps: OpenFreeMap vector styles, and Esri imagery for satellite.
+const STYLE_URL = {
+  clean: "https://tiles.openfreemap.org/styles/positron",
+  streets: "https://tiles.openfreemap.org/styles/liberty",
+} as const;
 
-function style(b: Basemap): StyleSpecification {
+function style(b: Basemap): string | StyleSpecification {
+  if (b !== "satellite") return STYLE_URL[b];
   return {
     version: 8,
-    sources: { base: { type: "raster", tiles: [TILES[b].url], tileSize: 256, attribution: TILES[b].attribution, maxzoom: 19 } },
+    sources: {
+      base: {
+        type: "raster", tileSize: 256, maxzoom: 19, attribution: "Imagery © Esri",
+        tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"],
+      },
+    },
     layers: [{ id: "base", type: "raster", source: "base" }],
   };
 }
@@ -63,6 +69,9 @@ export default function ParcelMap({
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
+  const dataRef = useRef(toGeo(parcels, highlight, selected));
+  dataRef.current = toGeo(parcels, highlight, selected);
+
   // create once
   useEffect(() => {
     let cancelled = false;
@@ -73,7 +82,13 @@ export default function ParcelMap({
         container: el.current, style: style(base), center, zoom,
         interactive, attributionControl: { compact: true }, cooperativeGestures: false,
       });
-      if (interactive) m.addControl(new ml.NavigationControl({ showCompass: false }), lang === "ar" ? "top-left" : "top-right");
+      if (interactive) {
+        m.addControl(new ml.NavigationControl({ showCompass: false }), lang === "ar" ? "top-left" : "top-right");
+        m.on("click", "dots", (e) => { const id = e.features?.[0]?.properties?.id; if (id) onSelectRef.current?.(id); });
+        m.on("mouseenter", "dots", () => { m.getCanvas().style.cursor = "pointer"; });
+        m.on("mouseleave", "dots", () => { m.getCanvas().style.cursor = ""; });
+      }
+      m.on("style.load", () => addParcels(m));
       m.on("load", () => { if (!cancelled) setLoaded(true); });
       map.current = m;
     })();
@@ -81,24 +96,9 @@ export default function ParcelMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // basemap switch
-  useEffect(() => {
-    const m = map.current;
-    if (!m || !loaded) return;
-    const src = m.getSource("base");
-    if (src) { m.removeLayer("base"); m.removeSource("base"); }
-    m.addSource("base", { type: "raster", tiles: [TILES[base].url], tileSize: 256, attribution: TILES[base].attribution, maxzoom: 19 });
-    m.addLayer({ id: "base", type: "raster", source: "base" }, m.getLayer("halo") ? "halo" : undefined);
-  }, [base, loaded]);
-
-  // parcels layer
-  useEffect(() => {
-    const m = map.current;
-    if (!m || !loaded) return;
-    const data = toGeo(parcels, highlight, selected);
-    const src = m.getSource("parcels") as GeoJSONSource | undefined;
-    if (src) { src.setData(data); return; }
-    m.addSource("parcels", { type: "geojson", data });
+  function addParcels(m: MLMap) {
+    if (m.getSource("parcels")) return;
+    m.addSource("parcels", { type: "geojson", data: dataRef.current });
     const color = ["match", ["get", "status"], "available", "#ffad33", "reserved", "#2f7bf6", "#a3acb9"] as unknown as string;
     m.addLayer({
       id: "halo", type: "circle", source: "parcels",
@@ -115,12 +115,25 @@ export default function ParcelMap({
         "circle-stroke-color": "#ffffff",
       },
     });
-    if (interactive) {
-      m.on("click", "dots", (e) => { const id = e.features?.[0]?.properties?.id; if (id) onSelectRef.current?.(id); });
-      m.on("mouseenter", "dots", () => { m.getCanvas().style.cursor = "pointer"; });
-      m.on("mouseleave", "dots", () => { m.getCanvas().style.cursor = ""; });
-    }
-  }, [parcels, highlight, selected, loaded, interactive]);
+  }
+
+  // basemap switch (style reload re-adds the parcels via style.load)
+  const firstBase = useRef(true);
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !loaded) return;
+    if (firstBase.current) { firstBase.current = false; return; }
+    m.setStyle(style(base), { diff: false });
+  }, [base, loaded]);
+
+  // parcels data
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !loaded) return;
+    const src = m.getSource("parcels") as GeoJSONSource | undefined;
+    if (src) src.setData(dataRef.current); else if (m.isStyleLoaded()) addParcels(m);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parcels, highlight, selected, loaded]);
 
   // fit to highlighted results
   useEffect(() => {
