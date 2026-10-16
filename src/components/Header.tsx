@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useLang } from "@/lib/i18n";
 import { waLink } from "@/lib/contact";
 import { track } from "@/lib/track";
+import Logo from "./Logo";
 
 export default function Header() {
   const { lang, setLang } = useLang();
@@ -15,9 +16,8 @@ export default function Header() {
     <>
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5">
       <div className="glass mx-auto flex h-14 max-w-6xl items-center gap-2 rounded-full ps-4 pe-2 sm:gap-4">
-        <Link href="/" className="flex items-center gap-2">
-          <span aria-hidden className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-b from-[#d6b475] to-[#b4893f] text-sm font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,.5)]">س</span>
-          <span className="hidden text-[17px] font-semibold min-[380px]:inline">{lang === "ar" ? "سرج العقارية" : "Sarj Real Estate"}</span>
+        <Link href="/" className="flex items-center text-ink" aria-label={lang === "ar" ? "سرج العقارية، الصفحة الرئيسية" : "Sarj Real Estate, home"}>
+          <Logo className="h-9 w-auto sm:h-10" />
         </Link>
         <nav className="ms-1 flex gap-1 sm:ms-2">
           {nav.map((n) => (

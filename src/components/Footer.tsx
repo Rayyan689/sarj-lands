@@ -4,6 +4,7 @@ import { useLang } from "@/lib/i18n";
 import { waLink } from "@/lib/contact";
 import { formatDate } from "@/lib/time";
 import { useToday } from "@/lib/useToday";
+import Logo from "./Logo";
 
 export default function Footer() {
   const { lang } = useLang();
@@ -12,8 +13,9 @@ export default function Footer() {
   return (
     <footer className="px-3 pb-4 pt-10 sm:px-5">
       <div className="glass-soft mx-auto flex max-w-6xl flex-col gap-3 rounded-[28px] px-6 py-5 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
-        <p>
-          {ar ? "سرج العقارية، الرياض." : "Sarj Real Estate, Riyadh."}
+        <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <Logo className="h-8 w-auto text-ink" />
+          <span>{ar ? "الرياض." : "Riyadh."}</span>
           {today && <span> {ar ? `الأسعار والتوفر محدّثة، ${formatDate(today, lang)}.` : `Prices and availability up to date, ${formatDate(today, lang)}.`}</span>}
         </p>
         <div className="flex items-center gap-4">

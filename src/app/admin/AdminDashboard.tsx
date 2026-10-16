@@ -7,6 +7,7 @@ import { AREA_LABEL, AREA_SHORT, DEAL_LABEL, TYPE_LABEL, money, num, district } 
 import { formatDate } from "@/lib/time";
 import type { Analytics } from "@/lib/admin/analytics";
 import type { Live } from "@/lib/admin/live";
+import Logo from "@/components/Logo";
 
 type T = { ar: string; en: string };
 
@@ -69,8 +70,8 @@ export default function AdminDashboard({ a, live }: { a: Analytics; live: Live }
       {/* top bar */}
       <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5">
         <div className="glass mx-auto flex h-14 max-w-7xl items-center gap-3 rounded-full ps-4 pe-2">
-          <span aria-hidden className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-b from-[#d6b475] to-[#b4893f] text-sm font-bold text-white">س</span>
-          <span className="font-semibold">{ar ? "سرج · لوحة الإدارة" : "Sarj · Admin"}</span>
+          <Logo className="h-9 w-auto text-ink" />
+          <span className="border-s border-hair ps-3 text-[15px] font-semibold">{ar ? "لوحة الإدارة" : "Admin"}</span>
           <div className="ms-auto flex items-center gap-1">
             <Link href="/" className="rounded-full px-3 py-2 text-[14px] text-muted hover:bg-white hover:text-ink">{ar ? "الموقع" : "Website"}</Link>
             <button onClick={() => setLang(ar ? "en" : "ar")} className="rounded-full px-3 py-2 text-[14px] text-muted hover:bg-white hover:text-ink">{ar ? "EN" : "عربي"}</button>
