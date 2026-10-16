@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MatchFlow from "@/components/MatchFlow";
 import PlotStory from "@/components/PlotStory";
+import TrackRecord from "@/components/TrackRecord";
 import { useLang } from "@/lib/i18n";
 import { available, districtCount } from "@/lib/portfolio";
 import { track } from "@/lib/track";
@@ -52,6 +53,7 @@ export default function Home() {
         </section>
 
         <PlotStory onStart={backToFlow} />
+        <TrackRecord onStart={backToFlow} />
       </main>
       <Footer />
     </>

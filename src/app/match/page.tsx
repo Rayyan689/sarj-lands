@@ -1,6 +1,6 @@
 "use client";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ParcelMap from "@/components/ParcelMap";
@@ -41,6 +41,13 @@ function Group({ title, sub, items, hover, sel, from }: { title: string; sub?: s
   );
 }
 
+/** The question lives on the homepage; this page only shows results. */
+function RedirectHome() {
+  const router = useRouter();
+  useEffect(() => { router.replace("/"); }, [router]);
+  return <div className="p-10" />;
+}
+
 function Results() {
   const sp = useSearchParams();
   const { lang } = useLang();
@@ -51,7 +58,8 @@ function Results() {
 
   useEffect(() => { track("page_view", { page: "match", ...(c ?? {}) }); setEditing(false); }, [c]);
 
-  if (!c || !r || editing) {
+  if (!c || !r) return <RedirectHome />;
+  if (editing) {
     return (
       <div className="mx-auto max-w-3xl px-3 py-10 sm:px-5">
         <div className="glass rounded-[34px] p-6 sm:p-8">
