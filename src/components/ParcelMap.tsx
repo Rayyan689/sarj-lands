@@ -26,6 +26,7 @@ function style(b: Basemap): string | StyleSpecification {
   };
 }
 
+let workerSet = false;
 const RIYADH: [number, number] = [46.70, 24.72];
 
 type Props = {
@@ -78,6 +79,13 @@ export default function ParcelMap({
     (async () => {
       const ml = await import("maplibre-gl");
       if (cancelled || !el.current) return;
+      // Bundlers break MapLibre's worker path, so we serve it ourselves (copied at build time).
+      if (!workerSet) {
+        workerSet = true;
+        ml.setWorkerUrl("/map/maplibre-gl-worker.mjs");
+        // Shapes Arabic map labels correctly.
+        try { ml.setRTLTextPlugin("/map/mapbox-gl-rtl-text.min.js", true); } catch {}
+      }
       const m = new ml.Map({
         container: el.current, style: style(base), center, zoom,
         interactive, attributionControl: { compact: true }, cooperativeGestures: false,
