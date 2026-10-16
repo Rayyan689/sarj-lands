@@ -1,6 +1,5 @@
 // All time-relative numbers are computed from the real date in Riyadh, every time a page loads.
 // Nothing in the UI is frozen to the data snapshot date.
-import { useEffect, useState } from "react";
 
 const TZ = "Asia/Riyadh";
 
@@ -21,14 +20,3 @@ export function formatDate(iso: string, lang: "ar" | "en") {
   return d.toLocaleDateString(lang === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: TZ });
 }
 
-/** Client hook: today's Riyadh date, set after mount so static pages never show a build-time date. */
-export function useToday() {
-  const [today, setToday] = useState<string | null>(null);
-  useEffect(() => {
-    setToday(riyadhToday());
-    // Roll over at midnight if the tab stays open.
-    const id = setInterval(() => setToday(riyadhToday()), 60_000);
-    return () => clearInterval(id);
-  }, []);
-  return today;
-}

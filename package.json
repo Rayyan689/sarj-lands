@@ -11,6 +11,7 @@
     "predev": "node scripts/copy-map-assets.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
     "@fontsource/rubik": "^5.3.0",
     "@mapbox/mapbox-gl-rtl-text": "^0.2.3",
     "@neondatabase/serverless": "^1.2.0",

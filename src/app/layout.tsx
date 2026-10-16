@@ -10,6 +10,7 @@ import "@fontsource/rubik/700.css";
 import "./globals.css";
 import { LangProvider } from "@/lib/i18n";
 import CookieNotice from "@/components/CookieNotice";
+import ChatWidget from "@/components/ChatWidget";
 
 export const metadata: Metadata = {
   title: "سرج العقارية | أرضك في الرياض",
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ar" dir="rtl" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <LangProvider>{children}<CookieNotice /></LangProvider>
+        <LangProvider>{children}<ChatWidget /><CookieNotice /></LangProvider>
       </body>
     </html>
   );

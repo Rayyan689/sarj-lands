@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { useLang } from "@/lib/i18n";
 import { waLink } from "@/lib/contact";
-import { formatDate, useToday } from "@/lib/time";
+import { formatDate } from "@/lib/time";
+import { useToday } from "@/lib/useToday";
 
 export default function Footer() {
   const { lang } = useLang();

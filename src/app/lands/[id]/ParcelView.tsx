@@ -7,6 +7,7 @@ import ParcelMap from "@/components/ParcelMap";
 import ParcelCard from "@/components/ParcelCard";
 import LeadForm from "@/components/LeadForm";
 import AlertForm from "@/components/AlertForm";
+import { openChat } from "@/components/ChatWidget";
 import { useLang } from "@/lib/i18n";
 import { byId, available, portfolio } from "@/lib/portfolio";
 import { AREA_LABEL, DEAL_LABEL, STATUS_LABEL, TYPE_LABEL, byDrive, district, hook, minutes, money, num, priceLabel, sqm, sqmPrice, street, type T } from "@/lib/format";
@@ -209,6 +210,9 @@ export default function ParcelView({ id }: { id: string }) {
                   className="btn-wa mt-3 block w-full px-4 py-3.5 text-center font-semibold">
                   {ar ? "اسألنا عنها واتساب" : "Ask us on WhatsApp"}
                 </a>
+                <button onClick={() => openChat()} className="bubble mt-2 block w-full px-4 py-3 text-center font-medium">
+                  💬 {ar ? "اسأل المستشار عنها الحين" : "Ask our advisor about it now"}
+                </button>
               </div>
             </div>
             <p className="mt-2 px-2 text-center text-[12px] text-muted" dir="ltr">{p.parcel_id}</p>

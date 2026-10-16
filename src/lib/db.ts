@@ -12,6 +12,11 @@ export function ensureSchema() {
       id SERIAL PRIMARY KEY, created_at TIMESTAMPTZ DEFAULT now(),
       name TEXT, phone TEXT, parcel_id TEXT, kind TEXT, message TEXT,
       preferred_time TEXT, source TEXT, lang TEXT, session_id TEXT, context JSONB)`;
+    await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT false`;
+    await sql`ALTER TABLE alerts ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT false`;
+    await sql`CREATE TABLE IF NOT EXISTS chats (
+      id BIGSERIAL PRIMARY KEY, created_at TIMESTAMPTZ DEFAULT now(),
+      session_id TEXT, mode TEXT, lang TEXT, page TEXT, user_msg TEXT, reply TEXT, tools JSONB, usage JSONB)`;
     await sql`CREATE TABLE IF NOT EXISTS events (
       id BIGSERIAL PRIMARY KEY, created_at TIMESTAMPTZ DEFAULT now(),
       session_id TEXT, name TEXT, parcel_id TEXT, props JSONB)`;

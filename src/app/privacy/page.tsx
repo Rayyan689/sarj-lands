@@ -15,6 +15,10 @@ const SECTIONS = [
     en: ["Cookies and browser storage", "We keep your language and cookie choice in your browser. If you accept cookies, we also record page visits anonymously (no name or number) to learn what visitors like and improve the site."],
   },
   {
+    ar: ["المحادثة مع المستشار", "رسايلك مع مستشار سرج تنحفظ عندنا عشان نحسّن الردود ونتابع طلبك. المستشار يشتغل بالذكاء الاصطناعي (Claude من Anthropic)، فالرسايل تنرسل لهم عشان يطلع الرد."],
+    en: ["Chatting with our advisor", "Your messages with the Sarj advisor are saved so we can improve answers and follow up on your request. The advisor runs on AI (Claude by Anthropic), so messages are sent to them to generate replies."],
+  },
+  {
     ar: ["الخرايط", "الخرايط تجي من OpenFreeMap والصور الجوية من Esri. لما تفتح الخريطة، متصفحك يطلب منهم الصور مباشرة."],
     en: ["Maps", "Maps come from OpenFreeMap and aerial imagery from Esri. When you open a map, your browser requests the tiles from them directly."],
   },
