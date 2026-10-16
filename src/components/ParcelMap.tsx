@@ -147,7 +147,7 @@ export default function ParcelMap({
 
   return (
     <div className={`relative ${className}`}>
-      <div ref={el} className="absolute inset-0" aria-label={lang === "ar" ? "خريطة الأراضي" : "Map of parcels"} role="region" />
+      <div ref={el} style={{ position: "absolute", inset: 0 }} aria-label={lang === "ar" ? "خريطة الأراضي" : "Map of parcels"} role="region" />
       {showBasemapToggle && (
         <div className="glass absolute top-3 start-3 z-10 flex gap-1 rounded-full p-1 text-xs">
           {(["clean", "streets", "satellite"] as Basemap[]).map((b) => (
