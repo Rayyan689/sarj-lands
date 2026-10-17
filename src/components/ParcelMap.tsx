@@ -41,9 +41,10 @@ type Props = {
   zoom?: number;
   center?: [number, number];
   className?: string;
+  heat?: Record<string, number>;  // views per parcel: draws a warm glow sized by interest
 };
 
-function toGeo(parcels: Parcel[], highlight?: Set<string>, selected?: string | null) {
+function toGeo(parcels: Parcel[], highlight?: Set<string>, selected?: string | null, heat?: Record<string, number>) {
   return {
     type: "FeatureCollection" as const,
     features: parcels.map((p) => ({
@@ -53,6 +54,7 @@ function toGeo(parcels: Parcel[], highlight?: Set<string>, selected?: string | n
         id: p.parcel_id, status: p.status,
         dim: highlight ? !highlight.has(p.parcel_id) : false,
         sel: selected === p.parcel_id,
+        views: heat?.[p.parcel_id] ?? 0,
       },
     })),
   };
@@ -60,7 +62,7 @@ function toGeo(parcels: Parcel[], highlight?: Set<string>, selected?: string | n
 
 export default function ParcelMap({
   parcels, highlight, selected, onSelect, basemap = "clean", showBasemapToggle = false,
-  fit = false, interactive = true, zoom = 9.6, center = RIYADH, className = "",
+  fit = false, interactive = true, zoom = 9.6, center = RIYADH, className = "", heat,
 }: Props) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<MLMap | null>(null);
@@ -70,8 +72,8 @@ export default function ParcelMap({
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
-  const dataRef = useRef(toGeo(parcels, highlight, selected));
-  dataRef.current = toGeo(parcels, highlight, selected);
+  const dataRef = useRef(toGeo(parcels, highlight, selected, heat));
+  dataRef.current = toGeo(parcels, highlight, selected, heat);
 
   // create once
   useEffect(() => {
@@ -109,6 +111,14 @@ export default function ParcelMap({
     m.addSource("parcels", { type: "geojson", data: dataRef.current });
     const color = ["match", ["get", "status"], "available", "#C9A15B", "reserved", "#5E6670", "#B9B4AC"] as unknown as string;
     m.addLayer({
+      id: "heat", type: "circle", source: "parcels",
+      filter: [">", ["get", "views"], 0],
+      paint: {
+        "circle-radius": ["interpolate", ["linear"], ["get", "views"], 1, 14, 10, 30, 40, 52],
+        "circle-color": "#E0A84F", "circle-opacity": 0.38, "circle-blur": 0.7,
+      },
+    });
+    m.addLayer({
       id: "halo", type: "circle", source: "parcels",
       filter: ["==", ["get", "sel"], true],
       paint: { "circle-radius": 18, "circle-color": "#C9A15B", "circle-opacity": 0.3, "circle-stroke-width": 3, "circle-stroke-color": "#ffffff" },
@@ -141,7 +151,7 @@ export default function ParcelMap({
     const src = m.getSource("parcels") as GeoJSONSource | undefined;
     if (src) src.setData(dataRef.current); else if (m.isStyleLoaded()) addParcels(m);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [parcels, highlight, selected, loaded]);
+  }, [parcels, highlight, selected, heat, loaded]);
 
   // fit to highlighted results
   useEffect(() => {

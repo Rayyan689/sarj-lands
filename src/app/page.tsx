@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import MatchFlow from "@/components/MatchFlow";
+import ConsultantHero from "@/components/ConsultantHero";
 import PlotStory from "@/components/PlotStory";
 import TrackRecord from "@/components/TrackRecord";
 import { useLang } from "@/lib/i18n";
@@ -18,7 +18,7 @@ export default function Home() {
 
   const backToFlow = () => {
     flowRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    setTimeout(() => flowRef.current?.querySelector("button")?.focus({ preventScroll: true }), 600);
+    setTimeout(() => flowRef.current?.querySelector<HTMLElement>("textarea, button")?.focus({ preventScroll: true }), 600);
   };
 
   return (
@@ -36,11 +36,11 @@ export default function Home() {
               {ar ? "أرضك في الرياض، نطلعها لك" : "Your place in Riyadh, found for you"}
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-[17px] leading-relaxed text-muted sm:text-lg">
-              {ar ? "علّمنا وش ببالك بأربع ضغطات، ونجيب لك اللي فعلاً يناسبك. بدون لف ودوران." : "Tell us what you have in mind in four taps, and we'll bring you what actually fits. No runaround."}
+              {ar ? "قول لمستشار سرج وش ببالك بكلامك، ويطلع لك الأرض اللي فعلاً تناسبك. بدون لف ودوران." : "Tell the Sarj consultant what you have in mind, in your own words, and get the land that actually fits. No runaround."}
             </p>
           </div>
           <div ref={flowRef} className="glass mt-8 rounded-[32px] p-5 sm:p-7">
-            <MatchFlow />
+            <ConsultantHero />
           </div>
           <p className="mt-5 text-center text-[14px] text-muted">
             {ar ? "تعرف وش تبي؟ " : "Know what you want? "}

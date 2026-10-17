@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   if (limited(ip)) return Response.json({ error: "rate", code: "rate" }, { status: 429 });
 
-  let body: { messages?: Msg[]; context?: { page?: string; parcel_id?: string; lang?: string }; session_id?: string; mode?: string };
+  let body: { messages?: Msg[]; context?: { page?: string; parcel_id?: string; lang?: string; profile?: Record<string, never> }; session_id?: string; mode?: string };
   try { body = await req.json(); } catch { return Response.json({ error: "bad request" }, { status: 400 }); }
   const history = (body.messages ?? [])
     .filter((m) => (m.role === "user" || m.role === "assistant") && typeof m.content === "string" && m.content.trim())

@@ -6,6 +6,7 @@ import { AREAS, available, type Area, type Deal } from "@/lib/portfolio";
 import { AREA_LABEL } from "@/lib/format";
 import { useLang } from "@/lib/i18n";
 import { track } from "@/lib/track";
+import { saveProfile } from "@/lib/profile";
 
 /** One question at a time. Four taps from intent to a shortlist. */
 export default function MatchFlow() {
@@ -33,6 +34,7 @@ export default function MatchFlow() {
     const q = new URLSearchParams({ use: use!, deal, area });
     if (budget != null) q.set("budget", String(budget));
     track("match_completed", { use, deal, area, budget });
+    saveProfile({ use: use!, deal, area, budget, anchor: null, said: null, summary: null });
     router.push(`/match?${q}`);
   };
 

@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useLang } from "@/lib/i18n";
-import { byId } from "@/lib/portfolio";
+import { byId, parcels } from "@/lib/portfolio";
+import ParcelMap from "@/components/ParcelMap";
 import { district } from "@/lib/format";
 import type { Live } from "@/lib/admin/live";
 import { Card, Empty, MoreLink, PageHeader, EVENT_T, whenFmt } from "../ui";
@@ -39,6 +40,12 @@ export default function WebsiteView({ live }: { live: Live | null }) {
                 <div className="mt-1 h-2.5 rounded-full bg-white/70"><div className="h-full rounded-e-[4px] rounded-s-full bg-[#b07f2c]" style={{ width: `${Math.max((x.v / top) * 100, x.v ? 2 : 0)}%` }} /></div>
               </div>
             ))}
+          </div>
+        </Card>
+        <Card className="lg:col-span-2" title={ar ? "وين يدورون الزوار" : "Where visitors are looking"}
+          sub={ar ? `كل ما كبر التوهج حول الأرض، زاد اللي فتحوها آخر 30 يوم. آخر 24 ساعة: ${Object.keys(live.views24).length} أرض انفتحت.` : `The bigger the glow, the more people opened that property in the last 30 days. Last 24 hours: ${Object.keys(live.views24).length} properties opened.`}>
+          <div className="h-[380px] overflow-hidden rounded-[20px]">
+            <ParcelMap parcels={parcels} heat={live.views} highlight={new Set(Object.keys(live.views))} className="h-full" />
           </div>
         </Card>
         <Card title={ar ? "أكثر أراضي انفتحت" : "Most opened properties"} sub={ar ? "اللي يشد الناس. استخدمها في الإعلانات والرسائل." : "What draws people in. Use these in ads and outreach."}>

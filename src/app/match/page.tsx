@@ -10,20 +10,26 @@ import AlertForm from "@/components/AlertForm";
 import { useLang } from "@/lib/i18n";
 import { criteriaFromParams, runMatch, type Criteria, type Match } from "@/lib/match";
 import { intentByKey, BUDGETS } from "@/lib/intents";
-import { AREA_LABEL, TYPE_LABEL } from "@/lib/format";
-import { parcels } from "@/lib/portfolio";
+import { AREA_LABEL, TYPE_LABEL, money } from "@/lib/format";
+import { parcels, portfolio } from "@/lib/portfolio";
+import { getProfile, type Profile } from "@/lib/profile";
+import { Avatar } from "@/components/ConsultantHero";
 import { track } from "@/lib/track";
 
 function chips(c: Criteria) {
   const i = intentByKey(c.use)!;
   const b = BUDGETS[c.deal].find((x) => x.max === c.budget) ?? BUDGETS[c.deal][BUDGETS[c.deal].length - 1];
   const area = c.area === "any" ? { ar: "أي مكان بالرياض", en: "Anywhere in Riyadh" } : AREA_LABEL[c.area];
-  return [
+  const budget = c.budget != null && !BUDGETS[c.deal].some((x) => x.max === c.budget)
+    ? { ar: `لين ${money(c.budget, "ar")}${c.deal === "lease" ? " بالسنة" : ""}`, en: `Up to ${money(c.budget, "en")}${c.deal === "lease" ? " a year" : ""}` } : b;
+  const out = [
     { ar: `${i.icon} ${i.ar}`, en: `${i.icon} ${i.en}` },
     c.deal === "sale" ? { ar: "شراء", en: "Buy" } : { ar: "إيجار", en: "Lease" },
     area,
-    b,
+    budget,
   ];
+  if (c.anchor) out.push({ ar: `📍 قريب من ${portfolio.anchors[c.anchor].ar}`, en: `📍 Near ${portfolio.anchors[c.anchor].en}` });
+  return out;
 }
 
 function Group({ title, sub, items, hover, sel, from }: { title: string; sub?: string; items: Match[]; hover: (id: string | null) => void; sel: string | null; from: string }) {
@@ -55,6 +61,8 @@ function Results() {
   const r = useMemo(() => (c ? runMatch(c) : null), [c]);
   const [editing, setEditing] = useState(false);
   const [sel, setSel] = useState<string | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  useEffect(() => { setProfile(getProfile()); }, [sp]);
 
   useEffect(() => { track("page_view", { page: "match", ...(c ?? {}) }); setEditing(false); }, [c]);
 
@@ -101,6 +109,15 @@ function Results() {
             {lang === "ar" ? "غيّر طلبك" : "Change"}
           </button>
         </div>
+        {profile?.said && profile.use === c.use && (
+          <div className="step-in mt-4 flex items-start gap-3">
+            <Avatar size={36} />
+            <div className="min-w-0 rounded-[20px] rounded-ss-md bg-white/85 px-4 py-3 text-[15px] leading-relaxed shadow-sm">
+              <p className="text-[13px] text-muted">{lang === "ar" ? "قلت لي:" : "You told me:"} <span dir="auto">«{profile.said}»</span></p>
+              {profile.summary && <p className="mt-1" dir="auto">{profile.summary}</p>}
+            </div>
+          </div>
+        )}
         <h1 className="mt-4 text-3xl font-bold leading-snug sm:text-4xl">{headline}</h1>
         <p className="mt-2 max-w-xl text-[16px] text-muted">{sub}</p>
 

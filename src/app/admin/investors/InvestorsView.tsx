@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLang } from "@/lib/i18n";
 import { byId } from "@/lib/portfolio";
 import { AREA_SHORT, DEAL_LABEL, money, district } from "@/lib/format";
@@ -41,6 +41,7 @@ function Calls({ a, lang }: { a: Analytics; lang: Lang }) {
   const [q, setQ] = useState("");
   const [all, setAll] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+  const [draftFor, setDraftFor] = useState<string | null>(null);
   const rows = a.calls.filter((c) => (status === "all" || c.status === status) && (!ready || c.intent === "ready to move") &&
     (!q.trim() || `${c.name} ${c.name_ar} ${c.id} ${c.phone}`.toLowerCase().includes(q.trim().toLowerCase())));
   const shown = all ? rows : rows.slice(0, 10);
@@ -87,7 +88,9 @@ function Calls({ a, lang }: { a: Analytics; lang: Lang }) {
                   <a href={c.wa} target="_blank" rel="noopener" className="btn-wa px-3.5 py-1.5 text-[13px] font-medium">{ar ? "واتساب" : "WhatsApp"}</a>
                   <button onClick={() => { navigator.clipboard?.writeText(c.waText).then(() => { setCopied(c.id); setTimeout(() => setCopied(null), 1500); }).catch(() => {}); }}
                     className="bubble px-3 py-1.5 text-[13px]">{copied === c.id ? (ar ? "انسخت ✓" : "Copied ✓") : (ar ? "انسخ الرسالة" : "Copy message")}</button>
+                  <button onClick={() => setDraftFor(draftFor === c.id ? null : c.id)} aria-expanded={draftFor === c.id} className="bubble px-3 py-1.5 text-[13px]">✨ {ar ? "اكتبها لي" : "Write it for me"}</button>
                 </div>
+                {draftFor === c.id && <Draft id={c.id} phone={c.phone} lang={lang} />}
               </div>
             );
           })}
@@ -162,5 +165,33 @@ function Duplicates({ a, lang }: { a: Analytics; lang: Lang }) {
         </ul>
       ) : <Empty>{ar ? "ما فيه تكرار." : "No duplicates."}</Empty>}
     </Card>
+  );
+}
+
+/** A personal WhatsApp message drafted by the AI for this investor. Editable before sending. */
+function Draft({ id, phone, lang }: { id: string; phone: string; lang: Lang }) {
+  const ar = lang === "ar";
+  const [text, setText] = useState<string | null>(null);
+  useEffect(() => {
+    let off = false;
+    fetch("/api/admin/draft", { method: "POST", headers: { "content-type": "application/json", "x-sarj-admin": "1" }, body: JSON.stringify({ id }) })
+      .then((r) => r.json()).then((d) => { if (!off) setText(d.text ?? ""); }).catch(() => { if (!off) setText(""); });
+    return () => { off = true; };
+  }, [id]);
+  return (
+    <div className="step-in rounded-[18px] bg-white/80 p-3 md:col-span-4">
+      {text == null ? (
+        <p className="flex items-center gap-2 py-2 text-[14px] text-muted"><span className="h-2 w-2 animate-pulse rounded-full bg-apricot" />{ar ? "يكتب رسالة خاصة له…" : "Writing a personal message…"}</p>
+      ) : (
+        <>
+          <label className="sr-only" htmlFor={`draft-${id}`}>{ar ? "الرسالة" : "Message"}</label>
+          <textarea id={`draft-${id}`} value={text} onChange={(e) => setText(e.target.value)} rows={6} dir="auto" className="field w-full resize-y rounded-[16px] p-3 text-[14px] leading-relaxed" />
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <a href={`https://wa.me/966${phone.slice(1)}?text=${encodeURIComponent(text)}`} target="_blank" rel="noopener" className="btn-wa px-4 py-2 text-[13px] font-semibold">{ar ? "أرسلها واتساب" : "Send on WhatsApp"}</a>
+            <span className="text-[12px] text-muted">{ar ? "كتبها الذكاء الاصطناعي من بياناته. راجعها وعدّل اللي تبي قبل ترسل." : "Drafted by AI from their details. Review and edit before sending."}</span>
+          </div>
+        </>
+      )}
+    </div>
   );
 }

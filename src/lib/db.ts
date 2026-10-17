@@ -13,7 +13,6 @@ export function ensureSchema() {
       name TEXT, phone TEXT, parcel_id TEXT, kind TEXT, message TEXT,
       preferred_time TEXT, source TEXT, lang TEXT, session_id TEXT, context JSONB)`;
     await sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT false`;
-    await sql`ALTER TABLE alerts ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT false`;
     await sql`CREATE TABLE IF NOT EXISTS chats (
       id BIGSERIAL PRIMARY KEY, created_at TIMESTAMPTZ DEFAULT now(),
       session_id TEXT, mode TEXT, lang TEXT, page TEXT, user_msg TEXT, reply TEXT, tools JSONB, usage JSONB)`;
@@ -23,6 +22,8 @@ export function ensureSchema() {
     await sql`CREATE TABLE IF NOT EXISTS alerts (
       id SERIAL PRIMARY KEY, created_at TIMESTAMPTZ DEFAULT now(),
       name TEXT, phone TEXT, criteria JSONB, session_id TEXT)`;
-  })();
+    await sql`ALTER TABLE alerts ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT false`;
+    await sql`CREATE TABLE IF NOT EXISTS briefs (day DATE, lang TEXT, body TEXT, created_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY (day, lang))`;
+  })().catch((e) => { ready = null; throw e; });
   return ready;
 }

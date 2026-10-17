@@ -7,6 +7,7 @@ import ParcelMap from "@/components/ParcelMap";
 import ParcelCard from "@/components/ParcelCard";
 import LeadForm from "@/components/LeadForm";
 import AlertForm from "@/components/AlertForm";
+import YourLand from "@/components/YourLand";
 import { openChat } from "@/components/ChatWidget";
 import { useLang } from "@/lib/i18n";
 import { byId, available, portfolio } from "@/lib/portfolio";
@@ -110,6 +111,7 @@ export default function ParcelView({ id }: { id: string }) {
 
         <div className="mx-auto mt-5 grid max-w-6xl gap-5 px-3 pb-6 sm:px-5 lg:grid-cols-[minmax(0,1fr)_370px]">
           <div className="min-w-0 space-y-5">
+            {!closed && <YourLand p={p} />}
             <section className="glass rounded-[30px] p-6">
               <h2 className="text-2xl font-bold">{ar ? "وش يميزها؟" : "What makes it special?"}</h2>
               <ul className="mt-4 space-y-3">
@@ -145,17 +147,29 @@ export default function ParcelView({ id }: { id: string }) {
             )}
 
             <section className="glass rounded-[30px] p-6">
-              <h2 className="text-2xl font-bold">{ar ? "وين موقعها؟" : "Where is it?"}</h2>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {byDrive(p).map((k) => (
-                  <span key={k} className="rounded-full bg-white/80 px-4 py-2 text-[15px]">
-                    <span aria-hidden>🚗 </span>
-                    <b className="font-semibold">{minutes(p.drive[k].min, lang)}</b>
-                    <span className="text-muted">{ar ? " عن " : " to "}{anchors[k][lang]}</span>
-                  </span>
+              <h2 className="text-2xl font-bold">{ar ? "يومك من هنا" : "A day from here"}</h2>
+              <p className="mt-1 text-[15px] text-muted">{ar ? "وين بتكون الرياض منك لو صارت هذي أرضك." : "Where Riyadh sits from your door, if this were yours."}</p>
+              <ol className="relative mt-5 space-y-4 ps-9">
+                <span aria-hidden className="absolute inset-y-2 start-[15px] w-[2px] rounded-full bg-gradient-to-b from-[#e2c891] via-apricot to-[#2b2f3a]" />
+                {(p.land_type === "residential" ? [
+                  { k: "kafd" as const, icon: "🌅", ar: "الصبح، رايح الدوام", en: "Morning, off to work", tail: { ar: "وأنت في المركز المالي", en: "and you're at the financial district" } },
+                  { k: "kingdom" as const, icon: "☕", ar: "الظهر، مشوار للعليا", en: "Midday, a run to Olaya", tail: { ar: "وأنت عند برج المملكة", en: "to Kingdom Centre" } },
+                  { k: "airport" as const, icon: "✈️", ar: "عندك سفرة؟", en: "Catching a flight?", tail: { ar: "وأنت في المطار", en: "to the airport" } },
+                  { k: "diriyah" as const, icon: "🌙", ar: "ليلة الويكند", en: "Weekend evening", tail: { ar: "وأنت تتمشى في الدرعية", en: "and you're strolling in Diriyah" } },
+                ] : [
+                  { k: "kingdom" as const, icon: "🤝", ar: "عملاءك من قلب الرياض", en: "Clients from central Riyadh", tail: { ar: "من العليا لبابك", en: "from Olaya to your door" } },
+                  { k: "kafd" as const, icon: "💼", ar: "اجتماع في المركز المالي", en: "A meeting at the financial district", tail: { ar: "وأنت هناك", en: "and you're there" } },
+                  { k: "airport" as const, icon: "📦", ar: "شحنة أو ضيف من المطار", en: "A shipment or guest from the airport", tail: { ar: "ويوصلك", en: "to reach you" } },
+                  { k: "diriyah" as const, icon: "🌙", ar: "عشا عمل في الدرعية", en: "A business dinner in Diriyah", tail: { ar: "من مكانك", en: "from here" } },
+                ]).map((s) => (
+                  <li key={s.k} className="relative">
+                    <span aria-hidden className="absolute -start-9 top-0 grid h-8 w-8 place-items-center rounded-full bg-white text-[16px] shadow-sm ring-1 ring-black/5">{s.icon}</span>
+                    <p className="text-[14px] text-muted">{ar ? s.ar : s.en}</p>
+                    <p className="text-[17px]"><b className="font-semibold">{minutes(p.drive[s.k].min, lang)}</b> {s.tail[lang]}</p>
+                  </li>
                 ))}
-              </div>
-              <p className="mt-3 text-[13px] text-muted">
+              </ol>
+              <p className="mt-4 text-[13px] text-muted">
                 {ar ? "وقت السواقة بدون زحمة، محسوب على الطرق الفعلية. وقت الذروة غالباً أطول." : "Driving time without traffic, on real roads. Rush hour usually takes longer."}
               </p>
             </section>

@@ -1,8 +1,8 @@
-import { available, type Area, type Deal, type Parcel } from "./portfolio";
+import { available, portfolio, type AnchorKey, type Area, type Deal, type Parcel } from "./portfolio";
 import { intentByKey, type IntentKey } from "./intents";
-import { AREA_LABEL, money } from "./format";
+import { AREA_LABEL, minutes, money } from "./format";
 
-export type Criteria = { use: IntentKey; deal: Deal; area: Area | "any"; budget: number | null };
+export type Criteria = { use: IntentKey; deal: Deal; area: Area | "any"; budget: number | null; anchor?: AnchorKey | null };
 export type T = { ar: string; en: string };
 export type Match = { parcel: Parcel; score: number; reasons: T[]; note?: T };
 export type MatchResult = { fits: Match[]; stretch: Match[]; alternatives: Match[]; considered: number };
@@ -13,7 +13,7 @@ const priceTxt = (p: Parcel): T => p.listing_type === "lease"
   : { ar: money(p.total_price_sar!, "ar"), en: money(p.total_price_sar!, "en") };
 
 /** Plain facts about why a parcel suits the stated use. Only uses fields from the data. */
-function reasonsFor(p: Parcel, use: IntentKey): { score: number; reasons: T[] } {
+function baseReasons(p: Parcel, use: IntentKey): { score: number; reasons: T[] } {
   let s = 0;
   const r: T[] = [];
   const w = p.street_width_m, a = p.area_sqm;
@@ -68,7 +68,19 @@ function reasonsFor(p: Parcel, use: IntentKey): { score: number; reasons: T[] } 
   return { score: s, reasons: r.slice(0, 3) };
 }
 
+/** Adds "N minutes from the place you care about" first, and favours closer parcels. */
+function withAnchor(p: Parcel, base: { score: number; reasons: T[] }, anchor?: AnchorKey | null) {
+  if (!anchor || !p.drive?.[anchor]) return base;
+  const m = p.drive[anchor].min;
+  const a = portfolio.anchors[anchor];
+  const r: T = m <= 20
+    ? { ar: `${minutes(m, "ar")} بس بالسيارة عن ${a.ar}، مثل ما طلبت`, en: `Just ${minutes(m, "en")} drive to ${a.en}, like you asked` }
+    : { ar: `${minutes(m, "ar")} بالسيارة عن ${a.ar}`, en: `${minutes(m, "en")} drive to ${a.en}` };
+  return { score: base.score + Math.max(0, 30 - m), reasons: [r, ...base.reasons].slice(0, 3) };
+}
+
 export function runMatch(c: Criteria): MatchResult {
+  const reasonsFor = (p: Parcel, use: IntentKey) => withAnchor(p, baseReasons(p, use), c.anchor);
   const intent = intentByKey(c.use);
   const typeOk = (p: Parcel) => !intent?.type || p.land_type === intent.type;
   const pool = available.filter((p) => typeOk(p) && p.listing_type === c.deal);
@@ -154,5 +166,7 @@ export function criteriaFromParams(sp: URLSearchParams): Criteria | null {
   const deal = (sp.get("deal") === "lease" ? "lease" : "sale") as Deal;
   const area = (sp.get("area") || "any") as Area | "any";
   const b = sp.get("budget");
-  return { use, deal, area, budget: b ? Number(b) : null };
+  const an = sp.get("near") as AnchorKey | null;
+  const anchor = an && an in portfolio.anchors ? an : null;
+  return { use, deal, area, budget: b ? Number(b) : null, anchor };
 }

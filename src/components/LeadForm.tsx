@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLang } from "@/lib/i18n";
 import { postJSON, track } from "@/lib/track";
 import { ERR, cleanName, normalizeSaudiMobile } from "@/lib/validate";
+import { clock, visitTime } from "@/lib/sun";
 
 export default function LeadForm({ parcelId }: { parcelId: string }) {
   const { lang } = useLang();
@@ -31,6 +32,7 @@ export default function LeadForm({ parcelId }: { parcelId: string }) {
       <div className="rounded-3xl bg-mint-soft p-5">
         <p className="text-lg font-semibold">{lang === "ar" ? "تم الحجز! 🎉" : "Visit booked! 🎉"}</p>
         <p className="mt-1 text-[15px]">{lang === "ar" ? "بيكلمك أحد من فريقنا خلال يوم عمل ونرتب الموعد سوا." : "Someone from our team will call you within a working day to set the time."}</p>
+        <VisitTip lang={lang} />
       </div>
     );
 
@@ -57,5 +59,18 @@ export default function LeadForm({ parcelId }: { parcelId: string }) {
       </button>
       {state === "error" && err && <p role="alert" className="text-sm text-red-600">{ERR[err][lang]}</p>}
     </form>
+  );
+}
+
+/** The consultant's tip: visit about an hour before sunset, computed for Riyadh today. */
+function VisitTip({ lang }: { lang: "ar" | "en" }) {
+  const { sunset, visit } = visitTime();
+  return (
+    <p className="mt-3 rounded-2xl bg-white/80 px-3.5 py-2.5 text-[14px] leading-relaxed">
+      <span aria-hidden>🌅 </span>
+      {lang === "ar"
+        ? <>نصيحة من المستشار: زرها <b className="font-semibold">العصر، الساعة {clock(visit)} تقريباً</b>. المغرب هالأيام {clock(sunset)}، والضوء قبله يوريك الأرض على حقيقتها والجو ألطف.</>
+        : <>Consultant tip: visit <b className="font-semibold">around {clock(visit)} pm</b>. Sunset these days is {clock(sunset)}, and the light before it shows the land at its best, in cooler air.</>}
+    </p>
   );
 }

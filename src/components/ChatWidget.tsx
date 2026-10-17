@@ -7,6 +7,7 @@ import { byId } from "@/lib/portfolio";
 import { district, priceLabel, sqm } from "@/lib/format";
 import { sessionId, track } from "@/lib/track";
 import Logo from "./Logo";
+import { getProfile } from "@/lib/profile";
 
 type Msg = { role: "user" | "assistant"; content: string; cards?: string[]; saved?: string[]; error?: boolean };
 const STORE = "sarj_chat_v1";
@@ -101,7 +102,7 @@ function ChatWidget() {
     try {
       const r = await fetch("/api/chat", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })), context: { page: path, parcel_id: parcelId, lang }, session_id: sessionId(), mode: isAdmin ? "admin" : "investor" }),
+        body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })), context: { page: path, parcel_id: parcelId, lang, profile: isAdmin ? undefined : getProfile() ?? undefined }, session_id: sessionId(), mode: isAdmin ? "admin" : "investor" }),
       });
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(j.code || "error");
@@ -150,7 +151,7 @@ function ChatWidget() {
           className="step-in fixed inset-0 z-50 flex flex-col sm:inset-auto sm:bottom-6 sm:end-6 sm:h-[min(640px,calc(100vh-7rem))] sm:w-[400px]">
           <div className="glass flex h-full flex-col overflow-hidden sm:rounded-[30px]" style={{ background: "linear-gradient(160deg, rgba(255,255,255,.92), rgba(246,249,253,.86))" }}>
             <div className="flex items-center gap-3 border-b border-hair px-4 py-3">
-              <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-white"><Logo variant="mark" className="h-[15px] w-auto" title="" /></span>
+              <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-white"><Logo variant="mark" className="h-auto w-[68%]" title="" /></span>
               <div className="min-w-0">
                 <p className="font-semibold leading-tight">{isAdmin ? (ar ? "مساعد الإدارة" : "Admin assistant") : (ar ? "مستشار سرج" : "Sarj advisor")}</p>
                 <p className="truncate text-[12px] text-muted">{ar ? "يرد فوراً، ومن بيانات أراضينا الفعلية" : "Instant answers from our real listings"}</p>

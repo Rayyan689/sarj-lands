@@ -6,6 +6,7 @@ import { byId } from "@/lib/portfolio";
 import { AREA_LABEL, AREA_SHORT, money, num, district } from "@/lib/format";
 import type { Analytics } from "@/lib/admin/analytics";
 import type { Live } from "@/lib/admin/live";
+import MorningLetter from "./MorningLetter";
 import { Card, MoreLink, Pill, STATUS_COLOR, STATUS_T, INTENT_T, VacancyClock, type Lang } from "./ui";
 
 type Task = { id: string; title: string; why: string; href: string; cta: string; tone: "act" | "risk" | "plan"; empty?: boolean };
@@ -65,6 +66,8 @@ export default function TodayView({ a, live }: { a: Analytics; live: Live | null
             : (ar ? `${actionable.length - doneCount} من ${actionable.length} مهام باقية. ابدأ من فوق، كل وحدة تفتح لك الصفحة اللي تحتاجها.` : `${actionable.length - doneCount} of ${actionable.length} tasks left. Start at the top; each one opens the page you need.`)}
         </p>
       </div>
+
+      <MorningLetter lang={lang} today={a.today} />
 
       {/* 1. what to do */}
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
