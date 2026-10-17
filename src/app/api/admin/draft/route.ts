@@ -24,12 +24,13 @@ export async function POST(req: Request) {
   };
   try {
     const res = await new Anthropic().messages.create({
-      model: MODEL, max_tokens: 500,
+      model: MODEL, max_tokens: 3000,
       system: "اكتب رسالة واتساب من فريق سرج العقارية لمستثمر. 45 إلى 80 كلمة. نجدي خفيف ومحترم (أستاذ/أستاذة حسب الاسم). ابدأ بالسلام واسمه الأول. اربط الأرض باللي يبيه هو بالضبط (مثلاً بيت العايلة أو المستودع)، واذكر ميزة وحدة أو ثنتين حقيقية من البيانات. إذا مو تطابق تام قلها بصراحة. حط الرابط في سطر لحاله. اختم بسؤال واحد سهل يخليه يرد (مثل موعد زيارة). إذا ينتظر من زمان، اعتذر بلطف عن التأخير بجملة قصيرة. استخدم البيانات بس. أرقام إنجليزية. بدون شرطة طويلة. بدون نجوم.",
       messages: [{ role: "user", content: JSON.stringify(facts) }],
     });
     const text = res.content.filter((b): b is Anthropic.TextBlock => b.type === "text").map((b) => b.text).join("\n").trim().replace(/\s*—\s*/g, "، ").replace(/\*\*/g, "");
-    return Response.json({ text: text || c.waText });
+    if (!text || res.stop_reason === "max_tokens") return Response.json({ text: c.waText, fallback: true });
+    return Response.json({ text });
   } catch {
     return Response.json({ text: c.waText, fallback: true });
   }

@@ -25,32 +25,34 @@ async function write(origin: string, lang: "ar" | "en") {
     website_last_30_days: live.ok ? { visitors: live.totals.sessions, open_requests: live.leads.filter((l) => !l.archived).length + live.alerts.filter((l) => !l.archived).length } : "unavailable",
   };
   const res = await new Anthropic().messages.create({
-    model: MODEL, max_tokens: 900,
+    model: MODEL, max_tokens: 4000,
     system: lang === "ar"
       ? "أنت مساعد مدير شركة سرج العقارية. اكتب رسالة الصباح لصاحب الشركة: بين 90 و140 كلمة، بلهجة نجدية خفيفة ودافية وذكية، مثل موظف ثقة يعرف الشغل. ابدأ بـ \"صباح الخير\" وجملة وحدة تلخص اليوم. بعدها ثلاث أولويات مرقمة، كل وحدة فيها اسم أو رقم حقيقي من البيانات ووش يسوي بالضبط. اختم بسطر قصير مشجع وتوقيع \"مساعدك في سرج\". استخدم البيانات المعطاة بس، لا تخترع شي. أرقام إنجليزية. لا تستخدم الشرطة الطويلة. بدون عناوين أو نجوم."
       : "You are the chief-of-staff assistant at Sarj Real Estate. Write the owner's morning letter: 90 to 140 words, warm, sharp and plain. Start with \"Good morning\" and one line that sums up the day. Then three numbered priorities, each with a real name or number from the data and exactly what to do. End with a short encouraging line signed \"Your Sarj assistant\". Use only the data given. No em dashes, no headings, no asterisks.",
     messages: [{ role: "user", content: `Data for today (${a.today}):\n${JSON.stringify(data)}` }],
   });
   const text = res.content.filter((b): b is Anthropic.TextBlock => b.type === "text").map((b) => b.text).join("\n").trim();
-  return (text || fallback(a, lang)).replace(/\s*—\s*/g, "، ").replace(/\*\*/g, "");
+  if (res.stop_reason === "max_tokens" || !text) throw new Error("incomplete letter");
+  return text.replace(/\s*—\s*/g, "، ").replace(/\*\*/g, "");
 }
 
 export async function GET(req: Request) {
   if (req.headers.get("x-sarj-admin") !== "1") return Response.json({ error: "forbidden" }, { status: 403 });
   const lang = new URL(req.url).searchParams.get("lang") === "en" ? "en" : "ar";
+  const slot = `${lang}-v2`;
   const day = riyadhToday();
   const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "localhost";
   const origin = `${req.headers.get("x-forwarded-proto") ?? "https"}://${host}`;
   try {
     if (sql) {
       await ensureSchema();
-      const rows = await sql`SELECT body FROM briefs WHERE day = ${day} AND lang = ${lang}`;
+      const rows = await sql`SELECT body FROM briefs WHERE day = ${day} AND lang = ${slot}`;
       if (rows[0]?.body) return Response.json({ day, body: rows[0].body, cached: true });
     }
-    const key = `${day}:${lang}`;
+    const key = `${day}:${slot}`;
     if (!inflight.has(key)) inflight.set(key, write(origin, lang).finally(() => setTimeout(() => inflight.delete(key), 60_000)));
     const body = await inflight.get(key)!;
-    if (sql) await sql`INSERT INTO briefs (day, lang, body) VALUES (${day}, ${lang}, ${body}) ON CONFLICT (day, lang) DO NOTHING`;
+    if (sql) await sql`INSERT INTO briefs (day, lang, body) VALUES (${day}, ${slot}, ${body}) ON CONFLICT (day, lang) DO NOTHING`;
     return Response.json({ day, body, cached: false });
   } catch {
     return Response.json({ day, body: fallback(buildAnalytics(origin), lang), cached: false, fallback: true });
