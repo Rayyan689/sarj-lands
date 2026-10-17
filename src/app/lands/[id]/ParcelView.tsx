@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ParcelMap from "@/components/ParcelMap";
@@ -8,7 +8,6 @@ import ParcelCard from "@/components/ParcelCard";
 import LeadForm from "@/components/LeadForm";
 import AlertForm from "@/components/AlertForm";
 import YourLand from "@/components/YourLand";
-import Tour3D from "@/components/Tour3D";
 import { openChat } from "@/components/ChatWidget";
 import { useLang } from "@/lib/i18n";
 import { byId, available, portfolio, ensureListing, type Parcel } from "@/lib/portfolio";
@@ -41,7 +40,6 @@ export default function ParcelView({ id, extra }: { id: string; extra?: Parcel }
   const { lang } = useLang();
   const ar = lang === "ar";
   const p = byId(id)!;
-  const [tour, setTour] = useState(false);
   useEffect(() => { track("parcel_view", { status: p.status }, p.parcel_id); }, [p]);
 
   const comps = useMemo(() => p.closed_comps.map((c) => byId(c)!).filter((x) => x.price_per_sqm_sar)
@@ -109,10 +107,7 @@ export default function ParcelView({ id, extra }: { id: string; extra?: Parcel }
                   <span aria-hidden>✦</span>{h[lang]}
                 </p>
               )}
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                <button onClick={() => setTour(true)} className="btn-primary px-4 py-2 text-[14px] font-medium text-white">🛰️ {ar ? "جولة 3D حولها" : "3D tour around it"}</button>
-                <a href={`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`} target="_blank" rel="noopener" onClick={() => track("google_maps_click", {}, p.parcel_id)} className="bubble px-4 py-2 text-[14px]">{ar ? "Google Maps ↗" : "Google Maps ↗"}</a>
-              </div>
+
             </div>
           </div>
         </section>
@@ -244,7 +239,6 @@ export default function ParcelView({ id, extra }: { id: string; extra?: Parcel }
         </div>
       </main>
       <Footer />
-      {tour && <Tour3D p={p} onClose={() => setTour(false)} />}
     </>
   );
 }

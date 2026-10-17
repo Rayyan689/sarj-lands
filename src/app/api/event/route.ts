@@ -1,6 +1,6 @@
 import { sql, ensureSchema } from "@/lib/db";
 
-const ALLOWED = new Set(["page_view", "tour_3d", "google_maps_click", "your_land_plan", "your_land_name", "share_card", "share_sent", "match_started", "match_step", "match_completed", "parcel_view", "parcel_click",
+const ALLOWED = new Set(["page_view", "your_land_plan", "your_land_name", "share_card", "share_sent", "match_started", "match_step", "match_completed", "parcel_view", "parcel_click",
   "explorer_filter", "compare", "chat_open", "chat_message", "lead_submitted", "alert_created", "whatsapp_click", "shortlist_add", "share"]);
 
 export async function POST(req: Request) {
