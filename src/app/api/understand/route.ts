@@ -19,9 +19,9 @@ const TOOL: Anthropic.Tool = {
       use: { type: "string", enum: INTENTS.map((i) => i.key), description: "family_home=own house; villas_sell=build villas to sell; apartments_rent=apartment building to rent out; compound; warehouse; showroom (incl. car showroom); office; retail=shop/store/restaurant/cafe; invest=hold or flip the land itself." },
       deal: { type: "string", enum: ["sale", "lease"], description: "sale=buy/own. lease=rent the land yearly. If not said, use sale for homes, villas, apartments, compound, office, invest; lease for warehouse, showroom, retail." },
       area: { type: "string", enum: [...AREAS, "any"], description: "Part of Riyadh. Map districts: Malqa, Yasmin, Narjis, Arid, Qirawan, Hittin, Sahafa, Aqiq=North; Rawdah, Nahdah, Qadisiyah, Rimal, Munsiyah, Khaleej=East; Olaya, Sulaimaniyah, Malaz, Murabba=Central; Laban, Irqah, Dhahrat Laban, Tuwaiq, Diriyah side=West; Shifa, Aziziyah, Badiah, Sultanah=South. Unknown=any." },
-      budget_sar: { type: ["number", "null"], description: "Sale: total budget in SAR. Lease: yearly rent in SAR. 'مليون'=1,000,000; 'ألف'=1,000. null if not given." },
-      anchor: { type: ["string", "null"], enum: ["kafd", "airport", "kingdom", "diriyah", null], description: "A place they want to be close to: work in KAFD/financial district=kafd; Olaya/Kingdom tower/city centre=kingdom; travels a lot/airport=airport; Diriyah/Boulevard-type leisure in the west=diriyah. null if none." },
-      family: { type: ["string", "null"], description: "Their family name if they mention it (e.g. 'آل سعود', 'العتيبي'). null otherwise." },
+      budget_sar: { type: "number", description: "Sale: total budget in SAR. Lease: yearly rent in SAR. 'مليون'=1,000,000; 'ألف'=1,000. 0 if not given." },
+      anchor: { type: "string", enum: ["kafd", "airport", "kingdom", "diriyah", "none"], description: "A place they want to be close to: work in KAFD/financial district=kafd; Olaya/Kingdom tower/city centre=kingdom; travels a lot/airport=airport; Diriyah/Boulevard-type leisure in the west=diriyah. none if none." },
+      family: { type: "string", description: "Their family name if they mention it (e.g. 'العتيبي'). Empty string otherwise." },
       reply: { type: "string", description: "One or two short sentences in the visitor's language. Arabic: warm light Najdi, e.g. 'فهمت عليك: بيت لعيالك بشمال الرياض، لين 3 ملايين، وقريب من العليا. هذي اللي لقيتها لك.' English: plain and warm. Restate what you understood so they feel heard. No em dashes. Western digits. If understood=false, ask kindly what they plan to do with the land." },
     },
     required: ["understood", "use", "deal", "area", "budget_sar", "anchor", "family", "reply"],
@@ -57,6 +57,7 @@ export async function POST(req: Request) {
     });
   } catch (e) {
     const status = (e as { status?: number }).status;
+    console.error("understand failed", status, (e as Error).message?.slice(0, 300));
     return Response.json({ error: status === 429 || status === 529 ? "busy" : "llm" }, { status: 502 });
   }
 }
