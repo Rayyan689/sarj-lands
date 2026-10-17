@@ -58,6 +58,6 @@ export async function POST(req: Request) {
   } catch (e) {
     const status = (e as { status?: number }).status;
     console.error("understand failed", status, (e as Error).message?.slice(0, 300));
-    return Response.json({ error: status === 429 || status === 529 ? "busy" : "llm" }, { status: 502 });
+    return Response.json({ error: status === 429 || status === 529 ? "busy" : "llm", ...(req.headers.get("x-debug") === "1" ? { detail: String((e as Error).message).slice(0, 300) } : {}) }, { status: 502 });
   }
 }
