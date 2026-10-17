@@ -1,10 +1,11 @@
 import { Suspense } from "react";
+import SyncListings from "../SyncListings";
 import { loadAdmin } from "../data-loader";
 import DataView from "./DataView";
 
 async function Content() {
-  const { a } = await loadAdmin(false);
-  return <DataView a={a} />;
+  const { a, listings } = await loadAdmin(false);
+  return <><SyncListings list={listings} /><DataView a={a} /></>;
 }
 
 export default function Page() {

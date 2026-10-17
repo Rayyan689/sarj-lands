@@ -9,11 +9,13 @@ import TrackRecord from "@/components/TrackRecord";
 import { useLang } from "@/lib/i18n";
 import { available, districtCount } from "@/lib/portfolio";
 import { track } from "@/lib/track";
+import { usePortfolioVersion } from "@/components/ListingsLoader";
 
 export default function Home() {
   const { lang } = useLang();
   const ar = lang === "ar";
   const flowRef = useRef<HTMLDivElement>(null);
+  usePortfolioVersion(); // the "available now" count includes newly added properties
   useEffect(() => { track("page_view", { page: "home" }); }, []);
 
   const backToFlow = () => {

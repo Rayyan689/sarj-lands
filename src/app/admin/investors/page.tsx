@@ -1,14 +1,15 @@
 import { Suspense } from "react";
+import SyncListings from "../SyncListings";
 import { loadAdmin } from "../data-loader";
 import InvestorsView from "./InvestorsView";
 
 type SP = Promise<{ tab?: string | string[] }>;
 
 async function Content({ sp }: { sp: SP }) {
-  const { a, live } = await loadAdmin(true);
+  const { a, live, listings } = await loadAdmin(true);
   const t = (await sp).tab;
   const tab = Array.isArray(t) ? t[0] : t;
-  return <InvestorsView a={a} live={live} tab={tab} />;
+  return <><SyncListings list={listings} /><InvestorsView a={a} live={live} tab={tab} /></>;
 }
 
 export default function Page({ searchParams }: { searchParams: SP }) {

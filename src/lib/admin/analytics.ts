@@ -40,13 +40,13 @@ const INTENT_W = { "ready to move": 3, "comparing options": 2, exploring: 1 } as
 const STALE_DAYS = 120;
 
 /** A realistic buyer for this parcel: same segment, price within 15% over budget and not trivially small for them (>= 35% of budget). */
-function affordable(q: Inquiry, p: Parcel, stretch = 1.15) {
+export function affordable(q: Inquiry, p: Parcel, stretch = 1.15) {
   return p.status === "available" && p.land_type === q.land_type_wanted && p.listing_type === q.prefers &&
     p.area_of_city === q.area_of_city_wanted && p.total_price_sar != null &&
     p.total_price_sar <= q.budget_sar * stretch && p.total_price_sar >= q.budget_sar * 0.35;
 }
 
-function waText(q: Inquiry, p: Parcel | null, origin: string, exact: boolean) {
+export function waText(q: Inquiry, p: Parcel | null, origin: string, exact: boolean) {
   const first = q.investor_name.split(" ")[0];
   const title = FEMALE.has(first) ? "أستاذة" : "أستاذ";
   const hi = `السلام عليكم ${title} ${NAME_AR[first] ?? first}، معك فريق سرج العقارية.`;

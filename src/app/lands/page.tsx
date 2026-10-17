@@ -8,6 +8,7 @@ import { useLang } from "@/lib/i18n";
 import { AREAS, parcels, type Area, type Deal, type LandType } from "@/lib/portfolio";
 import { AREA_SHORT, num } from "@/lib/format";
 import { track } from "@/lib/track";
+import { usePortfolioVersion } from "@/components/ListingsLoader";
 
 type Sort = "new" | "price_asc" | "price_desc" | "size_desc" | "value";
 
@@ -38,9 +39,11 @@ function Explorer() {
   useEffect(() => { track("page_view", { page: "explorer" }); }, []);
   useEffect(() => { track("explorer_filter", { area, deal, type, showClosed, sort }); }, [area, deal, type, showClosed, sort]);
 
+  const ver = usePortfolioVersion();
+  const all = useMemo(() => [...parcels], [ver]); // eslint-disable-line react-hooks/exhaustive-deps
   const list = useMemo(() => {
     const rank = { available: 0, reserved: 1, sold: 2, leased: 2 } as const;
-    const xs = parcels.filter((p) =>
+    const xs = all.filter((p) =>
       (area === "all" || p.area_of_city === area) && (deal === "all" || p.listing_type === deal) &&
       (type === "all" || p.land_type === type) && (showClosed || p.status === "available" || p.status === "reserved"));
     const price = (p: (typeof xs)[number]) => p.total_price_sar ?? Infinity;
@@ -53,7 +56,7 @@ function Explorer() {
       if (sort === "value") return (a.pricing.vs_area_pct ?? 999) - (b.pricing.vs_area_pct ?? 999);
       return b.listed_date.localeCompare(a.listed_date);
     });
-  }, [area, deal, type, showClosed, sort]);
+  }, [all, area, deal, type, showClosed, sort]);
 
   const ids = useMemo(() => new Set(list.map((p) => p.parcel_id)), [list]);
 
@@ -103,7 +106,7 @@ function Explorer() {
         )}
       </div>
       <div className="order-first h-[40vh] overflow-hidden rounded-[30px] lg:order-none lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)]">
-        <ParcelMap parcels={parcels} highlight={ids} selected={sel}
+        <ParcelMap parcels={all} highlight={ids} selected={sel}
           onSelect={(id) => { setSel(id); document.getElementById(`card-${id}`)?.scrollIntoView({ block: "center", behavior: "smooth" }); }}
           fit showBasemapToggle basemap="streets" className="h-full" />
       </div>

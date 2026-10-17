@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { systemBlocks, tools, runTool, type ToolEffects } from "@/lib/chat/investor";
 import { adminSystem, adminTools, runAdminTool } from "@/lib/chat/admin";
 import { sql, ensureSchema } from "@/lib/db";
+import { syncFromDb } from "@/lib/listings";
 
 const MODEL = process.env.CHAT_MODEL || "claude-sonnet-5-5";
 const MAX_TURNS = 12;        // conversation messages sent to the model
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
   const isAdmin = body.mode === "admin";
   const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "localhost";
   const origin = `${req.headers.get("x-forwarded-proto") ?? "https"}://${host}`;
+  await syncFromDb();
   const client = new Anthropic();
   const messages: Anthropic.MessageParam[] = history;
   const fx: ToolEffects = { cards: [], saved: [] };

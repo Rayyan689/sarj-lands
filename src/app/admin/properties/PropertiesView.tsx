@@ -4,18 +4,22 @@ import { useMemo, useState } from "react";
 import { useLang } from "@/lib/i18n";
 import { DEAL_LABEL, TYPE_LABEL, money, num } from "@/lib/format";
 import type { Analytics } from "@/lib/admin/analytics";
+import type { Parcel } from "@/lib/portfolio";
+import { priceLabel, district } from "@/lib/format";
 import { Card, Empty, PageHeader, Tabs, useTab, STATUS_T, type Lang } from "../ui";
 
-const TABS = ["hot", "slow", "vacancy"] as const;
+const TABS = ["hot", "slow", "vacancy", "added"] as const;
 
-export default function PropertiesView({ a, tab: initial }: { a: Analytics; tab?: string }) {
+export default function PropertiesView({ a, tab: initial, listings = [] }: { a: Analytics; tab?: string; listings?: Parcel[] }) {
   const { lang } = useLang();
   const ar = lang === "ar";
   const [tab, setTab] = useTab(initial, TABS);
   return (
     <>
       <PageHeader title={ar ? "الأراضي" : "Properties"}
-        sub={ar ? "وش يتحرك ووش واقف. ابدأ بالأراضي اللي عليها تنافس، بعدها اللي طوّلت، وآخرها أراضي الإيجار الفاضية." : "What's moving and what's stuck. Start with competing buyers, then slow listings, then vacant leases."} />
+        sub={ar ? "وش يتحرك ووش واقف. ابدأ بالأراضي اللي عليها تنافس، بعدها اللي طوّلت، وآخرها أراضي الإيجار الفاضية." : "What's moving and what's stuck. Start with competing buyers, then slow listings, then vacant leases."}>
+        <Link href="/admin/properties/new" className="btn-primary px-5 py-2.5 text-[14px] font-semibold text-white">+ {ar ? "أضف أرض" : "Add property"}</Link>
+      </PageHeader>
       <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-4">
         {[
           { k: ar ? "متاحة" : "Available", v: num(a.kpis.available, lang) },
@@ -30,10 +34,12 @@ export default function PropertiesView({ a, tab: initial }: { a: Analytics; tab?
         { id: "hot", label: ar ? "عليها تنافس" : "Competing buyers", count: a.hot.length },
         { id: "slow", label: ar ? "طوّلت في العرض" : "Slow listings", count: a.stale.length },
         { id: "vacancy", label: ar ? "إيجار ضايع" : "Missed rent", count: a.vacancies.length },
+        { id: "added", label: ar ? "أضفتها من اللوحة" : "Added here", count: listings.length },
       ]} />
       {tab === "hot" && <Hot a={a} lang={lang} />}
       {tab === "slow" && <Stale a={a} lang={lang} />}
       {tab === "vacancy" && <Vacancy a={a} lang={lang} />}
+      {tab === "added" && <Added listings={listings} lang={lang} />}
     </>
   );
 }
@@ -142,5 +148,36 @@ function Vacancy({ a, lang }: { a: Analytics; lang: Lang }) {
         ))}
       </div>
     </Card>
+  );
+}
+
+function Added({ listings, lang }: { listings: Parcel[]; lang: Lang }) {
+  const ar = lang === "ar";
+  const [gone, setGone] = useState<Record<string, boolean>>({});
+  const toggle = async (id: string, archived: boolean) => {
+    setGone((g) => ({ ...g, [id]: archived }));
+    await fetch("/api/admin/listings", { method: "PATCH", headers: { "content-type": "application/json", "x-sarj-admin": "1" }, body: JSON.stringify({ id, archived }) }).catch(() => {});
+  };
+  if (!listings.length) return (
+    <div className="glass rounded-[24px] p-8 text-center">
+      <p className="text-lg font-semibold">{ar ? "ما أضفت أراضي من اللوحة للحين" : "No properties added here yet"}</p>
+      <p className="mt-1 text-[14px] text-muted">{ar ? "أي أرض تضيفها تنزل على الموقع فوراً، ونقولك مين ينتظرها." : "Anything you add goes live instantly, and we'll tell you who's waiting for it."}</p>
+      <Link href="/admin/properties/new" className="btn-primary mt-4 inline-block px-5 py-2.5 text-[14px] font-semibold text-white">+ {ar ? "أضف أرض" : "Add property"}</Link>
+    </div>
+  );
+  return (
+    <div className="space-y-2">
+      {listings.map((p) => (
+        <div key={p.parcel_id} className={`glass flex flex-wrap items-center justify-between gap-3 rounded-[22px] p-4 ${gone[p.parcel_id] ? "opacity-50" : ""}`}>
+          <div>
+            <Link href={`/lands/${p.parcel_id}`} className="font-semibold hover:underline">{district(p, lang)}</Link> <span className="text-[12px] text-muted" dir="ltr">{p.parcel_id}</span>
+            <p className="text-[13px] text-muted">{TYPE_LABEL[p.land_type][lang]} · {DEAL_LABEL[p.listing_type][lang]} · {num(p.area_sqm, lang)} {ar ? "م²" : "m²"} · {priceLabel(p, lang)}</p>
+          </div>
+          <button onClick={() => toggle(p.parcel_id, !gone[p.parcel_id])} className="bubble px-3 py-1.5 text-[13px]">
+            {gone[p.parcel_id] ? (ar ? "رجّعها للموقع" : "Put back online") : (ar ? "شيلها من الموقع" : "Take offline")}
+          </button>
+        </div>
+      ))}
+    </div>
   );
 }

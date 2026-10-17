@@ -1,10 +1,11 @@
 import { Suspense } from "react";
+import SyncListings from "../SyncListings";
 import { loadAdmin } from "../data-loader";
 import WebsiteView from "./WebsiteView";
 
 async function Content() {
-  const { live } = await loadAdmin(true);
-  return <WebsiteView live={live} />;
+  const { live, listings } = await loadAdmin(true);
+  return <><SyncListings list={listings} /><WebsiteView live={live} /></>;
 }
 
 export default function Page() {

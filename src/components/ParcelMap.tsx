@@ -42,6 +42,8 @@ type Props = {
   center?: [number, number];
   className?: string;
   heat?: Record<string, number>;  // views per parcel: draws a warm glow sized by interest
+  onPick?: (lng: number, lat: number) => void; // click anywhere to choose a spot
+  pin?: [number, number] | null;  // the chosen spot
 };
 
 function toGeo(parcels: Parcel[], highlight?: Set<string>, selected?: string | null, heat?: Record<string, number>) {
@@ -62,7 +64,7 @@ function toGeo(parcels: Parcel[], highlight?: Set<string>, selected?: string | n
 
 export default function ParcelMap({
   parcels, highlight, selected, onSelect, basemap = "clean", showBasemapToggle = false,
-  fit = false, interactive = true, zoom = 9.6, center = RIYADH, className = "", heat,
+  fit = false, interactive = true, zoom = 9.6, center = RIYADH, className = "", heat, onPick, pin,
 }: Props) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<MLMap | null>(null);
@@ -71,6 +73,10 @@ export default function ParcelMap({
   const { lang } = useLang();
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+  const onPickRef = useRef(onPick);
+  onPickRef.current = onPick;
+  const pinRef = useRef(pin);
+  pinRef.current = pin;
 
   const dataRef = useRef(toGeo(parcels, highlight, selected, heat));
   dataRef.current = toGeo(parcels, highlight, selected, heat);
@@ -98,6 +104,8 @@ export default function ParcelMap({
         m.on("mouseenter", "dots", () => { m.getCanvas().style.cursor = "pointer"; });
         m.on("mouseleave", "dots", () => { m.getCanvas().style.cursor = ""; });
       }
+      m.on("click", (e) => onPickRef.current?.(e.lngLat.lng, e.lngLat.lat));
+      if (onPickRef.current) m.getCanvas().style.cursor = "crosshair";
       m.on("style.load", () => addParcels(m));
       m.on("load", () => { if (!cancelled) setLoaded(true); });
       map.current = m;
@@ -106,7 +114,15 @@ export default function ParcelMap({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function pinData() {
+    const p = pinRef.current;
+    return { type: "FeatureCollection" as const, features: p ? [{ type: "Feature" as const, geometry: { type: "Point" as const, coordinates: p }, properties: {} }] : [] };
+  }
+
   function addParcels(m: MLMap) {
+    if (!m.getSource("pin")) {
+      m.addSource("pin", { type: "geojson", data: pinData() });
+    }
     if (m.getSource("parcels")) return;
     m.addSource("parcels", { type: "geojson", data: dataRef.current });
     const color = ["match", ["get", "status"], "available", "#C9A15B", "reserved", "#5E6670", "#B9B4AC"] as unknown as string;
@@ -133,7 +149,18 @@ export default function ParcelMap({
         "circle-stroke-color": "#ffffff",
       },
     });
+    m.addLayer({ id: "pin-halo", type: "circle", source: "pin", paint: { "circle-radius": 22, "circle-color": "#1f1f1f", "circle-opacity": 0.18 } });
+    m.addLayer({ id: "pin", type: "circle", source: "pin", paint: { "circle-radius": 9, "circle-color": "#1f1f1f", "circle-stroke-width": 3, "circle-stroke-color": "#E2C891" } });
   }
+
+  // chosen spot
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !loaded) return;
+    (m.getSource("pin") as GeoJSONSource | undefined)?.setData(pinData());
+    if (pin) m.easeTo({ center: pin, zoom: Math.max(m.getZoom(), 13.5), duration: 600 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pin?.[0], pin?.[1], loaded]);
 
   // basemap switch (style reload re-adds the parcels via style.load)
   const firstBase = useRef(true);

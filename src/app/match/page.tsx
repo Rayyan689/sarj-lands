@@ -15,6 +15,7 @@ import { parcels, portfolio } from "@/lib/portfolio";
 import { getProfile, type Profile } from "@/lib/profile";
 import { Avatar } from "@/components/ConsultantHero";
 import { track } from "@/lib/track";
+import { usePortfolioVersion } from "@/components/ListingsLoader";
 
 function chips(c: Criteria) {
   const i = intentByKey(c.use)!;
@@ -58,7 +59,8 @@ function Results() {
   const sp = useSearchParams();
   const { lang } = useLang();
   const c = useMemo(() => criteriaFromParams(new URLSearchParams(sp.toString())), [sp]);
-  const r = useMemo(() => (c ? runMatch(c) : null), [c]);
+  const ver = usePortfolioVersion();
+  const r = useMemo(() => (c ? runMatch(c) : null), [c, ver]); // eslint-disable-line react-hooks/exhaustive-deps
   const [editing, setEditing] = useState(false);
   const [sel, setSel] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);

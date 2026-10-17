@@ -23,6 +23,7 @@ export function ensureSchema() {
       id SERIAL PRIMARY KEY, created_at TIMESTAMPTZ DEFAULT now(),
       name TEXT, phone TEXT, criteria JSONB, session_id TEXT)`;
     await sql`ALTER TABLE alerts ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT false`;
+    await sql`CREATE TABLE IF NOT EXISTS listings (id TEXT PRIMARY KEY, data JSONB NOT NULL, archived BOOLEAN DEFAULT false, created_at TIMESTAMPTZ DEFAULT now(), ip TEXT)`;
     await sql`CREATE TABLE IF NOT EXISTS briefs (day DATE, lang TEXT, body TEXT, created_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY (day, lang))`;
   })().catch((e) => { ready = null; throw e; });
   return ready;

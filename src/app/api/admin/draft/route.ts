@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { buildAnalytics } from "@/lib/admin/analytics";
 import { byId } from "@/lib/portfolio";
 import { AREA_LABEL, money } from "@/lib/format";
+import { syncFromDb } from "@/lib/listings";
 
 const MODEL = process.env.CHAT_MODEL || "claude-sonnet-5-5";
 
@@ -12,6 +13,7 @@ export async function POST(req: Request) {
   try { body = await req.json(); } catch { return Response.json({ error: "bad request" }, { status: 400 }); }
   const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "localhost";
   const origin = `${req.headers.get("x-forwarded-proto") ?? "https"}://${host}`;
+  await syncFromDb();
   const a = buildAnalytics(origin);
   const c = a.calls.find((x) => x.id === body.id);
   if (!c) return Response.json({ error: "not found" }, { status: 404 });

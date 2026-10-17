@@ -4,6 +4,7 @@ import { buildAnalytics } from "@/lib/admin/analytics";
 import { loadLive } from "@/lib/admin/live";
 import { sql, ensureSchema } from "@/lib/db";
 import { riyadhToday } from "@/lib/time";
+import { syncFromDb } from "@/lib/listings";
 
 const MODEL = process.env.CHAT_MODEL || "claude-sonnet-5-5";
 const inflight = new Map<string, Promise<string>>();
@@ -14,6 +15,7 @@ function fallback(a: ReturnType<typeof buildAnalytics>, lang: "ar" | "en") {
 }
 
 async function write(origin: string, lang: "ar" | "en") {
+  await syncFromDb();
   const a = buildAnalytics(origin);
   if (!process.env.ANTHROPIC_API_KEY) return fallback(a, lang);
   const live = await loadLive();

@@ -1,10 +1,11 @@
 import { Suspense } from "react";
+import SyncListings from "./SyncListings";
 import { loadAdmin } from "./data-loader";
 import TodayView from "./TodayView";
 
 async function Content() {
-  const { a, live } = await loadAdmin(true);
-  return <TodayView a={a} live={live} />;
+  const { a, live, listings } = await loadAdmin(true);
+  return <><SyncListings list={listings} /><TodayView a={a} live={live} /></>;
 }
 
 export default function Page() {

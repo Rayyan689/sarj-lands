@@ -1,14 +1,15 @@
 import { Suspense } from "react";
+import SyncListings from "../SyncListings";
 import { loadAdmin } from "../data-loader";
 import MarketView from "./MarketView";
 
 type SP = Promise<{ tab?: string | string[] }>;
 
 async function Content({ sp }: { sp: SP }) {
-  const { a } = await loadAdmin(false);
+  const { a, listings } = await loadAdmin(false);
   const t = (await sp).tab;
   const tab = Array.isArray(t) ? t[0] : t;
-  return <MarketView a={a} tab={tab} />;
+  return <><SyncListings list={listings} /><MarketView a={a} tab={tab} /></>;
 }
 
 export default function Page({ searchParams }: { searchParams: SP }) {

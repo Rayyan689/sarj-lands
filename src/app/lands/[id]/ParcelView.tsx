@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ParcelMap from "@/components/ParcelMap";
@@ -8,9 +8,10 @@ import ParcelCard from "@/components/ParcelCard";
 import LeadForm from "@/components/LeadForm";
 import AlertForm from "@/components/AlertForm";
 import YourLand from "@/components/YourLand";
+import Tour3D from "@/components/Tour3D";
 import { openChat } from "@/components/ChatWidget";
 import { useLang } from "@/lib/i18n";
-import { byId, available, portfolio } from "@/lib/portfolio";
+import { byId, available, portfolio, ensureListing, type Parcel } from "@/lib/portfolio";
 import { AREA_LABEL, DEAL_LABEL, STATUS_LABEL, TYPE_LABEL, byDrive, district, hook, minutes, money, num, priceLabel, sqm, sqmPrice, street, type T } from "@/lib/format";
 import { waLink } from "@/lib/contact";
 import { track } from "@/lib/track";
@@ -35,10 +36,12 @@ const STATUS_STYLE = {
   leased: "bg-ink/60 text-white",
 } as const;
 
-export default function ParcelView({ id }: { id: string }) {
+export default function ParcelView({ id, extra }: { id: string; extra?: Parcel }) {
+  if (extra) ensureListing(extra);
   const { lang } = useLang();
   const ar = lang === "ar";
   const p = byId(id)!;
+  const [tour, setTour] = useState(false);
   useEffect(() => { track("parcel_view", { status: p.status }, p.parcel_id); }, [p]);
 
   const comps = useMemo(() => p.closed_comps.map((c) => byId(c)!).filter((x) => x.price_per_sqm_sar)
@@ -96,6 +99,7 @@ export default function ParcelView({ id }: { id: string }) {
             <div className="glass pointer-events-auto rounded-[28px] p-5">
               <div className="flex items-center gap-2">
                 <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLE[p.status]}`}>{STATUS_LABEL[p.status][lang]}</span>
+                {p.added && <span className="rounded-full bg-ink px-2.5 py-1 text-xs font-medium text-white">{ar ? "نزلت جديد" : "Just listed"}</span>}
                 <Link href={`/lands?area=${p.area_of_city}`} className="text-[13px] text-muted hover:text-ink">{area[lang]}</Link>
               </div>
               <h1 className="mt-2 text-3xl font-bold sm:text-4xl">{district(p, lang)}</h1>
@@ -105,6 +109,10 @@ export default function ParcelView({ id }: { id: string }) {
                   <span aria-hidden>✦</span>{h[lang]}
                 </p>
               )}
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                <button onClick={() => setTour(true)} className="btn-primary px-4 py-2 text-[14px] font-medium text-white">🛰️ {ar ? "جولة 3D حولها" : "3D tour around it"}</button>
+                <a href={`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`} target="_blank" rel="noopener" onClick={() => track("google_maps_click", {}, p.parcel_id)} className="bubble px-4 py-2 text-[14px]">{ar ? "Google Maps ↗" : "Google Maps ↗"}</a>
+              </div>
             </div>
           </div>
         </section>
@@ -170,7 +178,9 @@ export default function ParcelView({ id }: { id: string }) {
                 ))}
               </ol>
               <p className="mt-4 text-[13px] text-muted">
-                {ar ? "وقت السواقة بدون زحمة، محسوب على الطرق الفعلية. وقت الذروة غالباً أطول." : "Driving time without traffic, on real roads. Rush hour usually takes longer."}
+                {p.drive_estimated
+                  ? (ar ? "أوقات تقريبية محسوبة من المسافة، بدون زحمة. نحدّثها بالطرق الفعلية قريب." : "Approximate times worked out from distance, without traffic. We'll update them with real routes soon.")
+                  : (ar ? "وقت السواقة بدون زحمة، محسوب على الطرق الفعلية. وقت الذروة غالباً أطول." : "Driving time without traffic, on real roads. Rush hour usually takes longer.")}
               </p>
             </section>
 
@@ -234,6 +244,7 @@ export default function ParcelView({ id }: { id: string }) {
         </div>
       </main>
       <Footer />
+      {tour && <Tour3D p={p} onClose={() => setTour(false)} />}
     </>
   );
 }
