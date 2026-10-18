@@ -10,7 +10,8 @@ import AlertForm from "@/components/AlertForm";
 import YourLand from "@/components/YourLand";
 import { openChat } from "@/components/ChatWidget";
 import { useLang } from "@/lib/i18n";
-import { byId, available, portfolio, ensureListing, type Parcel } from "@/lib/portfolio";
+import { byId, available, portfolio, syncLive, type Override, type Parcel } from "@/lib/portfolio";
+import { usePortfolioVersion } from "@/components/ListingsLoader";
 import { AREA_LABEL, DEAL_LABEL, STATUS_LABEL, TYPE_LABEL, byDrive, district, hook, minutes, money, num, priceLabel, sqm, sqmPrice, street, type T } from "@/lib/format";
 import { waLink } from "@/lib/contact";
 import { track } from "@/lib/track";
@@ -35,12 +36,13 @@ const STATUS_STYLE = {
   leased: "bg-ink/60 text-white",
 } as const;
 
-export default function ParcelView({ id, extra }: { id: string; extra?: Parcel }) {
-  if (extra) ensureListing(extra);
+export default function ParcelView({ id, live }: { id: string; live?: { listings: Parcel[]; overrides: Record<string, Override> } }) {
+  if (live) syncLive(live.listings, live.overrides);
+  const ver = usePortfolioVersion();
   const { lang } = useLang();
   const ar = lang === "ar";
   const p = byId(id)!;
-  useEffect(() => { track("parcel_view", { status: p.status }, p.parcel_id); }, [p]);
+  useEffect(() => { track("parcel_view", { status: p.status }, p.parcel_id); }, [p, ver]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const comps = useMemo(() => p.closed_comps.map((c) => byId(c)!).filter((x) => x.price_per_sqm_sar)
     .sort((a, b) => Number(b.district_en === p.district_en) - Number(a.district_en === p.district_en)).slice(0, 3), [p]);

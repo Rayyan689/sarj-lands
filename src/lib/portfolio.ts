@@ -38,37 +38,56 @@ export const available = parcels.filter((p) => p.status === "available");
 export const districtCount = new Set(parcels.map((p) => p.district_en)).size;
 export const AREAS: Area[] = ["North", "East", "Central", "West", "South"];
 
-// ---- Properties added from the admin panel (stored in the database) ----
-// They are merged into the same arrays everything reads, on the server per request and in the browser after load.
-const extraIds = new Set<string>();
+// ---- Live changes from the admin panel (stored in the database) ----
+// Added properties and status/price changes are layered over the original data and written into the same
+// arrays everything reads: on the server per request, and in the browser after load.
+export type Override = { status?: Status; total_price_sar?: number | null; closed_price?: number | null; closed_date?: string | null; updated_at?: string };
+
+let extras: Parcel[] = [];
+let overrides: Record<string, Override> = {};
 let version = 0;
+let signature = JSON.stringify([[], {}]);
 export const portfolioVersion = () => version;
+export const getOverride = (id: string) => overrides[id];
+export const originalOf = (id: string) => portfolio.parcels.find((p) => p.parcel_id === id) ?? extras.find((p) => p.parcel_id === id);
+
+function applyOne(p: Parcel, o?: Override): Parcel {
+  if (!o) return p;
+  const q: Parcel = { ...p, pricing: { ...p.pricing } };
+  if (o.status) q.status = o.status;
+  if (o.total_price_sar !== undefined && o.total_price_sar !== p.total_price_sar) {
+    q.total_price_sar = o.total_price_sar;
+    q.price_on_request = o.total_price_sar == null;
+    q.price_per_sqm_sar = o.total_price_sar == null ? null : Math.round(o.total_price_sar / p.area_sqm);
+    const per = q.price_per_sqm_sar;
+    if (per && q.pricing.area_median_sqm) q.pricing.vs_area_pct = Math.round((per / q.pricing.area_median_sqm - 1) * 100); else delete q.pricing.vs_area_pct;
+    if (per && q.pricing.district_median_sqm) q.pricing.vs_district_pct = Math.round((per / q.pricing.district_median_sqm - 1) * 100); else delete q.pricing.vs_district_pct;
+  }
+  return q;
+}
+
+function rebuild() {
+  const ids = new Set(portfolio.parcels.map((p) => p.parcel_id));
+  const all = [...portfolio.parcels, ...extras.filter((p) => !ids.has(p.parcel_id))].map((p) => applyOne(p, overrides[p.parcel_id]));
+  const sig = JSON.stringify([extras.map((p) => p.parcel_id), overrides]);
+  if (sig === signature) return false;
+  signature = sig;
+  parcels.length = 0; parcels.push(...all);
+  available.length = 0; available.push(...all.filter((p) => p.status === "available"));
+  version++;
+  return true;
+}
 
 /** Replace the set of admin-added properties with `list`. Safe to call repeatedly. */
-export function syncListings(list: Parcel[]) {
-  const next = new Map(list.map((p) => [p.parcel_id, p]));
-  let changed = false;
-  for (const id of [...extraIds]) {
-    if (next.has(id)) continue;
-    for (const arr of [parcels, available]) { const i = arr.findIndex((p) => p.parcel_id === id); if (i >= 0) arr.splice(i, 1); }
-    extraIds.delete(id); changed = true;
-  }
-  for (const p of next.values()) {
-    if (portfolio.parcels.some((x) => x.parcel_id === p.parcel_id && !extraIds.has(x.parcel_id))) continue; // never shadow the original 120
-    const i = parcels.findIndex((x) => x.parcel_id === p.parcel_id);
-    if (i >= 0) parcels[i] = p; else parcels.push(p);
-    const j = available.findIndex((x) => x.parcel_id === p.parcel_id);
-    if (p.status === "available") { if (j >= 0) available[j] = p; else available.push(p); } else if (j >= 0) available.splice(j, 1);
-    if (!extraIds.has(p.parcel_id)) changed = true;
-    extraIds.add(p.parcel_id);
-  }
-  if (changed) version++;
-  return changed;
-}
-export const isAdded = (id: string) => extraIds.has(id);
+export function syncListings(list: Parcel[]) { extras = list; return rebuild(); }
+/** Replace the status/price changes made from the admin panel. */
+export function syncOverrides(o: Record<string, Override>) { overrides = o ?? {}; return rebuild(); }
+/** Both at once (one re-render). */
+export function syncLive(list: Parcel[], o: Record<string, Override>) { extras = list; overrides = o ?? {}; return rebuild(); }
+export const isAdded = (id: string) => extras.some((p) => p.parcel_id === id);
 
 /** Add one admin-added property (e.g. the one a page was opened for) without touching the rest. */
 export function ensureListing(p: Parcel) {
-  if (parcels.some((x) => x.parcel_id === p.parcel_id)) return;
-  syncListings([...parcels.filter((x) => extraIds.has(x.parcel_id)), p]);
+  if (extras.some((x) => x.parcel_id === p.parcel_id) || portfolio.parcels.some((x) => x.parcel_id === p.parcel_id)) return;
+  extras = [...extras, p]; rebuild();
 }

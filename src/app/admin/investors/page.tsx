@@ -6,10 +6,10 @@ import InvestorsView from "./InvestorsView";
 type SP = Promise<{ tab?: string | string[] }>;
 
 async function Content({ sp }: { sp: SP }) {
-  const { a, live, listings } = await loadAdmin(true);
+  const { a, live, listings, overrides } = await loadAdmin(true);
   const t = (await sp).tab;
   const tab = Array.isArray(t) ? t[0] : t;
-  return <><SyncListings list={listings} /><InvestorsView a={a} live={live} tab={tab} /></>;
+  return <><SyncListings list={listings} overrides={overrides} /><InvestorsView a={a} live={live} tab={tab} /></>;
 }
 
 export default function Page({ searchParams }: { searchParams: SP }) {

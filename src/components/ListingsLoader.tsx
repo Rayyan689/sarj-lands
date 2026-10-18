@@ -1,18 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import { portfolioVersion, syncListings, type Parcel } from "@/lib/portfolio";
+import { portfolioVersion, syncLive, type Override, type Parcel } from "@/lib/portfolio";
 
-/** Brings in properties added from the admin panel, once per page load. */
+/** Brings in properties added from the admin panel and any status/price changes, once per page load. */
 export default function ListingsLoader() {
   useEffect(() => {
-    fetch("/api/listings").then((r) => r.json()).then((d: { listings?: Parcel[] }) => {
-      if (Array.isArray(d.listings) && syncListings(d.listings)) window.dispatchEvent(new CustomEvent("sarj:listings"));
+    fetch("/api/listings").then((r) => r.json()).then((d: { listings?: Parcel[]; overrides?: Record<string, Override> }) => {
+      if (syncLive(Array.isArray(d.listings) ? d.listings : [], d.overrides ?? {})) window.dispatchEvent(new CustomEvent("sarj:listings"));
     }).catch(() => {});
   }, []);
   return null;
 }
 
-/** Re-render when admin-added properties arrive. */
+/** Re-render when live changes arrive. */
 export function usePortfolioVersion() {
   const [v, setV] = useState(portfolioVersion());
   useEffect(() => {

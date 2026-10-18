@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { portfolio } from "@/lib/portfolio";
-import { loadListings } from "@/lib/listings";
+import { loadLiveState } from "@/lib/listings";
 import ParcelView from "./ParcelView";
 
 const original = (id: string) => portfolio.parcels.find((p) => p.parcel_id.toLowerCase() === id.toLowerCase());
@@ -19,10 +19,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 /** Properties added from the admin panel live in the database, so they're looked up per visit. */
 async function Added({ id }: { id: string }) {
   await connection();
-  const p = (await loadListings()).find((x) => x.parcel_id.toLowerCase() === id.toLowerCase());
+  const s = await loadLiveState();
+  const p = s.listings.find((x) => x.parcel_id.toLowerCase() === id.toLowerCase());
   if (!p) notFound();
-  const { archived: _a, created_at: _c, ...parcel } = p;
-  return <ParcelView id={parcel.parcel_id} extra={parcel} />;
+  return <ParcelView id={p.parcel_id} live={JSON.parse(JSON.stringify(s))} />;
 }
 
 async function Content({ params }: { params: Promise<{ id: string }> }) {

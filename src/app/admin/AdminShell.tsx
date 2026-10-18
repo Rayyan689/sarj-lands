@@ -14,6 +14,7 @@ const I = {
   properties: <><path d="M4 20V9l8-5 8 5v11" /><path d="M9 20v-5h6v5" /><path d="M2.5 20h19" /></>,
   market: <><path d="M4 20V4" /><path d="M4 20h16" /><path d="M8 16v-4M12 16V8M16 16v-6" /></>,
   website: <><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17" /></>,
+  manage: <><rect x="4" y="4" width="16" height="16" rx="3" /><path d="M8 9h8M8 13h8M8 17h5" /></>,
   data: <><path d="M12 3.5 19 6v5.5c0 4.3-3 7.6-7 9-4-1.4-7-4.7-7-9V6z" /><path d="m8.8 12 2.2 2.2 4.2-4.4" /></>,
   chat: <path d="M5 18.5V6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v7a2.5 2.5 0 0 1-2.5 2.5H9z" />,
 };
@@ -25,6 +26,7 @@ const NAV = [
   { href: "/admin", icon: I.today, ar: "اليوم", en: "Today", subAr: "وش يحتاجك الحين", subEn: "What needs you now" },
   { href: "/admin/investors", icon: I.investors, ar: "المستثمرين", en: "Investors", subAr: "مين تكلم ووش تقول", subEn: "Who to contact" },
   { href: "/admin/properties", icon: I.properties, ar: "الأراضي", en: "Properties", subAr: "وش يتحرك ووش واقف", subEn: "What's moving, what's stuck" },
+  { href: "/admin/manage", icon: I.manage, ar: "إدارة الأراضي", en: "Manage properties", subAr: "الحالة والسعر والإضافة", subEn: "Status, price, new listings" },
   { href: "/admin/market", icon: I.market, ar: "السوق", en: "Market", subAr: "الطلب ووش نشتري", subEn: "Demand and what to buy" },
   { href: "/admin/website", icon: I.website, ar: "الموقع", en: "Website", subAr: "الزوار ووش يسألون", subEn: "Visitors and questions" },
   { href: "/admin/data", icon: I.data, ar: "جودة البيانات", en: "Data quality", subAr: "وش صححنا وليش", subEn: "What we fixed and why" },

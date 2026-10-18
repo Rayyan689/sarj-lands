@@ -6,10 +6,10 @@ import MarketView from "./MarketView";
 type SP = Promise<{ tab?: string | string[] }>;
 
 async function Content({ sp }: { sp: SP }) {
-  const { a, listings } = await loadAdmin(false);
+  const { a, listings, overrides } = await loadAdmin(false);
   const t = (await sp).tab;
   const tab = Array.isArray(t) ? t[0] : t;
-  return <><SyncListings list={listings} /><MarketView a={a} tab={tab} /></>;
+  return <><SyncListings list={listings} overrides={overrides} /><MarketView a={a} tab={tab} /></>;
 }
 
 export default function Page({ searchParams }: { searchParams: SP }) {

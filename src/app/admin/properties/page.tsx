@@ -6,10 +6,10 @@ import PropertiesView from "./PropertiesView";
 type SP = Promise<{ tab?: string | string[] }>;
 
 async function Content({ sp }: { sp: SP }) {
-  const { a, listings } = await loadAdmin(false);
+  const { a, listings, overrides } = await loadAdmin(false);
   const t = (await sp).tab;
   const tab = Array.isArray(t) ? t[0] : t;
-  return <><SyncListings list={listings} /><PropertiesView a={a} tab={tab} listings={listings} /></>;
+  return <><SyncListings list={listings} overrides={overrides} /><PropertiesView a={a} tab={tab} listings={listings} /></>;
 }
 
 export default function Page({ searchParams }: { searchParams: SP }) {

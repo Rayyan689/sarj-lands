@@ -1,7 +1,7 @@
 // Properties added from the admin panel: validation, derived facts, storage. Server only.
 import "server-only";
 import { sql, ensureSchema } from "./db";
-import { parcels, portfolio, syncListings, type AnchorKey, type Area, type Deal, type LandType, type Parcel } from "./portfolio";
+import { parcels, portfolio, syncLive, type Override, type AnchorKey, type Area, type Deal, type LandType, type Parcel } from "./portfolio";
 import { riyadhToday } from "./time";
 import { inquiries } from "./admin/analytics";
 
@@ -86,11 +86,35 @@ export async function loadListings(includeArchived = false): Promise<(Parcel & {
   } catch { return []; }
 }
 
-/** Pull admin-added properties into the shared portfolio for this server instance. */
+export async function loadOverrides(): Promise<Record<string, Override>> {
+  if (!sql) return {};
+  try {
+    await ensureSchema();
+    const rows = await sql`SELECT id, status, total_price_sar, price_set, closed_price, closed_date, updated_at FROM overrides`;
+    const out: Record<string, Override> = {};
+    for (const r of rows) {
+      const o: Override = { updated_at: String(r.updated_at) };
+      if (r.status) o.status = r.status as Override["status"];
+      if (r.price_set) o.total_price_sar = r.total_price_sar == null ? null : Number(r.total_price_sar);
+      if (r.closed_price != null) o.closed_price = Number(r.closed_price);
+      if (r.closed_date) o.closed_date = new Date(r.closed_date as string).toISOString().slice(0, 10);
+      out[String(r.id)] = o;
+    }
+    return out;
+  } catch { return {}; }
+}
+
+/** Pull admin-added properties and status/price changes into the shared portfolio for this server instance. */
 export async function syncFromDb() {
-  const list = await loadListings();
-  syncListings(list);
+  const [list, o] = await Promise.all([loadListings(), loadOverrides()]);
+  syncLive(list, o);
   return list;
+}
+
+export async function loadLiveState() {
+  const [list, o] = await Promise.all([loadListings(), loadOverrides()]);
+  syncLive(list, o);
+  return { listings: list.map(({ archived: _a, created_at: _c, ...p }) => p as Parcel), overrides: o };
 }
 
 export async function nextId() {

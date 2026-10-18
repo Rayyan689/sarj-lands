@@ -4,8 +4,8 @@ import { loadAdmin } from "../data-loader";
 import WebsiteView from "./WebsiteView";
 
 async function Content() {
-  const { live, listings } = await loadAdmin(true);
-  return <><SyncListings list={listings} /><WebsiteView live={live} /></>;
+  const { live, listings, overrides } = await loadAdmin(true);
+  return <><SyncListings list={listings} overrides={overrides} /><WebsiteView live={live} /></>;
 }
 
 export default function Page() {

@@ -4,8 +4,8 @@ import { loadAdmin } from "./data-loader";
 import TodayView from "./TodayView";
 
 async function Content() {
-  const { a, live, listings } = await loadAdmin(true);
-  return <><SyncListings list={listings} /><TodayView a={a} live={live} /></>;
+  const { a, live, listings, overrides } = await loadAdmin(true);
+  return <><SyncListings list={listings} overrides={overrides} /><TodayView a={a} live={live} /></>;
 }
 
 export default function Page() {
