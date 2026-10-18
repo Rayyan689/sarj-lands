@@ -8,7 +8,7 @@ import { useLang } from "@/lib/i18n";
 import { AREAS, parcels, type Area, type Deal, type LandType } from "@/lib/portfolio";
 import { AREA_SHORT, num } from "@/lib/format";
 import { track } from "@/lib/track";
-import { usePortfolioVersion } from "@/components/ListingsLoader";
+import { usePortfolioVersion, useLiveReady } from "@/components/ListingsLoader";
 
 type Sort = "new" | "price_asc" | "price_desc" | "size_desc" | "value";
 
@@ -40,6 +40,7 @@ function Explorer() {
   useEffect(() => { track("explorer_filter", { area, deal, type, showClosed, sort }); }, [area, deal, type, showClosed, sort]);
 
   const ver = usePortfolioVersion();
+  const ready = useLiveReady();
   const all = useMemo(() => [...parcels], [ver]); // eslint-disable-line react-hooks/exhaustive-deps
   const list = useMemo(() => {
     const rank = { available: 0, reserved: 1, sold: 2, leased: 2 } as const;
@@ -94,7 +95,7 @@ function Explorer() {
               : [`${av} available`, rs ? `${rs} reserved` : "", cl ? `${cl} sold or leased` : ""].filter(Boolean).join(" · ");
           })()}
         </p>
-        {list.length ? (
+        {!ready ? <div className="mt-2 grid gap-3 pb-6 xl:grid-cols-2" aria-busy="true">{[0, 1, 2, 3].map((i) => <div key={i} className="h-40 animate-pulse rounded-[26px] bg-white/60" />)}</div> : list.length ? (
           <div className="mt-2 grid gap-3 pb-6 xl:grid-cols-2">
             {list.map((p) => <ParcelCard key={p.parcel_id} p={p} onHover={setSel} selected={sel === p.parcel_id} from="explorer" />)}
           </div>

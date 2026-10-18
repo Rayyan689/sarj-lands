@@ -15,7 +15,7 @@ import { parcels, portfolio } from "@/lib/portfolio";
 import { getProfile, type Profile } from "@/lib/profile";
 import { Avatar } from "@/components/ConsultantHero";
 import { track } from "@/lib/track";
-import { usePortfolioVersion } from "@/components/ListingsLoader";
+import { usePortfolioVersion, useLiveReady } from "@/components/ListingsLoader";
 
 function chips(c: Criteria) {
   const i = intentByKey(c.use)!;
@@ -60,6 +60,7 @@ function Results() {
   const { lang } = useLang();
   const c = useMemo(() => criteriaFromParams(new URLSearchParams(sp.toString())), [sp]);
   const ver = usePortfolioVersion();
+  const ready = useLiveReady();
   const r = useMemo(() => (c ? runMatch(c) : null), [c, ver]); // eslint-disable-line react-hooks/exhaustive-deps
   const [editing, setEditing] = useState(false);
   const [sel, setSel] = useState<string | null>(null);
@@ -120,9 +121,13 @@ function Results() {
             </div>
           </div>
         )}
+        {ready ? <>
         <h1 className="mt-4 text-3xl font-bold leading-snug sm:text-4xl">{headline}</h1>
         <p className="mt-2 max-w-xl text-[16px] text-muted">{sub}</p>
+        </> : <div className="mt-5 h-10 w-72 animate-pulse rounded-full bg-white/70" aria-busy="true" />}
 
+        {!ready && <div className="mt-8 grid gap-3" aria-busy="true">{[0, 1, 2].map((i) => <div key={i} className="h-40 animate-pulse rounded-[26px] bg-white/60" />)}</div>}
+        {ready && <>
         <Group title={lang === "ar" ? "تناسبك" : "Good fits"} items={r.fits.slice(0, 6)} hover={setSel} sel={sel} from="match_fit" />
         {r.fits.length > 6 && <Group title={lang === "ar" ? "وفيه بعد" : "There's more"} items={r.fits.slice(6)} hover={setSel} sel={sel} from="match_fit_more" />}
         <Group title={lang === "ar" ? "قريبة من ميزانيتك" : "Close to your budget"}
@@ -131,6 +136,7 @@ function Results() {
         <Group title={lang === "ar" ? "بدائل تستاهل" : "Alternatives worth a look"}
           sub={lang === "ar" ? "كل وحدة مكتوب عليها وش يختلف عن طلبك." : "Each one says how it differs from your ask."}
           items={r.alternatives} hover={setSel} sel={sel} from="match_alt" />
+        </>}
 
         <div className="mt-10">
           <AlertForm criteria={c} summary={{

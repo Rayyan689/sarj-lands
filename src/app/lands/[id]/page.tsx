@@ -28,7 +28,12 @@ async function Added({ id }: { id: string }) {
 async function Content({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const p = original(id);
-  if (p) return <ParcelView id={p.parcel_id} />;
+  if (p) {
+    // Status and price can change from the admin panel, so read the latest before rendering.
+    await connection();
+    const s = await loadLiveState();
+    return <ParcelView id={p.parcel_id} live={JSON.parse(JSON.stringify(s))} />;
+  }
   if (!/^SRE-\d{3,4}$/i.test(id)) notFound();
   return <Added id={id} />;
 }
