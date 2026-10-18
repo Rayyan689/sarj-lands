@@ -25,6 +25,8 @@ export function ensureSchema() {
     await sql`ALTER TABLE alerts ADD COLUMN IF NOT EXISTS archived BOOLEAN DEFAULT false`;
     await sql`CREATE TABLE IF NOT EXISTS listings (id TEXT PRIMARY KEY, data JSONB NOT NULL, archived BOOLEAN DEFAULT false, created_at TIMESTAMPTZ DEFAULT now(), ip TEXT)`;
     await sql`CREATE TABLE IF NOT EXISTS overrides (id TEXT PRIMARY KEY, status TEXT, total_price_sar BIGINT, price_set BOOLEAN DEFAULT false, closed_price BIGINT, closed_date DATE, updated_at TIMESTAMPTZ DEFAULT now())`;
+    await sql`ALTER TABLE overrides ADD COLUMN IF NOT EXISTS edits JSONB`;
+    await sql`ALTER TABLE overrides ADD COLUMN IF NOT EXISTS removed BOOLEAN DEFAULT false`;
     await sql`CREATE TABLE IF NOT EXISTS briefs (day DATE, lang TEXT, body TEXT, created_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY (day, lang))`;
   })().catch((e) => { ready = null; throw e; });
   return ready;

@@ -21,7 +21,7 @@ async function Added({ id }: { id: string }) {
   await connection();
   const s = await loadLiveState();
   const p = s.listings.find((x) => x.parcel_id.toLowerCase() === id.toLowerCase());
-  if (!p) notFound();
+  if (!p || s.overrides[p.parcel_id]?.removed) notFound();
   return <ParcelView id={p.parcel_id} live={JSON.parse(JSON.stringify(s))} />;
 }
 
@@ -32,6 +32,7 @@ async function Content({ params }: { params: Promise<{ id: string }> }) {
     // Status and price can change from the admin panel, so read the latest before rendering.
     await connection();
     const s = await loadLiveState();
+    if (s.overrides[p.parcel_id]?.removed) notFound();
     return <ParcelView id={p.parcel_id} live={JSON.parse(JSON.stringify(s))} />;
   }
   if (!/^SRE-\d{3,4}$/i.test(id)) notFound();

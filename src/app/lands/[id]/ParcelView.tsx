@@ -10,7 +10,7 @@ import AlertForm from "@/components/AlertForm";
 import YourLand from "@/components/YourLand";
 import { openChat } from "@/components/ChatWidget";
 import { useLang } from "@/lib/i18n";
-import { byId, available, portfolio, syncLive, type Override, type Parcel } from "@/lib/portfolio";
+import { byId, available, portfolio, syncLive, originalOf, type Override, type Parcel } from "@/lib/portfolio";
 import { usePortfolioVersion } from "@/components/ListingsLoader";
 import { AREA_LABEL, DEAL_LABEL, STATUS_LABEL, TYPE_LABEL, byDrive, district, hook, minutes, money, num, priceLabel, sqm, sqmPrice, street, type T } from "@/lib/format";
 import { waLink } from "@/lib/contact";
@@ -41,7 +41,7 @@ export default function ParcelView({ id, live }: { id: string; live?: { listings
   const ver = usePortfolioVersion();
   const { lang } = useLang();
   const ar = lang === "ar";
-  const p = byId(id)!;
+  const p = byId(id) ?? originalOf(id)!;
   useEffect(() => { track("parcel_view", { status: p.status }, p.parcel_id); }, [p, ver]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const comps = useMemo(() => p.closed_comps.map((c) => byId(c)!).filter((x) => x.price_per_sqm_sar)

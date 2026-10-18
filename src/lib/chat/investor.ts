@@ -19,9 +19,12 @@ const row = (p: Parcel) => [
 /** Changes made from the admin panel since the table was built. Sent uncached, every request. */
 export function liveUpdates() {
   const lines: string[] = [];
+  for (const o of portfolio.parcels) if (!parcels.some((p) => p.parcel_id === o.parcel_id)) lines.push(`${o.parcel_id} has been REMOVED from the portfolio: never offer, show or mention it as available.`);
   for (const p of parcels) {
     const o = portfolio.parcels.find((x) => x.parcel_id === p.parcel_id);
     if (!o) { lines.push(`NEW LISTING: ${row(p)}`); continue; }
+    const k = ["district_ar", "district_en", "area_of_city", "land_type", "listing_type", "area_sqm", "street_width_m"] as const;
+    if (k.some((f) => o[f] !== p[f])) { lines.push(`DETAILS CORRECTED (use this row instead): ${row(p)}`); continue; }
     if (o.status !== p.status) lines.push(`${p.parcel_id} status is now ${p.status} (was ${o.status})`);
     if (o.total_price_sar !== p.total_price_sar) lines.push(`${p.parcel_id} price is now ${p.total_price_sar ?? "on request"} SAR (${p.price_per_sqm_sar ?? "n/a"} per m², ${p.pricing.vs_area_pct != null ? `${p.pricing.vs_area_pct > 0 ? "+" : ""}${p.pricing.vs_area_pct}% vs area median` : ""})`);
   }

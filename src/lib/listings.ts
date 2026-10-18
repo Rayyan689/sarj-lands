@@ -90,13 +90,15 @@ export async function loadOverrides(): Promise<Record<string, Override>> {
   if (!sql) return {};
   try {
     await ensureSchema();
-    const rows = await sql`SELECT id, status, total_price_sar, price_set, closed_price, closed_date, updated_at FROM overrides`;
+    const rows = await sql`SELECT id, status, total_price_sar, price_set, closed_price, closed_date, updated_at, edits, removed FROM overrides`;
     const out: Record<string, Override> = {};
     for (const r of rows) {
       const o: Override = { updated_at: String(r.updated_at) };
       if (r.status) o.status = r.status as Override["status"];
       if (r.price_set) o.total_price_sar = r.total_price_sar == null ? null : Number(r.total_price_sar);
       if (r.closed_price != null) o.closed_price = Number(r.closed_price);
+      if (r.edits && Object.keys(r.edits as object).length) o.edits = r.edits as Override["edits"];
+      if (r.removed) o.removed = true;
       if (r.closed_date) o.closed_date = new Date(r.closed_date as string).toISOString().slice(0, 10);
       out[String(r.id)] = o;
     }
