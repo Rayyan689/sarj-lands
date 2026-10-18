@@ -9,10 +9,29 @@ import { daysSince, riyadhToday } from "../time";
 
 const AREAS: Area[] = ["North", "East", "Central", "West", "South"];
 
-/** One line per parcel. This is the model's full view of the inventory (cached). */
+const row = (p: Parcel) => [
+    p.parcel_id, `${p.district_ar} / ${p.district_en}`, p.area_of_city, p.land_type, p.listing_type, p.status, p.area_sqm,
+    p.price_per_sqm_sar ?? "on request", p.total_price_sar ?? "on request", p.street_width_m,
+    p.pricing.vs_area_pct != null ? `${p.pricing.vs_area_pct > 0 ? "+" : ""}${p.pricing.vs_area_pct}%` : "n/a",
+    `KAFD ${p.drive.kafd.min}, airport ${p.drive.airport.min}, Kingdom Centre ${p.drive.kingdom.min}, Diriyah ${p.drive.diriyah.min}${p.drive_estimated ? " (estimated)" : ""}`,
+  ].join(" | ");
+
+/** Changes made from the admin panel since the table was built. Sent uncached, every request. */
+export function liveUpdates() {
+  const lines: string[] = [];
+  for (const p of parcels) {
+    const o = portfolio.parcels.find((x) => x.parcel_id === p.parcel_id);
+    if (!o) { lines.push(`NEW LISTING: ${row(p)}`); continue; }
+    if (o.status !== p.status) lines.push(`${p.parcel_id} status is now ${p.status} (was ${o.status})`);
+    if (o.total_price_sar !== p.total_price_sar) lines.push(`${p.parcel_id} price is now ${p.total_price_sar ?? "on request"} SAR (${p.price_per_sqm_sar ?? "n/a"} per m², ${p.pricing.vs_area_pct != null ? `${p.pricing.vs_area_pct > 0 ? "+" : ""}${p.pricing.vs_area_pct}% vs area median` : ""})`);
+  }
+  return lines.length ? `\nLIVE UPDATES from today, these override the portfolio table:\n${lines.join("\n")}` : "";
+}
+
+/** One line per parcel, from the original data. This is the model's full view of the inventory (cached). */
 function portfolioTable() {
   const head = "id | district (ar / en) | area | type | deal | status | size m² | SAR per m² | total SAR (sale=asking price, lease=annual rent) | street m | vs area median | drive minutes without traffic";
-  const rows = parcels.map((p) => [
+  const rows = portfolio.parcels.map((p) => [
     p.parcel_id, `${p.district_ar} / ${p.district_en}`, p.area_of_city, p.land_type, p.listing_type, p.status, p.area_sqm,
     p.price_per_sqm_sar ?? "on request", p.total_price_sar ?? "on request", p.street_width_m,
     p.pricing.vs_area_pct != null ? `${p.pricing.vs_area_pct > 0 ? "+" : ""}${p.pricing.vs_area_pct}%` : "n/a",
@@ -77,7 +96,7 @@ export function systemBlocks(ctx: { page?: string; parcel_id?: string; lang?: st
     : `The visitor is on page: ${ctx.page ?? "/"}.`;
   return [
     { type: "text", text: STATIC_SYSTEM, cache_control: { type: "ephemeral" } },
-    { type: "text", text: `Today in Riyadh: ${today}. Site language: ${ctx.lang === "en" ? "English" : "Arabic"}. ${here}${profileLine(ctx.profile)}` },
+    { type: "text", text: `Today in Riyadh: ${today}. Site language: ${ctx.lang === "en" ? "English" : "Arabic"}. ${here}${profileLine(ctx.profile)}${liveUpdates()}` },
   ];
 }
 
